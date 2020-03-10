@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 09/03/20 by DrLarck
+Last update : 10/03/20 by DrLarck
 """
 
 import discord
@@ -19,8 +19,8 @@ from discord.ext import commands
 class Main:
 
     def __init__(self):
-        self.__token = os.environ["dev-dbz-token"]
-        self.__version = "1.0"
+        self.__TOKEN = os.environ["dev-dbz-token"]
+        self.__version = "1.0.0.0"
         self.__phase = ["ALPHA", "BETA", "RELEASE", "STABLE"]
 
     def run(self):
@@ -38,7 +38,7 @@ class Main:
                               activity=activity)
 
         # Run the bot
-        client.run(self.__token)
+        client.run(self.__TOKEN)
 
         return
 
