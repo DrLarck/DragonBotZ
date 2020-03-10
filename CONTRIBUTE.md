@@ -33,4 +33,4 @@ But let me explain how it works :
     - **MAJOR** : Represents a major change which is incompatible with the previous version such as a whole code rework, new gameplay, etc.
     - **MEDIUM** : Represents a medium change, like a new feature, etc.
     - **MINOR** : Represents minor changes such as patches, bug fix, etc.
-    - **CHANGEs** : Represents file changes, this value increases each time a file is changed. 
+    - **CHANGES** : Represents file changes, this value increases each time a file is changed. 
