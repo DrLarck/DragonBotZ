@@ -34,6 +34,7 @@ class Database:
     async def __get_connection(self):
         """
         Get the connection pool and set the connection.
+
         --
 
         :return: `asyncpg.connection.Connection` or `None`
@@ -51,3 +52,18 @@ class Database:
 
         return self.__connection
 
+    async def __close(self):
+        """
+        Close the connection to the database
+
+        --
+
+        :return: `None`
+        """
+
+        # Release the connection if there is an existing one
+        if self.__connection is not None:
+            await self.__pool.release(self.__connection)
+            await self.__pool.close()
+
+        return
