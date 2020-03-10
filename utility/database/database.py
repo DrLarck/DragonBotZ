@@ -67,3 +67,17 @@ class Database:
             await self.__pool.close()
 
         return
+
+    # Public method
+    async def init(self):
+        """
+        Init the database object
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__get_connection()
+
+        return
