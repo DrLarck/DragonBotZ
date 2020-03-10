@@ -19,18 +19,18 @@ You are free to **fork** the project or directly create a **new branch**.
 
 By the way, respect the **purpose** of your branch, stick to your planed changes and do not spread too much to avoid conflicts.
 
-For example : *If I create a new branch to add some characters ; I will only **ADD** new code and not **EDIT** existing one. If I want to edit existing code, I create a new branch OR I open a new **issue** to ask for changes.*
+For example : *If you create a new branch to add some characters ; You will only **ADD** new code and not **EDIT** existing ones. If you want to edit existing codes, you create a new branch OR you open a new **issue** to ask for changes.*
 
 Do not push **non-tested** code.
 
 ## Versioning
 The versioning system is a little bit tricky, you're not forced to update the version, when the code is merged with **master**, the owner will update the version for the production.
 
-But let me explain how it works : 
+Let me explain how it works : 
 - The versioning break it down as following : **{PHASE}** - v **{MAJOR}**.**{MEDIUM}**.**{MINOR}**.**{CHANGES}**
 
     - **PHASE** : Represents the current project phase (**Prototype**, **ALPHA**, **BETA**, **Release**, **Stable**).
-    - **MAJOR** : Represents a major change which is incompatible with the previous version such as a whole code rework, new gameplay, etc.
-    - **MEDIUM** : Represents a medium change, like a new feature, etc.
+    - **MAJOR** : Represents major changes which is incompatible with the previous version such as a whole code rework, new gameplay, etc.
+    - **MEDIUM** : Represents medium changes, like a new feature, etc.
     - **MINOR** : Represents minor changes such as patches, bug fix, etc.
     - **CHANGES** : Represents file changes, this value increases each time a file is changed. 
