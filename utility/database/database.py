@@ -113,3 +113,27 @@ class Database:
             await self.__close()
 
         return
+
+    async def fetchval(self, query):
+        """
+        Fetch a value
+
+        :param query: (`str`)
+
+        --
+
+        :return: Fetched value or `None` if not found
+        """
+
+        # Init
+        fetched = None
+
+        await self.__get_connection()
+
+        # Execute the query
+        await self.__connection.fetchval(query)
+
+        # Gracefully close the connection
+        await self.__close()
+
+        return fetched
