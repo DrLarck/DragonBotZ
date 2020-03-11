@@ -23,7 +23,7 @@ class Main:
 
     def __init__(self):
         self.__TOKEN = os.environ["dev-dbz-token"]
-        self.__version = "1.0.0.0"
+        self.__version = "1.0.0.3"
         self.__phase = ["ALPHA", "BETA", "RELEASE", "STABLE"]
 
     def run(self):
