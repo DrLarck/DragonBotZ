@@ -176,7 +176,7 @@ class Database:
                 player_id BIGINT,
                 player_register_date TEXT,
                 player_language TEXT DEFAULT 'EN'
-            )
+            );
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_reference_index ON player_info(reference);
             """
         ]
