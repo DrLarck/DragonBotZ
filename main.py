@@ -37,6 +37,7 @@ class Main:
 
         # Init
         activity = discord.Game(name=f"d!help | v{self.__version} - {self.__phase[0]}")
+        
         client = commands.Bot(command_prefix="!", help_command=None,
                               activity=activity)
 
