@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 10/03/20 by DrLarck
+Last update : 11/03/20 by DrLarck
 """
 
 import asyncpg
@@ -79,5 +79,37 @@ class Database:
         """
 
         await self.__get_connection()
+
+        return
+
+    async def execute(self, query, parameters=None):
+        """
+        Execute an SQL query
+
+        :param query: (`str`)
+
+        :param parameters: (`list`)
+
+        --
+
+        :return: `None`
+        """
+
+        if parameters is None:
+            parameters = []
+
+        await self.__get_connection()
+
+        # Execute the query with the passed parameters
+        try:
+            await self.__connection.execute(query, *parameters)
+
+        # Ignore the UniqueViolationError
+        except asyncpg.UniqueViolationError:
+            pass
+
+        # Gracefully close the connection
+        finally:
+            await self.__close()
 
         return
