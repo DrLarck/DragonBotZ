@@ -7,13 +7,16 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 10/03/20 by DrLarck
+Last update : 11/03/20 by DrLarck
 """
 
 import discord
 import os
 
 from discord.ext import commands
+
+# util
+from utility.database.database import Database
 
 
 class Main:
@@ -36,6 +39,9 @@ class Main:
         activity = discord.Game(name=f"d!help | v{self.__version} - {self.__phase[0]}")
         client = commands.Bot(command_prefix="!", help_command=None,
                               activity=activity)
+
+        # Set the database instance
+        client.database = Database()
 
         # Run the bot
         client.run(self.__TOKEN)
