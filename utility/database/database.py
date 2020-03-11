@@ -125,9 +125,6 @@ class Database:
         :return: Fetched value or `None` if not found
         """
 
-        # Init
-        fetched = None
-
         await self.__get_connection()
 
         # Execute the query
@@ -148,9 +145,6 @@ class Database:
 
         :return: `list` of rows or `None` if not found
         """
-
-        # Init
-        row = None
 
         await self.__get_connection()
 
