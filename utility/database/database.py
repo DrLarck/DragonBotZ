@@ -114,9 +114,9 @@ class Database:
 
         return
 
-    async def fetchval(self, query):
+    async def fetch_value(self, query):
         """
-        Fetch a value
+        Fetch a single value from the database
 
         :param query: (`str`)
 
@@ -131,9 +131,33 @@ class Database:
         await self.__get_connection()
 
         # Execute the query
-        await self.__connection.fetchval(query)
+        fetched = await self.__connection.fetchval(query)
 
         # Gracefully close the connection
         await self.__close()
 
         return fetched
+
+    async def fetch_row(self, query):
+        """
+        Fetch rows from the database
+
+        :param query: (`str`)
+
+        --
+
+        :return: `list` of rows or `None` if not found
+        """
+
+        # Init
+        row = None
+
+        await self.__get_connection()
+
+        # Fetch the row(s)
+        row = await self.__connection.fetch(query)
+
+        # Gracefully close the connection
+        await self.__close()
+
+        return row
