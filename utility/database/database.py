@@ -8,6 +8,7 @@ Author : DrLarck
 Last update : 11/03/20 by DrLarck
 """
 
+import asyncio
 import asyncpg
 import os
 
@@ -155,3 +156,35 @@ class Database:
         await self.__close()
 
         return row
+
+    async def create_game_tables(self):
+        """
+        Create the game tables.
+
+        --
+
+        :return: `None`
+        """
+
+        table_queries = [
+            # player_info table
+            """
+            CREATE SEQUENCE IF NOT EXISTS player_info_reference_seq;
+            CREATE TABLE IF NOT EXISTS player_info(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('player_info_reference_seq') NOT NULL,
+                player_name TEXT,
+                player_id BIGINT,
+                player_register_date TEXT,
+                player_language TEXT DEFAULT 'EN'
+            )
+            CREATE UNIQUE INDEX IF NOT EXISTS player_info_reference_index ON player_info(reference);
+            """
+        ]
+
+        # Create the tables
+        for query in table_queries:
+            await asyncio.sleep(0)
+
+            await self.execute(query)
+
+        return
