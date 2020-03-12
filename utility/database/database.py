@@ -167,6 +167,17 @@ class Database:
         """
 
         table_queries = [
+            # Logs
+            """
+            CREATE TABLE IF NOT EXISTS command_log(
+                command TEXT,
+                parameter TEXT,
+                date TEXT,
+                time BIGINT,
+                caller_id BIGINT,
+                caller_name TEXT
+            );
+            """,
             # player_info table
             """
             CREATE SEQUENCE IF NOT EXISTS player_info_reference_seq;
