@@ -53,14 +53,16 @@ class CommandStart(commands.Cog):
                                player_id, player_name,
                                player_register_date, player_language)
                                VALUES($1, $2, $3, $4);
-                               """, [player.id, player.name, date, 'EN'])
+                               """,
+                               [player.id, player.name, date, 'EN'])
 
-        # Give the player the dragonstones and the zenis
-        await  database.execute("""
-                                UPDATE player_resource
-                                SET player_dragonstone = $1, player_zeni = $2
-                                WHERE player_id = $3;
-                                """, [self.__start_dragonstone, self.__start_zenis, player.id])
+        await database.execute("""
+                                INSERT INTO player_resource(
+                                player_id, player_name,
+                                player_dragonstone, player_zeni)
+                                VALUES($1, $2, $3, $4);
+                                """,
+                               [player.id, player.name, self.__start_dragonstone, self.__start_zenis])
 
         # Display a welcome message
         await context.send(f"""
