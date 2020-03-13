@@ -17,7 +17,7 @@ from discord.ext import commands
 from utility.command.loader import CommandLoader
 
 # util
-from utility.database.database import Database
+from utility.database import Database
 
 
 class Main:
