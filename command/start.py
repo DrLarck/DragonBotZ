@@ -16,6 +16,7 @@ from discord.ext import commands
 from utility.player import Player
 from utility.database import Database
 from utility.command.checker import CommandChecker
+from utility.graphic.icon import GameIcon
 
 
 class CommandStart(commands.Cog):
@@ -53,6 +54,15 @@ class CommandStart(commands.Cog):
                                player_register_date, player_language)
                                VALUES($1, $2, $3, $4);
                                """, [player.id, player.name, date, 'EN'])
+
+        # Display a welcome message
+        await context.send(f"""
+Welcome to **Discord Ball Z : Origins** ! We're hoping you to enjoy your adventure !
+
+You receive **{self.__start_dragonstone:,}**{GameIcon().dragonstone} and **{self.__start_zenis:,}**{GameIcon().zeni}.
+Those will allow you to **summon** or **buy** powerful heroes who will fight for you !
+
+Do not hesitate to use the `d!help` command or join the **Official Support server** (https://discord.gg/eZf2p7h).""")
 
         return
 

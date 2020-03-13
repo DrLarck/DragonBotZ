@@ -14,6 +14,7 @@ from discord.channel import DMChannel
 from utility.player import Player
 from utility.database import Database
 
+
 class CommandChecker:
 
     # Public
