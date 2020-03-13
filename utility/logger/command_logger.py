@@ -11,7 +11,7 @@ Last update : 13/03/20 by DrLarck
 import asyncio
 import time
 
-from utility.database.database import Database
+from utility.database import Database
 
 
 class CommandLogger:
