@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 11/03/20 by DrLarck
+Last update : 13/03/20 by DrLarck
 """
 
 import asyncio
@@ -175,7 +175,8 @@ class Database:
                 date TEXT,
                 time BIGINT,
                 caller_id BIGINT,
-                caller_name TEXT
+                caller_name TEXT,
+                message TEXT
             );
             """,
             # player_info table
