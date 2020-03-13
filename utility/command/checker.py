@@ -8,7 +8,6 @@ Author : DrLarck
 Last update : 13/03/20 by DrLarck
 """
 
-from utility.logger.command_logger import CommandLogger
 from discord.channel import DMChannel
 
 
