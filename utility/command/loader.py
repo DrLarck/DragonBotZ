@@ -21,7 +21,7 @@ class CommandLoader:
         # List of commands to load
         self.__command = [
             # Command
-            "command.mod"
+            "command.mod", "command.start"
         ]
 
     async def load_commands(self):
