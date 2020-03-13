@@ -166,7 +166,7 @@ class Database:
         """
 
         table_queries = [
-            # Logs
+            # command_log table
             """
             CREATE TABLE IF NOT EXISTS command_log(
                 command TEXT,
@@ -183,12 +183,24 @@ class Database:
             CREATE SEQUENCE IF NOT EXISTS player_info_reference_seq;
             CREATE TABLE IF NOT EXISTS player_info(
                 reference BIGINT PRIMARY KEY DEFAULT nextval('player_info_reference_seq') NOT NULL,
+                player_id BIGINT,                
                 player_name TEXT,
-                player_id BIGINT,
                 player_register_date TEXT,
                 player_language TEXT DEFAULT 'EN'
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_reference_index ON player_info(reference);
+            """,
+            # player_resource table
+            """
+            CREATE SEQUENCE IF NOT EXISTS player_resource_reference_seq;
+            CREATE TABLE IF NOT EXISTS player_resource(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('player_resource_reference_seq') NOT NULL,
+                player_id BIGINT,
+                player_name TEXT,
+                player_dragonstone BIGINT DEFAULT 0,
+                player_zeni BIGINT DEFAULT 0
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS player_resource_reference_index ON player_resource(reference);
             """
         ]
 
