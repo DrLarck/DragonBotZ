@@ -8,6 +8,7 @@ Author : DrLarck
 Last update : 13/03/20 by DrLarck
 """
 
+import asyncio
 import time
 
 from utility.database.database import Database
@@ -39,13 +40,26 @@ class CommandLogger:
         command_message = context.message
         command_author = command_message.author
 
+        # Set the param as str
+        parameter = ""
+
+        # The first two parameters are :
+        # - The command Object
+        # - The Context
+        # The 'real' parameters are stored
+        # At the index >= 2
+        for i in range(2, len(command_param)):
+            await asyncio.sleep(0)
+
+            parameter += command_param[i] + ', '  # Add a comma between each parameter
+
         # Writing log
         await self.__database.execute("""INSERT INTO command_log(
                                       command, parameter, date, 
                                       time, caller_id, caller_name, message)
-                                      VALUES($1, $2, $3, $4, $5, $6, $7)""",
-                                      [command_name, command_param, command_date,
+                                      VALUES($1, $2, $3, $4, $5, $6, $7);""",
+                                      [command_name, parameter, command_date,
                                        command_time, command_author.id, command_author.name,
-                                       command_message])
+                                       command_message.content])
 
         return 

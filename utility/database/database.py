@@ -65,7 +65,6 @@ class Database:
         # Release the connection if there is an existing one
         if self.__connection is not None:
             await self.__pool.release(self.__connection)
-            await self.__pool.close()
 
         return
 
