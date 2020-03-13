@@ -8,13 +8,16 @@ Author : DrLarck
 Last update : 13/03/20 by DrLarck
 """
 
+from utility.logger.command_logger import CommandLogger
 from discord.channel import DMChannel
+
 
 class CommandChecker:
 
     # Public
     # Command checks
-    async def game_ready(self, context):
+    @staticmethod
+    async def game_ready(context):
         """
         Check if the game is ready
 
@@ -35,7 +38,7 @@ class CommandChecker:
         """
         Avoid the player to use the command in DM channel
 
-        :param context:
+        :param context: (`discord.ext.commands.Context`)
 
         --
 
