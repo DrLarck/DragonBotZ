@@ -24,8 +24,10 @@ class Main:
 
     def __init__(self):
         self.__TOKEN = os.environ["dev-dbz-token"]
-        self.__version = "1.0.0.3"
+        self.__version = "1.0.0.12"
         self.__phase = ["ALPHA", "BETA", "RELEASE", "STABLE"]
+
+        self.__prefix = ["d!", "D!", "db", "Db"]
 
     def run(self):
         """
@@ -39,7 +41,7 @@ class Main:
         # Init
         activity = discord.Game(name=f"d!help | v{self.__version} - {self.__phase[0]}")
         
-        client = commands.Bot(command_prefix="!", help_command=None,
+        client = commands.Bot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
 
         # Set the database instance
