@@ -7,13 +7,14 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 11/03/20 by DrLarck
+Last update : 13/03/20 by DrLarck
 """
 
 import discord
 import os
 
 from discord.ext import commands
+from utility.command.loader import CommandLoader
 
 # util
 from utility.database.database import Database
@@ -46,6 +47,9 @@ class Main:
 
         # Create the needed tables
         client.loop.run_until_complete(client.database.create_game_tables())
+
+        # Loading the commands
+        client.loop.run_until_complete(CommandLoader(client).load_commands())
 
         # Run the bot
         client.run(self.__TOKEN)
