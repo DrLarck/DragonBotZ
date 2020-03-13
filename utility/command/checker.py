@@ -10,6 +10,9 @@ Last update : 13/03/20 by DrLarck
 
 from discord.channel import DMChannel
 
+# util
+from utility.player import Player
+from utility.database import Database
 
 class CommandChecker:
 
@@ -54,3 +57,34 @@ class CommandChecker:
         # Not a DM channel
         else:
             return True
+
+    @staticmethod
+    async def can_register(context):
+        """
+        Check if the player is registered
+
+        :param context: (`discord.ext.commands.Context`)
+
+        --
+
+        :return: `None`
+        """
+
+        # Init
+        player = Player(context.message.author)
+        database = Database()
+
+        # Check if the player is in the database
+        value = await database.fetch_value(f"SELECT player_name WHERE player_id = {player.id};")
+
+        # If the player is already registered
+        # Send an error message telling him
+        # That he is already registered
+        if value is not None:
+            await context.send(":x: You are already registered.")
+
+            return False
+
+        else:  # Allow the player to process the command if he is not registered
+            return True
+
