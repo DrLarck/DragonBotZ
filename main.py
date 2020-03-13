@@ -44,11 +44,8 @@ class Main:
         client = commands.Bot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
 
-        # Set the database instance
-        client.database = Database()
-
         # Create the needed tables
-        client.loop.run_until_complete(client.database.create_game_tables())
+        client.loop.run_until_complete(Database().create_game_tables())
 
         # Loading the commands
         client.loop.run_until_complete(CommandLoader(client).load_commands())
