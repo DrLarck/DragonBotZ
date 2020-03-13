@@ -55,6 +55,13 @@ class CommandStart(commands.Cog):
                                VALUES($1, $2, $3, $4);
                                """, [player.id, player.name, date, 'EN'])
 
+        # Give the player the dragonstones and the zenis
+        await  database.execute("""
+                                UPDATE player_resource
+                                SET player_dragonstone = $1, player_zeni = $2
+                                WHERE player_id = $3;
+                                """, [self.__start_dragonstone, self.__start_zenis, player.id])
+
         # Display a welcome message
         await context.send(f"""
 Welcome to **Discord Ball Z : Origins** ! We're hoping you to enjoy your adventure !
@@ -62,7 +69,7 @@ Welcome to **Discord Ball Z : Origins** ! We're hoping you to enjoy your adventu
 You receive **{self.__start_dragonstone:,}**{GameIcon().dragonstone} and **{self.__start_zenis:,}**{GameIcon().zeni}.
 Those will allow you to **summon** or **buy** powerful heroes who will fight for you !
 
-Do not hesitate to use the `d!help` command or join the **Official Support server** (https://discord.gg/eZf2p7h).""")
+Do not hesitate to use the `d!help` command or join the **Official Support server** : https://discord.gg/eZf2p7h""")
 
         return
 
