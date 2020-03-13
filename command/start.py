@@ -28,6 +28,7 @@ class CommandStart(commands.Cog):
         self.__start_dragonstone = 50
         self.__start_zenis = 100000
 
+    @commands.check(CommandChecker.can_register)
     @commands.command()
     async def start(self, context):
         """
