@@ -44,6 +44,9 @@ class Main:
         # Set the database instance
         client.database = Database()
 
+        # Create the needed tables
+        client.loop.run_until_complete(client.database.create_game_tables())
+
         # Run the bot
         client.run(self.__TOKEN)
 
