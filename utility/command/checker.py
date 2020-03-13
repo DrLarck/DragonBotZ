@@ -61,13 +61,13 @@ class CommandChecker:
     @staticmethod
     async def can_register(context):
         """
-        Check if the player is registered
+        Check if the player is registered, if he's not registered, he can process the command
 
         :param context: (`discord.ext.commands.Context`)
 
         --
 
-        :return: `None`
+        :return: `bool`
         """
 
         # Init
@@ -88,3 +88,31 @@ class CommandChecker:
         else:  # Allow the player to process the command if he is not registered
             return True
 
+    @staticmethod
+    async def register(context):
+        """
+        Check if the player is registered, if he is registered, he can process the command
+
+        :param context: (`discord.ext.commands.Context`)
+
+        --
+
+        :return: `bool`
+        """
+
+        # Init
+        player = Player(context.message.author)
+        database = Database()
+
+        # Check if the player is in the database
+        value = await database.fetch_value(f"SELECT player_name WHERE player_id = {player.id};")
+
+        # If the player is registered
+        # Return true
+        if value is not None:
+            return True
+
+        else:  # The player is not registered
+            await context.send(":x: You are not registered, to do so, use the `d!start` command.")
+
+            return False
