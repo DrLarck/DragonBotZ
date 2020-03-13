@@ -20,6 +20,7 @@ class CommandModeration(commands.Cog):
         self.client = client
 
     # Command
+    @commands.check(CommandChecker.register)
     @commands.check(CommandChecker.no_dm)
     @commands.command()
     async def test(self, context, param1, param2, param3):
