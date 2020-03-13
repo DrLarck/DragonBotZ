@@ -114,42 +114,54 @@ class Database:
 
         return
 
-    async def fetch_value(self, query):
+    async def fetch_value(self, query, parameters=None):
         """
         Fetch a single value from the database
 
         :param query: (`str`)
+
+        :param parameters: (`list`)
 
         --
 
         :return: Fetched value or `None` if not found
         """
 
+        # Init
         await self.__get_connection()
 
+        if parameters is None:
+            parameters = []
+            
         # Execute the query
-        fetched = await self.__connection.fetchval(query)
+        fetched = await self.__connection.fetchval(query, *parameters)
 
         # Gracefully close the connection
         await self.__close()
 
         return fetched
 
-    async def fetch_row(self, query):
+    async def fetch_row(self, query, parameters=None):
         """
         Fetch rows from the database
 
         :param query: (`str`)
+
+        :param parameters: (`list`)
 
         --
 
         :return: `list` of rows or `None` if not found
         """
 
+        # Init
         await self.__get_connection()
 
+        if parameters is None:
+            parameters = []
+
         # Fetch the row(s)
-        row = await self.__connection.fetch(query)
+        row = await self.__connection.fetch(query, *parameters)
 
         # Gracefully close the connection
         await self.__close()
