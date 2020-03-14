@@ -33,9 +33,10 @@ class CommandModeration(commands.Cog):
 
         player = Player(context.message.author)
 
-        resources = await player.resource.get_resources()
+        zeni = await player.resource.get_zeni()
+        dragonstone = await player.resource.get_dragonstone()
 
-        print(resources[0], resources[1])
+        print(zeni, dragonstone)
 
 
 def setup(client):

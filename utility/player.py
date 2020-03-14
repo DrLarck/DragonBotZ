@@ -24,6 +24,9 @@ class Player:
 class PlayerResource:
 
     def __init__(self, player):
+        # Private
+        self.__database = Database()
+
         # Public
         self.player = player
 
@@ -37,12 +40,44 @@ class PlayerResource:
         :return: `list` | Index : 0 Dragon stones, 1 Zenis
         """
 
-        # Init
-        database = Database()
-
-        resources = await database.fetch_row("""
-                                               SELECT player_dragonstone, player_zeni 
-                                               FROM player_resource 
-                                               WHERE player_id = $1;""", [self.player.id])
+        resources = await self.__database.fetch_row("""
+                                                    SELECT player_dragonstone, player_zeni 
+                                                    FROM player_resource 
+                                                    WHERE player_id = $1;
+                                                    """, [self.player.id])
 
         return resources[0]
+
+    async def get_dragonstone(self):
+        """
+        Get the player's dragon stone amount
+
+        --
+
+        :return: `int`
+        """
+
+        dragonstone = await self.__database.fetch_value("""
+                                                        SELECT player_dragonstone 
+                                                        FROM player_resource 
+                                                        WHERE player_id = $1;
+                                                        """, [self.player.id])
+
+        return dragonstone
+
+    async def get_zeni(self):
+        """
+        Get the player's zeni amount
+
+        --
+
+        :return: `int`
+        """
+
+        zeni = await self.__database.fetch_value("""
+                                                SELECT player_zeni 
+                                                FROM player_resource 
+                                                WHERE player_id = $1;
+                                                """, [self.player.id])
+
+        return zeni
