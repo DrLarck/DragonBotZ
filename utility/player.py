@@ -18,7 +18,7 @@ class Player:
         self.name = user.name
         self.id = user.id
 
-        self.resource = PlayerResource()
+        self.resource = PlayerResource(self)
 
 
 class PlayerResource:
@@ -40,9 +40,9 @@ class PlayerResource:
         # Init
         database = Database()
 
-        resources = await database.fetch_value("""
-                                               SELECT player_dragonstone, player_zenis 
+        resources = await database.fetch_row("""
+                                               SELECT player_dragonstone, player_zeni 
                                                FROM player_resource 
                                                WHERE player_id = $1;""", [self.player.id])
 
-        return resources
+        return resources[0]
