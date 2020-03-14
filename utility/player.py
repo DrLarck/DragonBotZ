@@ -81,3 +81,29 @@ class PlayerResource:
                                                 """, [self.player.id])
 
         return zeni
+
+    async def add_dragonstone(self, amount):
+        """
+        Add the passed amount of dragonstone to the player resources
+
+        :param amount: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        # Init
+        dragonstone = await self.get_dragonstone()
+
+        # Add the amount of dragonstone
+        dragonstone += amount
+
+        # Update the inventory
+        await self.__database.execute("""
+                                      UPDATE player_resource 
+                                      SET player_dragonstone = $1 
+                                      WHERE player_id = $2;
+                                      """, [dragonstone, self.player.id])
+
+        return
