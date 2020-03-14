@@ -16,6 +16,7 @@ from discord.ext import commands
 from utility.player import Player
 from utility.database import Database
 from utility.command.checker import CommandChecker
+from utility.logger.command_logger import CommandLogger
 from utility.graphic.icon import GameIcon
 
 
@@ -46,6 +47,7 @@ class CommandStart(commands.Cog):
         player = Player(context.message.author)
         date = time.strftime("%d/%m/%y - %H:%M", time.gmtime())
         database = Database()
+        await CommandLogger().log(context)
 
         # Register the player into the database
         await database.execute("""
