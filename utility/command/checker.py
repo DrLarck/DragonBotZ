@@ -11,7 +11,7 @@ Last update : 13/03/20 by DrLarck
 from discord.channel import DMChannel
 
 # util
-from utility.player import Player
+from utility.entity.player import Player
 from utility.database import Database
 
 

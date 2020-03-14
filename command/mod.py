@@ -13,7 +13,7 @@ from discord.ext import commands
 # util
 from utility.logger.command_logger import CommandLogger
 from utility.command.checker import CommandChecker
-from utility.player import Player
+from utility.entity.player import Player
 
 
 class CommandModeration(commands.Cog):

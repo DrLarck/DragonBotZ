@@ -13,7 +13,7 @@ import time
 from discord.ext import commands
 
 # util
-from utility.player import Player
+from utility.entity.player import Player
 from utility.database import Database
 from utility.command.checker import CommandChecker
 from utility.logger.command_logger import CommandLogger
