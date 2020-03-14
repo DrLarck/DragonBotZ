@@ -5,8 +5,10 @@ Player object
 
 Author : DrLarck
 
-Last update : 13/03/20 by DrLarck
+Last update : 14/03/20 by DrLarck
 """
+
+from utility.database import Database
 
 
 class Player:
@@ -21,7 +23,26 @@ class Player:
 
 class PlayerResource:
 
-    def __init__(self):
-        self.__dragonstone = 0
-        self.__zeni = 0
+    def __init__(self, player):
+        # Public
+        self.player = player
 
+    # Public Method
+    async def get_resources(self):
+        """
+        Get the player's resources
+
+        --
+
+        :return: `list` | Index : 0 Dragon stones, 1 Zenis
+        """
+
+        # Init
+        database = Database()
+
+        resources = await database.fetch_value("""
+                                               SELECT player_dragonstone, player_zenis 
+                                               FROM player_resource 
+                                               WHERE player_id = $1;""", [self.player.id])
+
+        return resources
