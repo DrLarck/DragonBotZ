@@ -20,8 +20,15 @@ class Character:
         self.image = CharacterImage()
         self.type = CharacterType()
         self.rarity = CharacterRarity()
+
         self.health = CharacterHealth()
         self.ki = CharacterKi()
+
+        self.damage = CharacterDamage()
+        self.critical = CharacterCritical()
+
+        self.armor = CharacterDefense()
+        self.spirit = CharacterDefense()
 
 
 class CharacterImage:
@@ -63,3 +70,27 @@ class CharacterKi:
         # Public
         self.maximum = 0
         self.current = 0
+
+
+class CharacterDamage:
+
+    def __init__(self):
+        # Public
+        self.physical = 0
+        self.ki = 0
+
+
+class CharacterCritical:
+
+    def __init__(self):
+        # Public
+        self.chance = 0
+        self.bonus = 0
+
+
+class CharacterDefense:
+
+    def __init__(self):
+        # Public
+        self.fixed = 0
+        self.floating = 0
