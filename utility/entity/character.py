@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 14/03/20 by DrLarck
+Last update : 16/03/20 by DrLarck
 """
 
 
@@ -29,6 +29,48 @@ class Character:
 
         self.armor = CharacterDefense()
         self.spirit = CharacterDefense()
+
+    # Public method
+    async def generate(self, name="", char_id=0, level=1,
+                       card="", thumbnail="", icon="",
+                       type_value=0, rarity_value=0, health=0,
+                       ki=0, physical=0, ki_power=0,
+                       crit_chance=0, crit_bonus=0, armor_fixed=0,
+                       armor_floating=0, spirit_fixed=0, spirit_floating=0):
+        """
+        Generate a character instance.
+
+        :param name: (`str`)
+        :param char_id: (`int`)
+        :param level: (`int`)
+        :param card: (`url`)
+        :param thumbnail: (`url`)
+        :param icon: (`str`)
+        :param type_value: (`int`)
+        :param rarity_value: (`int`)
+        :param health: (`int`)
+        :param ki: (`int`)
+        :param physical: (`int`)
+        :param ki_power: (`int`)
+        :param crit_chance: (`int`)
+        :param crit_bonus: (`int`)
+        :param armor_fixed: (`int`)
+        :param armor_floating: (`int`)
+        :param spirit_fixed: (`int`)
+        :param spirit_floating: (`int`)
+
+        --
+
+        :return: `Character`
+        """
+
+        # Init all the attributes
+
+        # Get the icons
+
+        # Return the character
+
+        return self
 
 
 class CharacterImage:
