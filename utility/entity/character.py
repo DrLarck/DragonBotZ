@@ -90,6 +90,8 @@ class Character:
         self.spirit.fixed = spirit_fixed
         self.spirit.floating = spirit_floating
 
+        # Init sub-attributes
+
         # Get the icons
 
         # Return the character
@@ -129,6 +131,37 @@ class CharacterHealth:
         self.maximum = 0
         self.current = 0
 
+    # Public method
+    async def init(self):
+        """
+        Init the current health
+
+        --
+
+        :return: `None`
+        """
+
+        self.current = self.maximum
+
+        return
+
+    async def limit(self):
+        """
+        Avoid the current health to reach a value that is < 0 or higher than the max health
+
+        --
+
+        :return: `None`
+        """
+
+        if self.current < 0:
+            self.current = 0
+
+        if self.current > self.maximum:
+            self.current = self.maximum
+
+        return
+
 
 class CharacterKi:
 
@@ -137,6 +170,24 @@ class CharacterKi:
         self.maximum = 0
         self.current = 0
 
+    # Public method
+    async def limit(self):
+        """
+        Avoid the current ki value to reach a value that is < 0 or higher than maximum
+
+        --
+
+        :return: `None`
+        """
+
+        if self.current < 0:
+            self.current = 0
+
+        if self.current > self.maximum:
+            self.current = self.maximum
+
+        return
+
 
 class CharacterDamage:
 
@@ -144,6 +195,40 @@ class CharacterDamage:
         # Public
         self.physical = 0
         self.ki = 0
+
+        # Private
+        # This represents the difference in % between the max value and the min value
+        # For example, if the range is set to 10 and the max value is 100
+        # The min value would be 90 and max 100
+        self.__physical_range = 10
+        self.__ki_range = 10
+
+    # Public method
+    async def get_physical_min(self):
+        """
+        Return the minimal value of the physical damage range
+
+        --
+
+        :return: `int`
+        """
+
+        minimal = self.physical * (1 - (self.__physical_range / 100))
+
+        return minimal
+
+    async def get_ki_min(self):
+        """
+        Return the minimal value of the ki damage range
+
+        --
+
+        :return: `None`
+        """
+
+        minimal = self.ki * (1 - (self.__ki_range / 100))
+
+        return minimal
 
 
 class CharacterCritical:
