@@ -1,7 +1,7 @@
 ![version](https://img.shields.io/badge/version-1.0.0-orange.svg)
 ![MIT](https://img.shields.io/github/license/DrLarck/discordballz-origins)
 
-![dbz-logo](https://i.imgur.com/LJRJCTs.png)
+![dbz-logo](https://i.imgur.com/9lUhtNx.png)
 ## Welcome  
 Welcome to the official repository of **Discord Ball Z : Origins** project.
 
