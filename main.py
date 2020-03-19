@@ -7,17 +7,18 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 14/03/20 by DrLarck
+Last update : 19/03/20 by DrLarck
 """
 
 import discord
 import os
 
 from discord.ext import commands
-from utility.command.loader import CommandLoader
 
 # util
 from utility.database import Database
+from utility.command.loader import CommandLoader
+from utility.entity.character_getter import CharacterGetter
 
 
 class Main:
@@ -46,6 +47,9 @@ class Main:
 
         # Create the needed tables
         client.loop.run_until_complete(Database().create_game_tables())
+
+        # Filling up the cache
+        client.loop.run_until_complete(CharacterGetter().set_cache())
 
         # Loading the commands
         client.loop.run_until_complete(CommandLoader(client).load_commands())
