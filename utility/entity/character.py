@@ -116,7 +116,7 @@ class Character:
         """
 
         # Init
-        self.__embed = await self.__embed.setup(client, title=" ", thumbnail_url=self.image.card)
+        self.__embed = await self.__embed.setup(client)
 
         # Info
         info = f"""
