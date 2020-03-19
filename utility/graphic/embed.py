@@ -39,7 +39,7 @@ class CustomEmbed:
         # Setup the embed
         # In case the parameters have not been filled
         if not len(title) > 0:
-            title = "No title provided"
+            title = ""
 
         if not len(description) > 0:
             description = ""
