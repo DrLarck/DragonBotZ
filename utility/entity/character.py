@@ -5,11 +5,12 @@ Character object
 
 Author : Drlarck
 
-Last update : 19/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
 
 # util
 from utility.graphic.embed import CustomEmbed
+from utility.graphic.icon import GameIcon
 
 
 class Character:
@@ -40,7 +41,7 @@ class Character:
     async def generate(self, name="", char_id=0, level=1,
                        card="", thumbnail="",
                        type_value=0, rarity_value=0, health=0,
-                       ki=0, physical=0, ki_power=0,
+                       ki=100, physical=0, ki_power=0,
                        crit_chance=0, crit_bonus=0, armor_fixed=0,
                        armor_floating=0, spirit_fixed=0, spirit_floating=0):
         """
@@ -82,7 +83,7 @@ class Character:
 
         self.health.maximum = health
 
-        self.ki = ki
+        self.ki.maximum = ki
 
         self.damage.physical = physical
         self.damage.ki = ki_power
@@ -99,9 +100,10 @@ class Character:
         # Init sub-attributes
 
         # Get the icons
+        self.rarity.icon = await GameIcon().get_rarity_icon(self.rarity.value)
+        self.type.icon = await GameIcon().get_type_icon(self.type.value)
 
         # Return the character
-
         return self
 
     async def get_display_card(self, client):
@@ -120,22 +122,22 @@ class Character:
 
         # Info
         info = f"""
-__Name__ : **{self.name}**
+__Name__ : **{self.name}**{self.type.icon}
 __Reference__ : `#{self.id}`
-__Rarity__ : **{self.rarity.value}**
-__Type__ : **{self.type.value}**
+__Rarity__ : {self.rarity.icon}
 __Level__ : **{self.level}**
         """
 
-        health = f"{self.health.maximum}:hearts:"
-        ki = f"{self.ki}:fire:"
+        health = f"{self.health.maximum} :hearts:"
+        ki = f"{self.ki.maximum} :fire:"
 
         damage = [await self.damage.get_physical_min(), self.damage.physical]
-        damage_ = f"**{damage[0]}** - **{damage[1]}**:crossed_swords:"
+        damage_ = f"**{damage[0]}** - **{damage[1]}** :crossed_swords:"
 
         self.__embed.add_field(name="Info :", value=info, inline=False)
         self.__embed.add_field(name="Health :", value=health, inline=False)
         self.__embed.add_field(name="Damage :", value=damage_, inline=False)
+        self.__embed.add_field(name="Ki :", value=ki, inline=False)
 
         self.__embed.set_image(url=self.image.card)
 
