@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 19/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
 
 import discord
@@ -18,7 +18,7 @@ from discord.ext import commands
 # util
 from utility.database import Database
 from utility.command.loader import CommandLoader
-from utility.entity.character_getter import CharacterGetter
+from utility.entity.character import CharacterGetter
 
 
 class Main:
