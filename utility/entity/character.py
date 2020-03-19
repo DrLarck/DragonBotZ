@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 16/03/20 by DrLarck
+Last update : 19/03/20 by DrLarck
 """
 
 
@@ -97,6 +97,19 @@ class Character:
         # Return the character
 
         return self
+
+    async def get_display_card(self):
+        """
+        Generate a display card of this character
+
+        --
+
+        :return: `discord.Embed`
+        """
+
+        # Init
+        embed = discord.Embed()
+
 
 
 class CharacterImage:
