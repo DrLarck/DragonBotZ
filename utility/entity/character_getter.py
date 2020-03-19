@@ -50,7 +50,6 @@ class CharacterGetter:
                                                             physical=character[6])
 
                     self.__cache.append(character_)
-                    print(f"Append {character_.name}")
 
                 # Cache has been filled
                 self.__cache_ok = True
@@ -74,7 +73,7 @@ class CharacterGetter:
 
         # Get the character from the cache
         if reference > 0 and reference < len(self.__cache):
-            print(self.__cache)
+            return self.__cache[reference - 1]
 
         else:
             print(f"Character {reference} not found.")
