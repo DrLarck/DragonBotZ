@@ -116,7 +116,28 @@ class Character:
         """
 
         # Init
-        self.__embed = await self.__embed.setup(client, title=self.name)
+        self.__embed = await self.__embed.setup(client, title=" ", thumbnail_url=self.image.card)
+
+        # Info
+        info = f"""
+__Name__ : **{self.name}**
+__Reference__ : `#{self.id}`
+__Rarity__ : **{self.rarity.value}**
+__Type__ : **{self.type.value}**
+__Level__ : **{self.level}**
+        """
+
+        health = f"{self.health.maximum}:hearts:"
+        ki = f"{self.ki}:fire:"
+
+        damage = [await self.damage.get_physical_min(), self.damage.physical]
+        damage_ = f"**{damage[0]}** - **{damage[1]}**:crossed_swords:"
+
+        self.__embed.add_field(name="Info :", value=info, inline=False)
+        self.__embed.add_field(name="Health :", value=health, inline=False)
+        self.__embed.add_field(name="Damage :", value=damage_, inline=False)
+
+        self.__embed.set_image(url=self.image.card)
 
         return self.__embed
 
@@ -237,7 +258,7 @@ class CharacterDamage:
 
         minimal = self.physical * (1 - (self.__physical_range / 100))
 
-        return minimal
+        return int(minimal)
 
     async def get_ki_min(self):
         """
@@ -250,7 +271,7 @@ class CharacterDamage:
 
         minimal = self.ki * (1 - (self.__ki_range / 100))
 
-        return minimal
+        return int(minimal)
 
 
 class CharacterCritical:
