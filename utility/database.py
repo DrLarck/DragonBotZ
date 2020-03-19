@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 14/03/20 by DrLarck
+Last update : 19/03/20 by DrLarck
 """
 
 import asyncio
@@ -214,6 +214,28 @@ class Database:
                 player_zeni BIGINT DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_resource_reference_index ON player_resource(reference);
+            """,
+            # character_reference table
+            """
+            CREATE SEQUENCE IF NOT EXISTS character_reference_reference_seq;
+            CREATE TABLE IF NOT EXISTS character_reference(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('character_reference_reference_seq') NOT NULL,
+                character_name TEXT,
+                character_type INTEGER,
+                character_rarity INTEGER,
+                character_card TEXT,
+                character_health BIGINT,
+                character_damage BIGINT,
+                character_attack1_name TEXT,
+                character_attack1_damage BIGINT,
+                character_attack2_name TEXT,
+                character_attack2_damage BIGINT,
+                character_attack3_name TEXT,
+                character_attack3_damage BIGINT,
+                character_attack4_name TEXT,
+                character_attack4_damage BIGINT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS character_reference_reference_index ON character_reference(reference);
             """
         ]
 
