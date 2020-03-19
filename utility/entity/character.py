@@ -8,6 +8,9 @@ Author : Drlarck
 Last update : 19/03/20 by DrLarck
 """
 
+# util
+from utility.graphic.embed import CustomEmbed
+
 
 class Character:
 
@@ -29,6 +32,9 @@ class Character:
 
         self.armor = CharacterDefense()
         self.spirit = CharacterDefense()
+
+        # Private
+        self.__embed = CustomEmbed()
 
     # Public method
     async def generate(self, name="", char_id=0, level=1,
@@ -98,9 +104,11 @@ class Character:
 
         return self
 
-    async def get_display_card(self):
+    async def get_display_card(self, client):
         """
         Generate a display card of this character
+
+        :param client: (`discord.ext.commands.Bot`)
 
         --
 
@@ -108,8 +116,9 @@ class Character:
         """
 
         # Init
-        embed = discord.Embed()
+        self.__embed = await self.__embed.setup(client, title=self.name)
 
+        return self.__embed
 
 
 class CharacterImage:

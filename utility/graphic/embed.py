@@ -42,10 +42,10 @@ class CustomEmbed:
             title = "No title provided"
 
         if not len(description) > 0:
-            description = "No description provided"
+            description = ""
 
         if not len(footer) > 0:
-            footer = "Discord Ball Z : Origins | DrLarck & DrMegas | MIT License | ©2019 - 2020"
+            footer = "Discord Ball Z : Origins | DrLarck & DrMegas | MIT License ©2019 - 2020"
 
         if not len(thumbnail_url) > 0:
             thumbnail_url = None
