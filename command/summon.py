@@ -22,7 +22,7 @@ class CommandSummon(commands.Cog):
 
         # Private
         self.__cost = 5
-        self.__getter = BannerGetter
+        self.__getter = BannerGetter()
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
@@ -35,7 +35,9 @@ class CommandSummon(commands.Cog):
         if banner is not None:
             summoned = await banner.summon()
 
-            await summoned.get_display_card()
+            character_display = await summoned.get_display_card(self.client)
+
+            await context.send(embed=character_display)
 
         else:
             await context.send(f"Banner **{banner_reference:,}** not found")
