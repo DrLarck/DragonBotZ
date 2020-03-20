@@ -132,7 +132,7 @@ __Rarity__ : {self.rarity.icon}
 __Level__ : **{self.level}**
         """
 
-        health = f"**0{self.health.maximum:,}** :hearts:"
+        health = f"**{self.health.maximum:,}** :hearts:"
         ki = f"**{self.ki.maximum:,}** :fire:"
 
         damage = [await self.damage.get_physical_min(), self.damage.physical]
