@@ -218,7 +218,7 @@ class BannerGetter:
 
         if self.__cache_ok is False:
             data = await client.database.fetch_row("""
-                                                   SELECT * 
+                                                   SELECT banner_name, banner_image, banner_content 
                                                    FROM banner
                                                    ORDER BY reference;
                                                    """)
@@ -230,7 +230,7 @@ class BannerGetter:
                     # Generate the banner object
                     banner_ = Banner()
 
-                    await banner_.generate(name=banner[1], image=banner[3], characters=banner[4])
+                    await banner_.generate(name=banner[0], image=banner[1], characters=banner[2])
 
                     self.__cache.append(banner_)
 
