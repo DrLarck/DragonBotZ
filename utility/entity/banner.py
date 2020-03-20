@@ -236,3 +236,22 @@ class BannerGetter:
             print("Banner Cache : The cache has already been filled.")
 
         return
+
+    async def get_banner(self, reference):
+        """
+        Return a banner object from the cache
+
+        :param reference: (`int`)
+
+        --
+
+        :return: `Banner` or `None` if not found
+        """
+
+        # Get the banner object from the cache
+        if reference > 0 and reference < len(self.__cache):
+            return self.__cache[reference - 1]
+
+        else:
+            print(f"Banner {reference} not found.")
+            return None
