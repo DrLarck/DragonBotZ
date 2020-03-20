@@ -11,6 +11,9 @@ Last update : 20/03/20 by DrLarck
 import asyncio
 import random
 
+# util
+from utility.database import Database
+
 
 class Banner:
 
@@ -147,3 +150,42 @@ class Banner:
                 i -= 1
 
         return characters
+
+
+class BannerGetter:
+
+    # Private
+    __database = Database()
+    __cache = []
+    __cache_ok = False
+
+    # Public
+    async def set_cache(self):
+        """
+        Set the banner cache
+
+        --
+
+        :return: `None`
+        """
+
+        if self.__cache_ok is False:
+            data = await self.__database.fetch_row("""
+                                                   SELECT * 
+                                                   FROM banner
+                                                   ORDER BY reference;
+                                                   """)
+
+            if len(data) > 0:
+                for banner in data:
+                    await asyncio.sleep(0)
+
+                    self.__cache.append(banner)
+
+                self.__cache_ok = True
+                print("Banner Cache : DONE")
+
+        else:
+            print("Banner Cache : The cache has already been filled.")
+
+        return
