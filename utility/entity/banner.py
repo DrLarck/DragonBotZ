@@ -28,6 +28,14 @@ class Banner:
         self.__r = []
         self.__n = []
 
+        # Droprate as %
+        self.__lr_droprate = 0.01
+        self.__ur_droprate = 3
+        self.__ssr_droprate = 15
+        self.__ssr_droprate = 33
+        self.__lr_droprate = 50
+        self.__n_droprate = 100
+
     # Public
     async def sort(self):
         """
