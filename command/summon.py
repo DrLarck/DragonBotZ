@@ -27,7 +27,7 @@ class CommandSummon(commands.Cog):
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
     @commands.command()
-    async def summon(self, context, banner_reference: int):
+    async def summon(self, context, banner_reference: int = 1):
 
         # Init
         banner = await self.__getter.get_banner(banner_reference)
