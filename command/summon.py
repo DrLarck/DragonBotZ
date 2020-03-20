@@ -54,7 +54,7 @@ class CommandSummon(commands.Cog):
             # Setup the embed
             character_display = await summoned.get_display_card(self.client)
             character_display.set_thumbnail(url=player.avatar)
-            character_display.description = f"Summoned from **{banner.name}**"
+            character_display.description = f"Summoned from **{banner.name}** banner"
 
             # Remove the amount of stones used
             await player.resource.remove_dragonstone(self.__cost)
