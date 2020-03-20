@@ -46,8 +46,11 @@ class Main:
         client = commands.Bot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
 
+        # Create the database attribute for client
+        client.database = Database()
+
         # Create the needed tables
-        client.loop.run_until_complete(Database().create_game_tables())
+        client.loop.run_until_complete(client.database.create_game_tables())
 
         # Filling up the cache
         client.loop.run_until_complete(CharacterGetter().set_cache())
