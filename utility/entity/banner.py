@@ -13,6 +13,7 @@ import random
 
 # util
 from utility.database import Database
+from utility.entity.character import CharacterGetter
 
 
 class Banner:
@@ -151,6 +152,47 @@ class Banner:
 
         return characters
 
+    async def generate(self, name="",
+                       image="", characters=""):
+        """
+        Generate a banner object
+
+        :param name: (`str`)
+        :param image: (`str`) Valid url
+        :param characters: (`str`)
+
+        --
+
+        :return: `Banner`
+        """
+
+        # Init
+        getter = CharacterGetter
+
+        # Set the attributes
+        self.name = name
+        self.image = image
+        self.characters = characters
+
+        # Get the character instances
+        self.characters = self.characters.split()
+
+        # The character are stored as reference id in the characters[] attribute
+        for reference in self.characters:
+            await asyncio.sleep(0)
+
+            # Convert the str reference to int
+            reference = int(reference)
+            character = await getter.get_reference_character(reference)
+
+            # Add the character into the list
+            self.characters.append(character)
+
+        # Sort the banner
+        await self.sort()
+
+        return self
+
 
 class BannerGetter:
 
@@ -172,13 +214,18 @@ class BannerGetter:
         if self.__cache_ok is False:
             data = await self.__database.fetch_row("""
                                                    SELECT * 
-                                                   FROM banner
-                                                   ORDER BY reference;
+                                                   FROM portal
+                                                   ORDER BY portal_num;
                                                    """)
 
             if len(data) > 0:
                 for banner in data:
                     await asyncio.sleep(0)
+
+                    # Generate the banner object
+                    banner_ = Banner()
+
+                    await banner_.generate(name=banner[1], image=banner[3], characters=banner[4])
 
                     self.__cache.append(banner)
 
