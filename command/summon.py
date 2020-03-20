@@ -5,7 +5,7 @@ Summon command
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 21/03/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -53,8 +53,8 @@ class CommandSummon(commands.Cog):
 
             # Setup the embed
             character_display = await summoned.get_display_card(self.client)
+            character_display.set_thumbnail(url=player.avatar)
             character_display.description = f"Summoned from **{banner.name}**"
-            character_display.set_thumbnail(url=context.message.author.avatar_url)
 
             # Remove the amount of stones used
             await player.resource.remove_dragonstone(self.__cost)
