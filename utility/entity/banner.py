@@ -167,7 +167,7 @@ class Banner:
         """
 
         # Init
-        getter = CharacterGetter
+        getter = CharacterGetter()
 
         # Set the attributes
         self.name = name
@@ -177,16 +177,23 @@ class Banner:
         # Get the character instances
         self.characters = self.characters.split()
 
+        # Init the new character list
+        new_character_list = []
+
         # The character are stored as reference id in the characters[] attribute
         for reference in self.characters:
             await asyncio.sleep(0)
 
             # Convert the str reference to int
             reference = int(reference)
+
             character = await getter.get_reference_character(reference)
 
             # Add the character into the list
-            self.characters.append(character)
+            new_character_list.append(character)
+
+        # Replace the old character list by the new one
+        self.characters = new_character_list
 
         # Sort the banner
         await self.sort()
@@ -227,7 +234,7 @@ class BannerGetter:
 
                     await banner_.generate(name=banner[1], image=banner[3], characters=banner[4])
 
-                    self.__cache.append(banner)
+                    self.__cache.append(banner_)
 
                 self.__cache_ok = True
                 print("Banner Cache : DONE")
@@ -249,7 +256,7 @@ class BannerGetter:
         """
 
         # Get the banner object from the cache
-        if reference > 0 and reference < len(self.__cache):
+        if reference > 0 and reference - 1 < len(self.__cache):
             return self.__cache[reference - 1]
 
         else:
