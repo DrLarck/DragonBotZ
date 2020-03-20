@@ -201,6 +201,7 @@ class Banner:
 
         return self
 
+    # noinspection PyMethodMayBeStatic
     async def generate_unique_id(self, reference):
         """
         Generate a unique id from the reference
@@ -212,12 +213,7 @@ class Banner:
         :return: `str`
         """
 
-        # Tiers
-        number = 0,
-        first_letter = 0
-        second_letter = 0
-        third_letter = 0
-        fourth_letter = 0
+        # Init
         letters = ascii_letters
 
         # Generation
