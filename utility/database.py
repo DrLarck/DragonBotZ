@@ -236,6 +236,17 @@ class Database:
                 character_attack4_damage BIGINT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_reference_reference_index ON character_reference(reference);
+            """,
+            # banner table
+            """
+            CREATE SEQUENCE IF NOT EXISTS banner_reference_seq;
+            CREATE TABLE IF NOT EXISTS banner(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('banner_reference_seq') NOT NULL,
+                banner_name TEXT,
+                banner_image TEXT,
+                banner_content TEXT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS banner_reference_index ON banner(reference);
             """
         ]
 
