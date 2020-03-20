@@ -13,6 +13,7 @@ import asyncio
 # util
 from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
+from utility.graphic.color import GameColor
 
 
 class Character:
@@ -122,7 +123,8 @@ class Character:
         """
 
         # Init
-        embed = await self.__embed.setup(client)
+        color = await GameColor().get_rarity_color(self.rarity.value)
+        embed = await self.__embed.setup(client, color=color)
 
         # Info
         info = f"""
