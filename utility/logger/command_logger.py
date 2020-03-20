@@ -5,20 +5,18 @@ Command logger
 
 Author : DrLarck
 
-Last update : 13/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
 
 import asyncio
 import time
 
-from utility.database import Database
-
 
 class CommandLogger:
 
-    def __init__(self):
+    def __init__(self, client):
         # Private
-        self.__database = Database()
+        self.__database = client.database
 
     # Public
     async def log(self, context):

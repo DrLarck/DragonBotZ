@@ -5,7 +5,7 @@ Start command
 
 Author : DrLarck
 
-Last update : 13/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
 
 import time
@@ -14,7 +14,6 @@ from discord.ext import commands
 
 # util
 from utility.entity.player import Player
-from utility.database import Database
 from utility.command.checker import CommandChecker
 from utility.logger.command_logger import CommandLogger
 from utility.graphic.icon import GameIcon
@@ -44,10 +43,10 @@ class CommandStart(commands.Cog):
         """
 
         # Init
-        player = Player(context.message.author)
+        player = Player(self.client, context.message.author)
         date = time.strftime("%d/%m/%y - %H:%M", time.gmtime())
-        database = Database()
-        await CommandLogger().log(context)
+        database = self.client.database
+        await CommandLogger(self.client).log(context)
 
         # Register the player into the database
         await database.execute("""

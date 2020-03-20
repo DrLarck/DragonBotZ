@@ -19,6 +19,7 @@ from discord.ext import commands
 from utility.database import Database
 from utility.command.loader import CommandLoader
 from utility.entity.character import CharacterGetter
+from utility.entity.banner import BannerGetter
 
 
 class Main:
@@ -45,11 +46,15 @@ class Main:
         client = commands.Bot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
 
+        # Create the database attribute for client
+        client.database = Database()
+
         # Create the needed tables
-        client.loop.run_until_complete(Database().create_game_tables())
+        client.loop.run_until_complete(client.database.create_game_tables())
 
         # Filling up the cache
-        client.loop.run_until_complete(CharacterGetter().set_cache())
+        client.loop.run_until_complete(CharacterGetter().set_cache(client))
+        client.loop.run_until_complete(BannerGetter().set_cache(client))
 
         # Loading the commands
         client.loop.run_until_complete(CommandLoader(client).load_commands())
