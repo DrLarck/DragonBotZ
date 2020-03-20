@@ -219,8 +219,8 @@ class BannerGetter:
         if self.__cache_ok is False:
             data = await client.database.fetch_row("""
                                                    SELECT * 
-                                                   FROM portal
-                                                   ORDER BY portal_num;
+                                                   FROM banner
+                                                   ORDER BY reference;
                                                    """)
 
             if len(data) > 0:
