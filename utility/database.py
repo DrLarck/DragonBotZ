@@ -258,14 +258,14 @@ class Database:
                 character_owner_id BIGINT,
                 character_owner_name TEXT,
                 character_rarity INTEGER,
-                character_level INTEGER,
-                character_experience BIGINT,
-                character_dokkan_rate INTEGER,
-                character_star INTEGER,
-                character_training_armor INTEGER,
-                character_training_spirit INTEGER,
-                character_training_physical INTEGER,
-                character_training_ki INTEGER
+                character_level INTEGER DEFAULT 1,
+                character_experience BIGINT DEFAULT 0,
+                character_dokkan_rate INTEGER DEFAULT 0,
+                character_star INTEGER DEFAULT 0,
+                character_training_armor INTEGER DEFAULT 0,
+                character_training_spirit INTEGER DEFAULT 0,
+                character_training_physical INTEGER DEFAULT 0,
+                character_training_ki INTEGER DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """
