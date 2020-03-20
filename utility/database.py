@@ -247,6 +247,27 @@ class Database:
                 banner_content TEXT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS banner_reference_index ON banner(reference);
+            """,
+            # character_unique table
+            """
+            CREATE SEQUENCE IF NOT EXISTS character_unique_reference_seq;
+            CREATE TABLE IF NOT EXISTS character_unique(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('character_unique_reference_seq') NOT NULL,
+                character_reference BIGINT,
+                character_unique_id TEXT DEFAULT 'NONE',
+                character_owner_id BIGINT,
+                character_owner_name TEXT,
+                character_rarity INTEGER,
+                character_level INTEGER,
+                character_experience BIGINT,
+                character_dokkan_rate INTEGER,
+                character_star INTEGER,
+                character_training_armor INTEGER,
+                character_training_spirit INTEGER,
+                character_training_physical INTEGER,
+                character_training_ki INTEGER
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """
         ]
 
