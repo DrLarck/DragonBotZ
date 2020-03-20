@@ -254,7 +254,7 @@ class Banner:
         """
 
         # Get the characters that have 'NONE' as unique id
-        characters = client.database.fetch_row("""
+        characters = await client.database.fetch_row("""
                                                SELECT reference 
                                                FROM character_unique
                                                WHERE character_unique_id = 'NONE';
@@ -269,7 +269,7 @@ class Banner:
             unique_id = await self.generate_unique_id(reference)
 
             # Update the character's unique id
-            self.client.database.execute("""
+            await client.database.execute("""
                                          UPDATE character_unique
                                          SET character_unique_id = $1
                                          WHERE reference = $2;
