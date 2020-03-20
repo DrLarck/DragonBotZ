@@ -20,6 +20,7 @@ class Banner:
         self.image = ""
         self.characters = []
         self.sorted = False
+        self.multi = 10
 
         # Private
         self.__lr = []
@@ -123,3 +124,26 @@ class Banner:
             return character
 
         return
+
+    async def multi_summon(self):
+        """
+        Proceed to a multi summon
+
+        --
+
+        :return: `list` of `Character`
+        """
+
+        # Init
+        characters = []
+
+        for i in range(self.multi):
+            summoned = await self.summon()
+
+            if summoned is not None:
+                characters.append(summoned)
+
+            else:
+                i -= 1
+
+        return characters
