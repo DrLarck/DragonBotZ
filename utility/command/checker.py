@@ -5,14 +5,13 @@ Command checker
 
 Author : DrLarck
 
-Last update : 13/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
 
 from discord.channel import DMChannel
 
 # util
 from utility.entity.player import Player
-from utility.database import Database
 
 
 class CommandChecker:
@@ -72,8 +71,9 @@ class CommandChecker:
         """
 
         # Init
-        player = Player(context.message.author)
-        database = Database()
+        client = context.bot
+        player = Player(client, context.message.author)
+        database = client.database
 
         # Check if the player is in the database
         value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = {player.id};")
@@ -102,8 +102,9 @@ class CommandChecker:
         """
 
         # Init
-        player = Player(context.message.author)
-        database = Database()
+        client = context.bot
+        player = Player(client, context.message.author)
+        database = client.database
 
         # Check if the player is in the database
         value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = {player.id};")

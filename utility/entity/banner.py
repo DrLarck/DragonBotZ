@@ -11,8 +11,9 @@ Last update : 20/03/20 by DrLarck
 import asyncio
 import random
 
+from string import ascii_letters
+
 # util
-from utility.database import Database
 from utility.entity.character import CharacterGetter
 
 
@@ -167,7 +168,7 @@ class Banner:
         """
 
         # Init
-        getter = CharacterGetter
+        getter = CharacterGetter()
 
         # Set the attributes
         self.name = name
@@ -177,32 +178,114 @@ class Banner:
         # Get the character instances
         self.characters = self.characters.split()
 
+        # Init the new character list
+        new_character_list = []
+
         # The character are stored as reference id in the characters[] attribute
         for reference in self.characters:
             await asyncio.sleep(0)
 
             # Convert the str reference to int
             reference = int(reference)
+
             character = await getter.get_reference_character(reference)
 
             # Add the character into the list
-            self.characters.append(character)
+            new_character_list.append(character)
+
+        # Replace the old character list by the new one
+        self.characters = new_character_list
 
         # Sort the banner
         await self.sort()
 
         return self
 
+    async def generate_unique_id(self, reference):
+        """
+        Generate a unique id from the reference
+
+        :param reference: (`int`)
+
+        --
+
+        :return: `str`
+        """
+
+        # Tiers
+        number = 0,
+        first_letter = 0
+        second_letter = 0
+        third_letter = 0
+        fourth_letter = 0
+        letters = ascii_letters
+
+        # Generation
+        # First of all, store the highest value in 'number'
+        number = int(reference / pow(52, 4))
+        reference -= number * pow(52, 4)
+
+        # Then deal the value with the letters
+        # Each letter can store (52^index - 1) values
+        # The first_letter (tier 1) can handle 52 values
+        first_letter = int(reference / pow(52, 3))
+        reference -= first_letter * pow(52, 3)
+
+        second_letter = int(reference / pow(52, 2))
+        reference -= second_letter * pow(52, 2)
+
+        third_letter = int(reference / 52)
+        reference -= third_letter * 52
+
+        fourth_letter = reference
+
+        # Get the unique id
+        id_ = f"{letters[fourth_letter]}{letters[third_letter]}{letters[second_letter]}{letters[first_letter]}{number}"
+
+        return id_
+
+    async def set_unique_id(self, client):
+        """
+        Generate an unique id for the characters that have 'NONE' as unique id
+
+        --
+
+        :return: `None`
+        """
+
+        # Get the characters that have 'NONE' as unique id
+        characters = await client.database.fetch_row("""
+                                               SELECT reference 
+                                               FROM character_unique
+                                               WHERE character_unique_id = 'NONE';
+                                               """)
+
+        # Generate a unique id for each of them
+        for character in characters:
+            await asyncio.sleep(0)
+
+            # Get the unique character's reference
+            reference = character[0]
+            unique_id = await self.generate_unique_id(reference)
+
+            # Update the character's unique id
+            await client.database.execute("""
+                                         UPDATE character_unique
+                                         SET character_unique_id = $1
+                                         WHERE reference = $2;
+                                         """, [unique_id, reference])
+
+        return
+
 
 class BannerGetter:
 
     # Private
-    __database = Database()
     __cache = []
     __cache_ok = False
 
     # Public
-    async def set_cache(self):
+    async def set_cache(self, client):
         """
         Set the banner cache
 
@@ -212,10 +295,10 @@ class BannerGetter:
         """
 
         if self.__cache_ok is False:
-            data = await self.__database.fetch_row("""
-                                                   SELECT * 
-                                                   FROM portal
-                                                   ORDER BY portal_num;
+            data = await client.database.fetch_row("""
+                                                   SELECT banner_name, banner_image, banner_content 
+                                                   FROM banner
+                                                   ORDER BY reference;
                                                    """)
 
             if len(data) > 0:
@@ -225,9 +308,9 @@ class BannerGetter:
                     # Generate the banner object
                     banner_ = Banner()
 
-                    await banner_.generate(name=banner[1], image=banner[3], characters=banner[4])
+                    await banner_.generate(name=banner[0], image=banner[1], characters=banner[2])
 
-                    self.__cache.append(banner)
+                    self.__cache.append(banner_)
 
                 self.__cache_ok = True
                 print("Banner Cache : DONE")
@@ -249,7 +332,7 @@ class BannerGetter:
         """
 
         # Get the banner object from the cache
-        if reference > 0 and reference < len(self.__cache):
+        if reference > 0 and reference - 1 < len(self.__cache):
             return self.__cache[reference - 1]
 
         else:

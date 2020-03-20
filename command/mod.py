@@ -29,9 +29,9 @@ class CommandModeration(commands.Cog):
     async def test(self, context):
 
         # Init
-        await CommandLogger().log(context)
+        await CommandLogger(self.client).log(context)
 
-        player = Player(context.message.author)
+        player = Player(self.client, context.message.author)
 
         dragonstone = await player.resource.get_dragonstone()
 

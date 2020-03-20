@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 19/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
 
 import asyncio
@@ -236,6 +236,38 @@ class Database:
                 character_attack4_damage BIGINT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_reference_reference_index ON character_reference(reference);
+            """,
+            # banner table
+            """
+            CREATE SEQUENCE IF NOT EXISTS banner_reference_seq;
+            CREATE TABLE IF NOT EXISTS banner(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('banner_reference_seq') NOT NULL,
+                banner_name TEXT,
+                banner_image TEXT,
+                banner_content TEXT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS banner_reference_index ON banner(reference);
+            """,
+            # character_unique table
+            """
+            CREATE SEQUENCE IF NOT EXISTS character_unique_reference_seq;
+            CREATE TABLE IF NOT EXISTS character_unique(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('character_unique_reference_seq') NOT NULL,
+                character_reference BIGINT,
+                character_unique_id TEXT DEFAULT 'NONE',
+                character_owner_id BIGINT,
+                character_owner_name TEXT,
+                character_rarity INTEGER,
+                character_level INTEGER DEFAULT 1,
+                character_experience BIGINT DEFAULT 0,
+                character_dokkan_rate INTEGER DEFAULT 0,
+                character_star INTEGER DEFAULT 0,
+                character_training_armor INTEGER DEFAULT 0,
+                character_training_spirit INTEGER DEFAULT 0,
+                character_training_physical INTEGER DEFAULT 0,
+                character_training_ki INTEGER DEFAULT 0
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """
         ]
 
