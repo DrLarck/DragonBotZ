@@ -48,6 +48,17 @@ class CommandSummon(commands.Cog):
             # Remove the amount of stones used
             await player.resource.remove_dragonstone(self.__cost)
 
+            # Add the character to the character_unique table
+            await self.client.database.execute("""
+                                               INSERT INTO character_unique(
+                                               character_reference, character_owner_id, character_owner_name,
+                                               character_rarity) 
+                                               VALUES($1, $2, $3, $4);
+                                               """, [summoned.id, player.id, player.name, summoned.rarity.value])
+
+            # Generate an unique id
+            await banner.set_unique_id(self.client)
+            
             # Display the card
             await context.send(embed=character_display)
 
