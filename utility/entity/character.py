@@ -122,7 +122,7 @@ class Character:
         """
 
         # Init
-        self.__embed = await self.__embed.setup(client)
+        embed = await self.__embed.setup(client)
 
         # Info
         info = f"""
@@ -138,14 +138,14 @@ __Level__ : **{self.level}**
         damage = [await self.damage.get_physical_min(), self.damage.physical]
         damage_ = f"**{damage[0]}** - **{damage[1]}** :crossed_swords:"
 
-        self.__embed.add_field(name="Info :", value=info, inline=False)
-        self.__embed.add_field(name="Health :", value=health, inline=False)
-        self.__embed.add_field(name="Damage :", value=damage_, inline=False)
-        self.__embed.add_field(name="Ki :", value=ki, inline=False)
+        embed.add_field(name="Info :", value=info, inline=False)
+        embed.add_field(name="Health :", value=health, inline=False)
+        embed.add_field(name="Damage :", value=damage_, inline=False)
+        embed.add_field(name="Ki :", value=ki, inline=False)
 
-        self.__embed.set_image(url=self.image.card)
+        embed.set_image(url=self.image.card)
 
-        return self.__embed
+        return embed
 
 
 class CharacterImage:
