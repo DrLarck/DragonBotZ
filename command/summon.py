@@ -29,21 +29,32 @@ class CommandSummon(commands.Cog):
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
     @commands.command()
-    async def summon(self, context, banner_reference: int = 1):
+    async def summon(self, context, banner_reference: int = None):
 
         # Init
         player = Player(self.client, context.message.author)
         icon = GameIcon()
-        banner = await self.__getter.get_banner(banner_reference)
+
+        # Get the banner
+        if banner_reference is None:  # If the banner reference is not specified
+            banner = await self.__getter.get_latest_banner()
+
+        # If the banner reference is specified
+        else:
+            banner = await self.__getter.get_banner(banner_reference)
 
         # Check if the player has enough resource to summon
         player_dargonstone = await player.resource.get_dragonstone()
 
         # If the player has enough to summon
         if player_dargonstone >= self.__cost and banner is not None:
+            # Get the summoned character
             summoned = await banner.summon()
 
+            # Setup the embed
             character_display = await summoned.get_display_card(self.client)
+            character_display.description = f"Summoned from **{banner.name}**"
+            character_display.set_thumbnail(url=context.message.author.avatar_url)
 
             # Remove the amount of stones used
             await player.resource.remove_dragonstone(self.__cost)
