@@ -352,7 +352,7 @@ class CharacterGetter:
         """
 
         # Get the character from the cache
-        if reference > 0 and reference < len(self.__cache):
+        if reference > 0 and reference - 1 < len(self.__cache):
             return self.__cache[reference - 1]
 
         else:
