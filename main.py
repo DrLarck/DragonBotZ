@@ -19,6 +19,7 @@ from discord.ext import commands
 from utility.database import Database
 from utility.command.loader import CommandLoader
 from utility.entity.character import CharacterGetter
+from utility.entity.banner import BannerGetter
 
 
 class Main:
@@ -50,6 +51,7 @@ class Main:
 
         # Filling up the cache
         client.loop.run_until_complete(CharacterGetter().set_cache())
+        client.loop.run_until_complete(BannerGetter().set_cache())
 
         # Loading the commands
         client.loop.run_until_complete(CommandLoader(client).load_commands())
