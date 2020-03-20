@@ -132,3 +132,55 @@ class PlayerResource:
                                       """, [zeni, self.player.id])
 
         return
+
+    async def remove_dragonstone(self, amount):
+        """
+        Remove a certain amount of dragon stones
+
+        :param amount: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        # Init
+        dragonstone = await self.get_dragonstone()
+
+        # Remove the amount
+        dragonstone -= amount
+
+        # Update the inventory
+        await self.__database.execute("""
+                                      UPDATE player_resource
+                                      SET player_dragonstone = $1
+                                      WHERE player_id = $2;
+                                      """, [dragonstone, self.player.id])
+
+        return
+
+    async def remove_zeni(self, amount):
+        """
+        Remove a certain amount of zeni
+
+        :param amount: (`int`)
+
+        --
+
+        :return:
+        """
+
+        # Init
+        zeni = await self.get_zeni()
+
+        # Remove the amount
+        zeni -= amount
+
+        # Update inventory
+        await self.__database.execute("""
+                                      UPDATE player_resource
+                                      SET player_zeni = $1
+                                      WHERE player_id = $2;
+                                      """, [zeni, self.player.id])
+
+        return
