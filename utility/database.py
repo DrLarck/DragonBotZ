@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 19/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
 
 import asyncio

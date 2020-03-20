@@ -5,16 +5,15 @@ Player object
 
 Author : DrLarck
 
-Last update : 14/03/20 by DrLarck
+Last update : 20/03/20 by DrLarck
 """
-
-from utility.database import Database
 
 
 class Player:
 
-    def __init__(self, user):
+    def __init__(self, client, user):
         # Public
+        self.client = client
         self.name = user.name
         self.id = user.id
 
@@ -25,7 +24,7 @@ class PlayerResource:
 
     def __init__(self, player):
         # Private
-        self.__database = Database()
+        self.__database = player.client.database
 
         # Public
         self.player = player

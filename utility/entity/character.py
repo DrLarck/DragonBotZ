@@ -11,15 +11,16 @@ Last update : 20/03/20 by DrLarck
 import asyncio
 
 # util
-from utility.database import Database
 from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
 
 
 class Character:
 
-    def __init__(self):
+    def __init__(self, client):
         # Public
+        self.client = client
+
         self.name = ""
         self.id = 0
         self.level = 1
@@ -298,12 +299,11 @@ class CharacterDefense:
 class CharacterGetter:
 
     # Private
-    __database = Database()
     __cache = []
     __cache_ok = False  # Indicates if the cache has already been filled
 
     # Public
-    async def set_cache(self):
+    async def set_cache(self, client):
         """
         Set the character cache
 
@@ -313,7 +313,7 @@ class CharacterGetter:
         """
 
         if self.__cache_ok is False:
-            data = await self.__database.fetch_row("""
+            data = await client.database.fetch_row("""
                                                  SELECT *
                                                  FROM character_reference
                                                  ORDER BY reference;
@@ -324,10 +324,10 @@ class CharacterGetter:
                 for character in data:
                     await asyncio.sleep(0)
 
-                    character_ = await Character().generate(char_id=character[0], name=character[1],
-                                                            type_value=character[2], rarity_value=character[3],
-                                                            card=character[4], health=character[5],
-                                                            physical=character[6])
+                    character_ = await Character(client).generate(char_id=character[0], name=character[1],
+                                                                  type_value=character[2], rarity_value=character[3],
+                                                                  card=character[4], health=character[5],
+                                                                  physical=character[6])
 
                     self.__cache.append(character_)
 

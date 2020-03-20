@@ -53,8 +53,8 @@ class Main:
         client.loop.run_until_complete(client.database.create_game_tables())
 
         # Filling up the cache
-        client.loop.run_until_complete(CharacterGetter().set_cache())
-        client.loop.run_until_complete(BannerGetter().set_cache())
+        client.loop.run_until_complete(CharacterGetter().set_cache(client))
+        client.loop.run_until_complete(BannerGetter().set_cache(client))
 
         # Loading the commands
         client.loop.run_until_complete(CommandLoader(client).load_commands())

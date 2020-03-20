@@ -12,7 +12,6 @@ import asyncio
 import random
 
 # util
-from utility.database import Database
 from utility.entity.character import CharacterGetter
 
 
@@ -204,12 +203,11 @@ class Banner:
 class BannerGetter:
 
     # Private
-    __database = Database()
     __cache = []
     __cache_ok = False
 
     # Public
-    async def set_cache(self):
+    async def set_cache(self, client):
         """
         Set the banner cache
 
@@ -219,7 +217,7 @@ class BannerGetter:
         """
 
         if self.__cache_ok is False:
-            data = await self.__database.fetch_row("""
+            data = await client.database.fetch_row("""
                                                    SELECT * 
                                                    FROM portal
                                                    ORDER BY portal_num;
