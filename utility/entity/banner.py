@@ -5,7 +5,7 @@ Banner object
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 21/03/20 by DrLarck
 """
 
 import asyncio
@@ -338,3 +338,14 @@ class BannerGetter:
         else:
             print(f"Banner {reference} not found.")
             return None
+
+    async def get_latest_banner(self):
+        """
+        Return the last banner stored in the cache
+
+        --
+
+        :return: `Banner`
+        """
+
+        return self.__cache[len(self.__cache) - 1]
