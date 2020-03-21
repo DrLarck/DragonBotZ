@@ -43,9 +43,16 @@ class CommandProfile(commands.Cog):
 
         embed = CustomEmbed()
 
-        # Initialize embed's informations
-        level = player.level
-        
+        # Initialize embed's information
+        level = await player.experience.get_player_level()
+
+        # Setup the embed
+        embed = await embed.setup(title=f"{player.name}'s profile", thumbnail_url=player.avatar)
+
+        embed.add_field(name=":star:Level", value=level, inline=True)
+
+        # Display the profile
+        await context.send(embed=embed)
 
 
 def setup(client):
