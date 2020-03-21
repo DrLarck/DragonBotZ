@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 21/03/20 by DrLarck
 """
 
 
@@ -15,6 +15,7 @@ class Player:
         # Public
         self.client = client
         self.name = user.name
+        self.avatar = user.avatar_url
         self.id = user.id
 
         self.resource = PlayerResource(self)
