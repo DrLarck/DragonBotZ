@@ -279,7 +279,7 @@ class BannerGetter:
     # Private
     __cache = []
     __cache_ok = False
-    __current_baner = 35
+    __current_banner = 35
 
     # Public
     async def set_cache(self, client):
@@ -345,4 +345,4 @@ class BannerGetter:
         :return: `Banner`
         """
 
-        return self.__cache[self.__current_baner - 1]
+        return self.__cache[self.__current_banner - 1]
