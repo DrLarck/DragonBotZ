@@ -22,7 +22,10 @@ class CommandLoader:
         self.__command = [
             # Command
             "command.mod", "command.start", "command.summon",
-            "command.profile"
+            "command.profile",
+
+            # Event
+            "utility.event.on_ready"
         ]
 
     async def load_commands(self):
