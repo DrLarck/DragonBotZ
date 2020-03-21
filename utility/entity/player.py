@@ -19,7 +19,7 @@ class Player:
         self.id = user.id
 
         self.resource = PlayerResource(self)
-        self.experience = PlayerExperience
+        self.experience = PlayerExperience(self)
 
 
 class PlayerResource:

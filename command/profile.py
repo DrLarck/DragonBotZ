@@ -25,6 +25,7 @@ class CommandProfile(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
+    @commands.command()
     async def profile(self, context, target: discord.Member = None):
 
         # Log
@@ -47,7 +48,7 @@ class CommandProfile(commands.Cog):
         level = await player.experience.get_player_level()
 
         # Setup the embed
-        embed = await embed.setup(title=f"{player.name}'s profile", thumbnail_url=player.avatar)
+        embed = await embed.setup(self.client, title=f"{player.name}'s profile", thumbnail_url=player.avatar)
 
         embed.add_field(name=":star:Level", value=level, inline=True)
 
