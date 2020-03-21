@@ -31,6 +31,9 @@ class CommandSummon(commands.Cog):
     @commands.command()
     async def summon(self, context, banner_reference: int = None):
 
+        # Log
+        await self.client.logger.log(context)
+
         # Init
         player = Player(self.client, context.message.author)
         icon = GameIcon()
