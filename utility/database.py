@@ -210,8 +210,8 @@ class Database:
                 reference BIGINT PRIMARY KEY DEFAULT nextval('player_info_reference_seq') NOT NULL,
                 player_id BIGINT,
                 player_name TEXT,
-                player_level BIGINT,
-                player_experience BIGINT
+                player_level BIGINT DEFAULT 1,
+                player_experience BIGINT DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_experience_reference_index ON player_experience(reference);
             """
