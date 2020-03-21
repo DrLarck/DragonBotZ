@@ -16,6 +16,7 @@ class EventOnError(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    # noinspection PyUnusedLocal
     @commands.Cog.listener()
     async def on_command_error(self, context, error):
         """
