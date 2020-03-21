@@ -51,7 +51,7 @@ class Main:
         client.database = Database()
 
         # Create the logger attribute for the client
-        client.logger = CommandLogger()
+        client.logger = CommandLogger(client)
 
         # Create the needed tables
         client.loop.run_until_complete(client.database.create_game_tables())
