@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 21/03/20 by DrLarck
 """
 
 import discord
@@ -17,6 +17,7 @@ from discord.ext import commands
 
 # util
 from utility.database import Database
+from utility.logger.command_logger import CommandLogger
 from utility.command.loader import CommandLoader
 from utility.entity.character import CharacterGetter
 from utility.entity.banner import BannerGetter
@@ -48,6 +49,9 @@ class Main:
 
         # Create the database attribute for client
         client.database = Database()
+
+        # Create the logger attribute for the client
+        client.logger = CommandLogger()
 
         # Create the needed tables
         client.loop.run_until_complete(client.database.create_game_tables())
