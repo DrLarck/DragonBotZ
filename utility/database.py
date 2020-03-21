@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 21/03/20 by DrLarck
 """
 
 import asyncio
@@ -203,6 +203,18 @@ class Database:
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_reference_index ON player_info(reference);
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_id_index ON player_info(player_id);
             """,
+            # player_experience table
+            """
+            CREATE SEQUENCE IF NOT EXISTS player_experience_reference_seq;
+            CREATE TABLE IF NOT EXISTS player_experience(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('player_info_reference_seq') NOT NULL,
+                player_id BIGINT,
+                player_name TEXT,
+                player_level BIGINT,
+                player_experience BIGINT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS player_experience_reference_index ON player_experience(reference);
+            """
             # player_resource table
             """
             CREATE SEQUENCE IF NOT EXISTS player_resource_reference_seq;
