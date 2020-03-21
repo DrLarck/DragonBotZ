@@ -37,7 +37,7 @@ class CommandSummon(commands.Cog):
 
         # Get the banner
         if banner_reference is None:  # If the banner reference is not specified
-            banner = await self.__getter.get_latest_banner()
+            banner = await self.__getter.get_current_banner()
 
         # If the banner reference is specified
         else:
