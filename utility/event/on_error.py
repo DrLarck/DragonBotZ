@@ -10,9 +10,6 @@ Last update : 21/03/20 by DrLarck
 
 from discord.ext import commands
 
-# commands
-from command.summon import CommandSummon
-
 
 class EventOnError(commands.Cog):
 
@@ -41,6 +38,10 @@ class EventOnError(commands.Cog):
         if isinstance(error, commands.CheckFailure):
             # Ignore the exception
             pass
+
+        # Print unhandled error
+        else:
+            print(error)
 
         return
 
