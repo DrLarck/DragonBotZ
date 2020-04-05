@@ -20,7 +20,6 @@ class ToolInventory:
         self.client = client
 
         # Private
-        self.__embed = CustomEmbed()
         self.__database = self.client.database
         self.__icon = GameIcon()
 
@@ -43,25 +42,27 @@ class ToolInventory:
                                                             WHERE character_owner_id = $1;
                                                             """, [player.id])
 
+        embed = CustomEmbed()
+
         collection = len(player_characters)
         dragonstone = await player.resource.get_dragonstone()
         zeni = await player.resource.get_zeni()
 
         # Setup the embed
-        self.__embed = await self.__embed.setup(self.client, title=f"{player.name}'s inventory",
-                                                thumbnail_url=player.avatar)
+        embed = await embed.setup(self.client, title=f"{player.name}'s inventory",
+                                  thumbnail_url=player.avatar)
 
         # Embed fields
-        self.__embed.add_field(name=f"{self.__icon.dragonstone}Dragon Stone",
-                               value=f"{dragonstone:,}",
-                               inline=True)
+        embed.add_field(name=f"{self.__icon.dragonstone}Dragon Stone",
+                        value=f"{dragonstone:,}",
+                        inline=True)
 
-        self.__embed.add_field(name=f"{self.__icon.zeni}Zeni",
-                               value=f"{zeni:,}",
-                               inline=True)
+        embed.add_field(name=f"{self.__icon.zeni}Zeni",
+                        value=f"{zeni:,}",
+                        inline=True)
 
-        self.__embed.add_field(name="Collection",
-                               value=f"{collection:,}",
-                               inline=True)
+        embed.add_field(name="Character",
+                        value=f"{collection:,}",
+                        inline=True)
 
-        return self.__embed
+        return embed
