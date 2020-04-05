@@ -52,16 +52,16 @@ class ToolInventory:
                                                 thumbnail_url=player.avatar)
 
         # Embed fields
-        self.__embed.add_field(name=f"Dragon Stone{self.__icon.dragonstone}",
-                               value=dragonstone,
+        self.__embed.add_field(name=f"{self.__icon.dragonstone}Dragon Stone",
+                               value=f"{dragonstone:,}",
                                inline=True)
 
-        self.__embed.add_field(name=f"Zeni{self.__icon.zeni}",
-                               value=zeni,
+        self.__embed.add_field(name=f"{self.__icon.zeni}Zeni",
+                               value=f"{zeni:,}",
                                inline=True)
 
         self.__embed.add_field(name="Collection",
-                               value=collection,
+                               value=f"{collection:,}",
                                inline=True)
 
         return self.__embed
