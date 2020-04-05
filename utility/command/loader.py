@@ -5,7 +5,7 @@ Command loader
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 05/04/20 by DrLarck
 """
 
 import asyncio
