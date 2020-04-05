@@ -22,7 +22,7 @@ class CommandLoader:
         self.__command = [
             # Command
             "command.mod", "command.start", "command.summon",
-            "command.profile", "command.inventory"
+            "command.profile", "command.inventory",
 
             # Event
             "utility.event.on_ready", "utility.event.on_error"
