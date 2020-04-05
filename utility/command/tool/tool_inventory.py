@@ -40,7 +40,7 @@ class ToolInventory:
         player_characters = await self.__database.fetch_row("""
                                                             SELECT *
                                                             FROM character_unique
-                                                            WHERE player_id = $1;
+                                                            WHERE character_owner_id = $1;
                                                             """, [player.id])
 
         collection = len(player_characters)
