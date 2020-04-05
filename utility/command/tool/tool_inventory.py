@@ -5,11 +5,12 @@ Inventory tool object
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 05/04/20 by DrLarck
 """
 
 # util
 from utility.graphic.embed import CustomEmbed
+from utility.graphic.icon import GameIcon
 
 
 class ToolInventory:
@@ -21,6 +22,7 @@ class ToolInventory:
         # Private
         self.__embed = CustomEmbed()
         self.__database = self.client.database
+        self.__icon = GameIcon()
 
     # Public
     async def get_inventory_embed(self, player):
@@ -50,6 +52,16 @@ class ToolInventory:
                                                 thumbnail_url=player.avatar)
 
         # Embed fields
-        self.__embed.add_field(name="")
+        self.__embed.add_field(name=f"Dragon Stone{self.__icon.dragonstone}",
+                               value=dragonstone,
+                               inline=True)
+
+        self.__embed.add_field(name=f"Zeni{self.__icon.zeni}",
+                               value=zeni,
+                               inline=True)
+
+        self.__embed.add_field(name="Collection",
+                               value=collection,
+                               inline=True)
 
         return self.__embed
