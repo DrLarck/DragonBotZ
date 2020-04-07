@@ -74,13 +74,15 @@ class ToolBox:
 
             # Display and manage the box behaviour
             stop = False
+            page_id = 1
 
             while not stop:
                 # Display the box page from the page 1
-                box_page = await self.get_box(player, 1)
+                box_page = await self.get_box(player, page_id)
 
-                await self.context.send(embed=box_page)
-                break
+                current_page = await self.context.send(embed=box_page)
+
+                # Add buttons to the current page
 
         # If the player doesn't have any character
         else:
@@ -143,3 +145,30 @@ class ToolBox:
                            inline=False)
 
         return box_page
+
+    async def get_buttons(self, page_id):
+        """
+        Get a list of buttons to add to the page
+
+        :param page_id: (`int`)
+
+        --
+
+        :return: `list` of `emote`
+        """
+
+        # Init
+        # By default, the ❌ emote is here
+        emote = ['❌']
+
+        # If it's not the first page
+        if page_id > 1:
+            emote.append('⏮')
+            emote.append('◀')
+
+        # If it's not the last page
+        if page_id < self.__total_page:
+            emote.append('▶')
+            emote.append('⏭')
+
+        return emote
