@@ -12,6 +12,7 @@ from discord.ext import commands
 
 # util
 from utility.entity.player import Player
+from utility.command.checker import CommandChecker
 
 # tool
 from utility.command.tool.tool_inventory import ToolInventory
@@ -25,6 +26,8 @@ class CommandInventory(commands.Cog):
         # Private
         self.__tool = ToolInventory(self.client)
 
+    @commands.check(CommandChecker.game_ready)
+    @commands.check(CommandChecker.register)
     @commands.command()
     async def inventory(self, context):
         # Log
