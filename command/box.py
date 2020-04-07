@@ -1,9 +1,9 @@
 """
-Inventory command
+Box command
 
 --
 
-Author : DrLarck
+Author : Drlarck
 
 Last update : 07/04/20 by DrLarck
 """
@@ -11,34 +11,32 @@ Last update : 07/04/20 by DrLarck
 from discord.ext import commands
 
 # util
-from utility.entity.player import Player
 from utility.command.checker import CommandChecker
+from utility.entity.player import Player
 
 # tool
-from utility.command.tool.tool_inventory import ToolInventory
+from utility.command.tool.tool_box import ToolBox
 
 
-class CommandInventory(commands.Cog):
+class CommandBox(commands.Cog):
 
     def __init__(self, client):
+        # Public
         self.client = client
-
-        # Private
-        self.__tool = ToolInventory(self.client)
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
     @commands.command()
-    async def inventory(self, context):
+    async def box(self, context):
         # Log
         await self.client.logger.log(context)
-
+        
         # Init
         player = Player(self.client, context.message.author)
-        inventory = await self.__tool.get_inventory_embed(player)
+        tool = ToolBox(self.client, context)
 
-        await context.send(embed=inventory)
+        await tool.box_manager(player)
 
 
 def setup(client):
-    client.add_cog(CommandInventory(client))
+    client.add_cog(CommandBox(client))
