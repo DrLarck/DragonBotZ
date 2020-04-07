@@ -83,6 +83,43 @@ class ToolBox:
                 current_page = await self.context.send(embed=box_page)
 
                 # Add buttons to the current page
+                button = Button(self.client, current_page)
+                box_button = await self.get_buttons(page_id)
+
+                await button.add(box_button)
+
+                # Get the pressed button
+                pressed = await button.get_pressed(box_button, player)
+
+                # If a button has been pressed
+                if pressed is not None:
+                    # Close the box
+                    if pressed == '❌':
+                        await current_page.delete()
+                        break
+
+                    # Go back to the first page
+                    elif pressed == '⏮':
+                        page_id = 1
+
+                    # Go to the previous page
+                    elif pressed == '◀':
+                        page_id -= 1
+
+                    # Go to the next page
+                    elif pressed == '▶':
+                        page_id += 1
+
+                    # Go to the last page
+                    elif pressed == '⏭':
+                        page_id = self.__total_page
+
+                    # Delete the current page to open a new one
+                    await current_page.delete()
+
+                # No button has been pressed
+                else:
+                    break
 
         # If the player doesn't have any character
         else:
