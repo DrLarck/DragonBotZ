@@ -5,7 +5,7 @@ Inventory command
 
 Author : DrLarck
 
-Last update : 05/04/20 by DrLarck
+Last update : 07/04/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -27,6 +27,9 @@ class CommandInventory(commands.Cog):
 
     @commands.command()
     async def inventory(self, context):
+        # Log
+        await self.client.logger.log(context)
+        
         # Init
         player = Player(self.client, context.message.author)
         inventory = await self.__tool.get_inventory_embed(player)
