@@ -279,6 +279,7 @@ class BannerGetter:
     # Private
     __cache = []
     __cache_ok = False
+    __current_banner = 35
 
     # Public
     async def set_cache(self, client):
@@ -335,13 +336,13 @@ class BannerGetter:
             print(f"Banner {reference} not found.")
             return None
 
-    async def get_latest_banner(self):
+    async def get_current_banner(self):
         """
-        Return the last banner stored in the cache
+        Return the last banner out
 
         --
 
         :return: `Banner`
         """
 
-        return self.__cache[len(self.__cache) - 1]
+        return self.__cache[self.__current_banner - 1]

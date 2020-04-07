@@ -19,6 +19,7 @@ class Player:
         self.id = user.id
 
         self.resource = PlayerResource(self)
+        self.experience = PlayerExperience(self)
 
 
 class PlayerResource:
@@ -185,3 +186,31 @@ class PlayerResource:
                                       """, [zeni, self.player.id])
 
         return
+
+
+class PlayerExperience:
+
+    def __init__(self, player):
+        # Private
+        self.__database = player.client.database
+
+        # Public
+        self.player = player
+
+    # Public
+    async def get_player_level(self):
+        """
+        Get the player level from the database
+
+        --
+
+        :return: `int`
+        """
+
+        player_level = await self.__database.fetch_value("""
+                                                         SELECT player_level 
+                                                         FROM player_experience
+                                                         WHERE player_id = $1;   
+                                                         """, [self.player.id])
+
+        return player_level

@@ -31,13 +31,16 @@ class CommandSummon(commands.Cog):
     @commands.command()
     async def summon(self, context, banner_reference: int = None):
 
+        # Log
+        await self.client.logger.log(context)
+
         # Init
         player = Player(self.client, context.message.author)
         icon = GameIcon()
 
         # Get the banner
         if banner_reference is None:  # If the banner reference is not specified
-            banner = await self.__getter.get_latest_banner()
+            banner = await self.__getter.get_current_banner()
 
         # If the banner reference is specified
         else:

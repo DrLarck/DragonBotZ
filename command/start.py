@@ -5,7 +5,7 @@ Start command
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 21/03/20 by DrLarck
 """
 
 import time
@@ -64,6 +64,12 @@ class CommandStart(commands.Cog):
                                 VALUES($1, $2, $3, $4);
                                 """,
                                [player.id, player.name, self.__start_dragonstone, self.__start_zenis])
+
+        await database.execute("""
+                               INSERT INTO player_experience(
+                               player_id, player_name)
+                               VALUES($1, $2);
+                               """, [player.id, player.name])
 
         # Display a welcome message
         await context.send(f"""

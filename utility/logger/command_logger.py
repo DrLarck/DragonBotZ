@@ -5,7 +5,7 @@ Command logger
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 21/03/20 by DrLarck
 """
 
 import asyncio
@@ -49,7 +49,21 @@ class CommandLogger:
         for i in range(2, len(command_param)):
             await asyncio.sleep(0)
 
-            parameter += command_param[i] + ', '  # Add a comma between each parameter
+            # Get the parameter
+            current_param = command_param[i]
+
+            # Ignore the parameter if it's NoneType
+            if current_param is not None:
+                # Convert the param to str
+                current_param = str(current_param)
+
+                # Check if we need to add a comma or not
+                if i == len(command_param) - 1:  # If we reach the end of the list
+                    # Do not add the final comma
+                    parameter += current_param
+
+                else:  # Add a comma
+                    parameter += current_param + ', '  # Add a comma between each parameter
 
         # Writing log
         await self.__database.execute("""INSERT INTO command_log(
