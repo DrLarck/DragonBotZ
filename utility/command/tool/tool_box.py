@@ -46,10 +46,10 @@ class ToolBox:
         if self.__data is None:
             # Get all the distinct characters from the database
             self.__data = await self.__database.fetch_row("""
-                                                          SELECT DISTINCT character_reference
+                                                          SELECT DISTINCT character_reference, character_rarity
                                                           FROM character_unique
                                                           WHERE character_owner_id = $1
-                                                          ORDER BY character_reference;
+                                                          ORDER BY character_rarity;
                                                           """, [player.id])
 
             # Get the character objects
@@ -69,7 +69,7 @@ class ToolBox:
         if len(self.__data) > 0:
             # Get the total number of page
             self.__total_page = int(
-                                   (len(self.__data) - 1 / self.__display_per_page) + 1
+                                   ((len(self.__data) - 1) / self.__display_per_page) + 1
                                    )
 
             # Display and manage the box behaviour
@@ -156,6 +156,10 @@ class ToolBox:
 
         end = page * self.__display_per_page
 
+        # Avoid the out of range error
+        if end > len(self.__data):
+            end = len(self.__data)
+
         # Add characters to the embed
         characters = ""
 
@@ -175,7 +179,7 @@ class ToolBox:
             amount = len(amount)
 
             # Display the character
-            characters += f"**{character.name}**{character.rarity.icon} x{amount}\n"
+            characters += f"**{character.name}** {character.rarity.icon} x{amount}\n"
 
         box_page.add_field(name="Characters",
                            value=characters,
