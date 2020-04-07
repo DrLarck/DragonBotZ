@@ -16,7 +16,7 @@ import os
 from discord.ext import commands
 
 # util
-from utility.database import Database
+from utility.entity.database import Database
 from utility.logger.command_logger import CommandLogger
 from utility.command.loader import CommandLoader
 from utility.entity.character import CharacterGetter

@@ -29,7 +29,7 @@ class CommandInventory(commands.Cog):
     async def inventory(self, context):
         # Log
         await self.client.logger.log(context)
-        
+
         # Init
         player = Player(self.client, context.message.author)
         inventory = await self.__tool.get_inventory_embed(player)
