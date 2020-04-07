@@ -58,7 +58,7 @@ class ToolBox:
             for reference in self.__data:
                 await asyncio.sleep(0)
 
-                character = self.__getter.get_reference_character(reference)
+                character = await self.__getter.get_reference_character(reference[0])
 
                 new_data.append(character)
 
@@ -136,7 +136,7 @@ class ToolBox:
             amount = len(amount)
 
             # Display the character
-            characters += f"**{character.name}**{character.rarity.icon} x{amount}"
+            characters += f"**{character.name}**{character.rarity.icon} x{amount}\n"
 
         box_page.add_field(name="Characters",
                            value=characters,
