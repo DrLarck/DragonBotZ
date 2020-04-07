@@ -31,10 +31,11 @@ class ToolBox:
         self.__getter = CharacterGetter()
 
     # Public
-    async def box_manager(self, player):
+    async def box_manager(self, player, rarity=None):
         """
         Manage the box displaying
 
+        :param rarity: (`int`)
         :param player: (`Player`)
 
         --
@@ -44,13 +45,27 @@ class ToolBox:
 
         # Init
         if self.__data is None:
-            # Get all the distinct characters from the database
-            self.__data = await self.__database.fetch_row("""
-                                                          SELECT DISTINCT character_reference, character_rarity
-                                                          FROM character_unique
-                                                          WHERE character_owner_id = $1
-                                                          ORDER BY character_rarity;
-                                                          """, [player.id])
+            # Adapt the data
+            # If the player didn't ask a rarity box
+            if rarity is None:
+                # Get all the distinct characters from the database
+                self.__data = await self.__database.fetch_row("""
+                                                              SELECT DISTINCT character_reference, character_rarity
+                                                              FROM character_unique
+                                                              WHERE character_owner_id = $1
+                                                              ORDER BY character_rarity;
+                                                              """, [player.id])
+
+            # The player asked for a rarity box
+            else:
+                # Get all the distinct characters from the database
+                # But by rarity
+                self.__data = await self.__database.fetch_row("""
+                                                              SELECT DISTINCT character_reference
+                                                              FROM character_unique
+                                                              WHERE character_owner_id = $1 AND character_rarity = $2
+                                                              ORDER BY character_reference;                                                              
+                                                              """, [player.id, rarity])
 
             # Get the character objects
             new_data = []
