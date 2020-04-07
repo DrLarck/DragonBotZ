@@ -5,7 +5,7 @@ Profile command
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 07/04/20 by DrLarck
 """
 
 import discord
@@ -16,6 +16,7 @@ from discord.ext import commands
 from utility.entity.player import Player
 from utility.command.checker import CommandChecker
 from utility.graphic.embed import CustomEmbed
+from utility.interactive.button import Button
 
 
 class CommandProfile(commands.Cog):
@@ -53,7 +54,14 @@ class CommandProfile(commands.Cog):
         embed.add_field(name=":star:Level", value=level, inline=True)
 
         # Display the profile
-        await context.send(embed=embed)
+        profile = await context.send(embed=embed)
+
+        # Buttons
+        # Add the button to switch to the inventory panel
+        button = Button(self.client, profile)
+        button_ = ['🛍']
+
+        await button.add(button_)
 
 
 def setup(client):
