@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 07/04/20 by DrLarck
+Last update : 08/04/20 by DrLarck
 """
 
 import asyncio
@@ -194,7 +194,7 @@ class ToolBox:
             amount = len(amount)
 
             # Display the character
-            characters += f"**{character.name}** {character.rarity.icon} x{amount}\n"
+            characters += f"`#{character.id}` **{character.name}** {character.rarity.icon} x{amount}\n"
 
         box_page.add_field(name="Characters",
                            value=characters,
