@@ -23,7 +23,7 @@ class CommandLoader:
             # Command
             "command.mod", "command.start", "command.summon",
             "command.profile", "command.inventory", "command.box",
-            "command.hourly",
+            "command.hourly", "command.daily",
 
             # Event
             "utility.event.on_ready", "utility.event.on_error"
