@@ -266,7 +266,7 @@ class Database:
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_reference_reference_index ON character_reference(reference);
             """,
-            
+
             # character_unique table
             """
             CREATE SEQUENCE IF NOT EXISTS character_unique_reference_seq;
