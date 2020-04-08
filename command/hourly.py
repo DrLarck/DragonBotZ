@@ -95,7 +95,7 @@ Hourly : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, 
 
         # Not the time yet
         else:
-            time_remaining = 3600 - elapsed
+            time_remaining = self.__time_hourly - elapsed
 
             # Get the string that tells when the player has to come back
             come_back = await self.__tool_time.convert_time(time_remaining)
