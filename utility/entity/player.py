@@ -239,6 +239,7 @@ class PlayerTime:
         # Init
         last_hourly = await self.__database.fetch_value("""
                                                         SELECT player_hourly_time
+                                                        FROM player_time
                                                         WHERE player_id = $1;
                                                         """, [self.player.id])
 
@@ -256,6 +257,7 @@ class PlayerTime:
         # Init
         last_daily = await self.__database.fetch_value("""
                                                        SELECT player_daily_time
+                                                       FROM player_time
                                                        WHERE player_id = $1;
                                                        """, [self.player.id])
 
@@ -273,6 +275,7 @@ class PlayerTime:
         # Init
         hourly_combo = await self.__database.fetch_value("""
                                                          SELECT player_hourly_combo
+                                                         FROM player_time
                                                          WHERE player_id = $1;
                                                          """, [self.player.id])
 
@@ -290,6 +293,7 @@ class PlayerTime:
         # Init
         daily_combo = await self.__database.fetch_value("""
                                                         SELECT player_daily_combo
+                                                        FROM player_time
                                                         WHERE player_id = $1;
                                                         """, [self.player.id])
 
