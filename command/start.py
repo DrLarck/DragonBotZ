@@ -5,7 +5,7 @@ Start command
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 08/04/20 by DrLarck
 """
 
 import time
@@ -67,6 +67,12 @@ class CommandStart(commands.Cog):
 
         await database.execute("""
                                INSERT INTO player_experience(
+                               player_id, player_name)
+                               VALUES($1, $2);
+                               """, [player.id, player.name])
+
+        await database.execute("""
+                               INSERT INTO player_time(
                                player_id, player_name)
                                VALUES($1, $2);
                                """, [player.id, player.name])
