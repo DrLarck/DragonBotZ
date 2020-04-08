@@ -33,6 +33,9 @@ class CommandHourly(commands.Cog):
         self.__combo_rate = 1.2  # +20 %
         self.__tool_time = ToolTime()
 
+        self.__time_hourly = 3600
+        self.__time_combo = 7200
+
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
     @commands.command()
@@ -55,12 +58,12 @@ class CommandHourly(commands.Cog):
 
         # If an hour has passed
         # Time is in seconds
-        if elapsed >= 3600:
+        if elapsed >= self.__time_hourly:
             # Init
             combo = 0
 
             # The player is on a combo streak
-            if elapsed < 7200:
+            if elapsed < self.__time_combo:
                 # Get the combo value
                 combo = await player.time.get_hourly_combo()
 
@@ -97,7 +100,7 @@ Hourly : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, 
             # Get the string that tells when the player has to come back
             come_back = await self.__tool_time.convert_time(time_remaining)
 
-            await context.send(f"It's to early for this, come back in {come_back}")
+            await context.send(f"It's to early for this, come back in **{come_back}**")
 
 
 def setup(client):
