@@ -8,17 +8,26 @@ Author : DrLarck
 Last update : 08/04/20 by DrLarck
 """
 
+import time
+
 from discord.ext import commands
 
 # util
 from utility.command.checker import CommandChecker
 from utility.entity.player import Player
+from utility.graphic.icon import GameIcon
 
 
 class CommandHourly(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+
+        # Private
+        self.__dragonstone = 0
+        self.__zeni = 0
+        self.__experience = 0
+        self.__combo_rate = 1.2  # +20 %
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
@@ -29,6 +38,58 @@ class CommandHourly(commands.Cog):
 
         # Init
         player = Player(self.client, context.message.author)
+        current_time = time.time()
+        icon = GameIcon()
+
+        # Get the player's last hourly
+        player_hourly = await player.time.get_hourly()
+
+        # If there is more than 1 hour between the current time and the player's
+        # last hourly : do the hourly
+        # The player has 1h59 to do his hourly to gain a combo point
+        elapsed = current_time - player_hourly
+
+        # If an hour has passed
+        # Time is in seconds
+        if elapsed >= 3600:
+            # Init
+            combo = 0
+            reward_ds, reward_zeni, reward_xp = 0, 0, 0
+
+            # The player is on a combo streak
+            if elapsed < 7200:
+                # Get the combo value
+                combo = await player.time.get_hourly_combo()
+
+                # Increase the combo
+                combo += 1
+
+            # Get the rewards value
+            reward_ds = self.__dragonstone * pow(self.__combo_rate, combo)
+            reward_zeni = self.__zeni * pow(self.__combo_rate, combo)
+            reward_xp = self.__experience * pow(self.__combo_rate, combo)
+
+            # Update the player_time table
+            # Time
+            await player.time.update_hourly_time(current_time)
+
+            # Combo
+            await player.time.update_hourly_combo(combo)
+
+            # Update the player resources
+            await player.resource.add_dragonstone(reward_ds)
+            await player.resource.add_zeni(reward_zeni)
+
+            # Rewarding message
+            message = f"""
+Hourly : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, **+{reward_xp:,}** 
+*(Combo **x{combo}**)*"""
+
+            await context.send(message)
+
+        # Not the time yet
+        else:
+            await context.send("Bruh")
 
 
 def setup(client):
