@@ -20,6 +20,7 @@ class Player:
 
         self.resource = PlayerResource(self)
         self.experience = PlayerExperience(self)
+        self.time = PlayerTime(self)
 
 
 class PlayerResource:
