@@ -46,19 +46,19 @@ class ToolTime:
         time_string = ""
 
         # Calculate the day
-        day = seconds // ref_day
+        day = int(seconds / ref_day)
         seconds -= ref_day * day
 
         # Calculate the hour
-        hour = seconds // ref_hour
+        hour = int(seconds / ref_hour)
         seconds -= ref_hour * hour
 
         # Calculate the minute
-        minute = seconds // ref_minute
+        minute = int(seconds / ref_minute)
         seconds -= ref_minute * minute
 
         # Calculate the second
-        second = seconds // ref_second
+        second = int(seconds / ref_second)
         seconds -= ref_second * second
 
         # Setup the string
