@@ -53,7 +53,7 @@ class ToolBox:
                                                               SELECT DISTINCT character_reference, character_rarity
                                                               FROM character_unique
                                                               WHERE character_owner_id = $1
-                                                              ORDER BY character_rarity;
+                                                              ORDER BY character_rarity, character_reference;
                                                               """, [player.id])
 
             # The player asked for a rarity box
