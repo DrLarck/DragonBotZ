@@ -24,8 +24,8 @@ class CommandHourly(commands.Cog):
         self.client = client
 
         # Private
-        self.__dragonstone = 0
-        self.__zeni = 0
+        self.__dragonstone = 5
+        self.__zeni = 10000
         self.__experience = 0
         self.__combo_rate = 1.2  # +20 %
 
@@ -65,9 +65,9 @@ class CommandHourly(commands.Cog):
                 combo += 1
 
             # Get the rewards value
-            reward_ds = self.__dragonstone * pow(self.__combo_rate, combo)
-            reward_zeni = self.__zeni * pow(self.__combo_rate, combo)
-            reward_xp = self.__experience * pow(self.__combo_rate, combo)
+            reward_ds = int(self.__dragonstone * pow(self.__combo_rate, combo))
+            reward_zeni = int(self.__zeni * pow(self.__combo_rate, combo))
+            reward_xp = int(self.__experience * pow(self.__combo_rate, combo))
 
             # Update the player_time table
             # Time
@@ -82,7 +82,7 @@ class CommandHourly(commands.Cog):
 
             # Rewarding message
             message = f"""
-Hourly : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, **+{reward_xp:,}** 
+Hourly : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, **+{reward_xp:,}**:star: 
 *(Combo **x{combo}**)*"""
 
             await context.send(message)
