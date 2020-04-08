@@ -17,6 +17,9 @@ from utility.command.checker import CommandChecker
 from utility.entity.player import Player
 from utility.graphic.icon import GameIcon
 
+# tool
+from utility.command.tool.tool_time import ToolTime
+
 
 class CommandHourly(commands.Cog):
 
@@ -28,6 +31,7 @@ class CommandHourly(commands.Cog):
         self.__zeni = 10000
         self.__experience = 0
         self.__combo_rate = 1.2  # +20 %
+        self.__tool_time = ToolTime()
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
@@ -54,7 +58,6 @@ class CommandHourly(commands.Cog):
         if elapsed >= 3600:
             # Init
             combo = 0
-            reward_ds, reward_zeni, reward_xp = 0, 0, 0
 
             # The player is on a combo streak
             if elapsed < 7200:
@@ -89,7 +92,12 @@ Hourly : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, 
 
         # Not the time yet
         else:
-            await context.send("Bruh")
+            time_remaining = 3600 - elapsed
+
+            # Get the string that tells when the player has to come back
+            come_back = await self.__tool_time.convert_time(time_remaining)
+
+            await context.send(f"It's to early for this, come back in {come_back}")
 
 
 def setup(client):
