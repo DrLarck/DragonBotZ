@@ -294,3 +294,79 @@ class PlayerTime:
                                                         """, [self.player.id])
 
         return daily_combo
+
+    async def update_hourly_combo(self, value):
+        """
+        Update the player's hourly combo value
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_hourly_combo = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return
+
+    async def update_daily_combo(self, value):
+        """
+        Update the player's daily combo value
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_daily_combo = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return
+
+    async def update_hourly_time(self, value):
+        """
+        Update the value of the player hourly time
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_hourly_time = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return
+
+    async def update_daily_time(self, value):
+        """
+        Update the value of the player daily time
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_daily_time = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return
