@@ -5,7 +5,7 @@ Box command
 
 Author : Drlarck
 
-Last update : 07/04/20 by DrLarck
+Last update : 08/04/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -27,7 +27,7 @@ class CommandBox(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @commands.command()
+    @commands.group(invoke_without_command=True)
     async def box(self, context, rarity: str = None):
         # Log
         await self.client.logger.log(context)
@@ -50,6 +50,20 @@ class CommandBox(commands.Cog):
 
             else:
                 await context.send(f"Sorry, but I can't find the rarity `{rarity}`")
+
+    @commands.check(CommandChecker.game_ready)
+    @commands.check(CommandChecker.register)
+    @box.command()
+    async def unique(self, context, reference: int):
+        # Log
+        await self.client.logger.log(context)
+
+        # Init
+        player = Player(self.client, context.message.author)
+        box_tool = ToolBox(self.client, context)
+
+        # Display the unique box
+        await box_tool.box_manager(player, unique_reference=reference)
 
 
 def setup(client):

@@ -5,7 +5,7 @@ Button manager
 
 Author : DrLarck
 
-Last update : 07/04/20 by DrLarck
+Last update : 08/04/20 by DrLarck
 """
 
 import asyncio
@@ -52,7 +52,9 @@ class Button:
 
         # Init
         def check(_reaction, _user):
-            if str(_reaction.emoji) in reaction and _user.id == user.id:
+            if(_reaction.message.id == self.message.id
+               and str(_reaction.emoji) in reaction
+               and _user.id == user.id):
                 return True
 
             else:

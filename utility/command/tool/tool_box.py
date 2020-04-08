@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 07/04/20 by DrLarck
+Last update : 08/04/20 by DrLarck
 """
 
 import asyncio
@@ -31,12 +31,13 @@ class ToolBox:
         self.__getter = CharacterGetter()
 
     # Public
-    async def box_manager(self, player, rarity=None):
+    async def box_manager(self, player, rarity=None, unique_reference=None):
         """
         Manage the box displaying
 
         :param rarity: (`int`)
         :param player: (`Player`)
+        :param unique_reference: (`int`)
 
         --
 
@@ -44,20 +45,12 @@ class ToolBox:
         """
 
         # Init
+        unique = False
+
         if self.__data is None:
             # Adapt the data
-            # If the player didn't ask a rarity box
-            if rarity is None:
-                # Get all the distinct characters from the database
-                self.__data = await self.__database.fetch_row("""
-                                                              SELECT DISTINCT character_reference, character_rarity
-                                                              FROM character_unique
-                                                              WHERE character_owner_id = $1
-                                                              ORDER BY character_rarity;
-                                                              """, [player.id])
-
             # The player asked for a rarity box
-            else:
+            if rarity is not None:
                 # Get all the distinct characters from the database
                 # But by rarity
                 self.__data = await self.__database.fetch_row("""
@@ -67,18 +60,42 @@ class ToolBox:
                                                               ORDER BY character_reference;                                                              
                                                               """, [player.id, rarity])
 
-            # Get the character objects
-            new_data = []
+            # The player asked for a unique box
+            elif unique_reference is not None:
+                # Setup the data
+                self.__data = await self.__database.fetch_row("""
+                                                              SELECT character_unique_id, character_level
+                                                              FROM character_unique
+                                                              WHERE character_reference = $1 AND character_owner_id = $2
+                                                              ORDER BY character_level DESC;
+                                                              """, [unique_reference, player.id])
 
-            for reference in self.__data:
-                await asyncio.sleep(0)
+                unique = True
 
-                character = await self.__getter.get_reference_character(reference[0])
+            # If the player asked for a normal box
+            else:
+                # Get all the distinct characters from the database
+                self.__data = await self.__database.fetch_row("""
+                                                              SELECT DISTINCT character_reference, character_rarity
+                                                              FROM character_unique
+                                                              WHERE character_owner_id = $1
+                                                              ORDER BY character_rarity, character_reference;
+                                                              """, [player.id])
 
-                new_data.append(character)
+            # If this is not a unique box call
+            if not unique:
+                # Get the character objects
+                new_data = []
 
-            # Replace the data by the characters objects
-            self.__data = new_data
+                for reference in self.__data:
+                    await asyncio.sleep(0)
+
+                    character = await self.__getter.get_reference_character(reference[0])
+
+                    new_data.append(character)
+
+                # Replace the data by the characters objects
+                self.__data = new_data
 
         # If the player has at least one character
         if len(self.__data) > 0:
@@ -93,7 +110,13 @@ class ToolBox:
 
             while not stop:
                 # Display the box page from the page 1
-                box_page = await self.get_box(player, page_id)
+                # Normal box
+                if not unique:
+                    box_page = await self.get_box(player, page_id)
+
+                # Unique box
+                else:
+                    box_page = await self.get_unique_box(player, unique_reference, page_id)
 
                 current_page = await self.context.send(embed=box_page)
 
@@ -194,7 +217,62 @@ class ToolBox:
             amount = len(amount)
 
             # Display the character
-            characters += f"**{character.name}** {character.rarity.icon} x{amount}\n"
+            characters += f"`#{character.id}` **{character.name}** {character.rarity.icon} x{amount}\n"
+
+        box_page.add_field(name="Characters",
+                           value=characters,
+                           inline=False)
+
+        return box_page
+
+    async def get_unique_box(self, player, reference, page):
+        """
+        Get the unique box page embed
+
+        :param player: (`Player`)
+        :param reference: (`int`)
+        :param page: (`int`)
+
+        --
+
+        :return: `discord.Embed`
+        """
+
+        # Init
+        box_page = await CustomEmbed().setup(self.client,
+                                             title=f"{player.name}'s box",
+                                             description=f"Page {page}/{self.__total_page}",
+                                             thumbnail_url=player.avatar)
+
+        reference = await self.__getter.get_reference_character(reference)
+
+        # Display the characters
+        # Get the first character to display
+        # For example, if you are at page 1
+        # The first character's index would be 0, and the last one 4, it would display 5 characters
+        # according to the display_per_page attribute which is editable
+        # If you are at the page 2, the first character index to display would be 5 and the last one 9
+        # and so on ...
+        start = (page - 1) * self.__display_per_page
+
+        end = page * self.__display_per_page
+
+        # Avoid the out of range error
+        if end > len(self.__data):
+            end = len(self.__data)
+
+        # Add characters to the embed
+        characters = ""
+
+        for i in range(start, end):
+            await asyncio.sleep(0)
+
+            # Get the unique id
+            unique_id = self.__data[i][0]
+            character_level = self.__data[i][1]
+
+            # Display the character
+            characters += f"`#{unique_id}` **{reference.name}** {reference.rarity.icon} - lv.{character_level}\n"
 
         box_page.add_field(name="Characters",
                            value=characters,
