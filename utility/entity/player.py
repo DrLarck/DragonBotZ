@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 08/04/20 by DrLarck
 """
 
 
@@ -20,6 +20,7 @@ class Player:
 
         self.resource = PlayerResource(self)
         self.experience = PlayerExperience(self)
+        self.time = PlayerTime(self)
 
 
 class PlayerResource:
@@ -214,3 +215,162 @@ class PlayerExperience:
                                                          """, [self.player.id])
 
         return player_level
+
+
+class PlayerTime:
+
+    def __init__(self, player):
+        # Private
+        self.__database = player.client.database
+
+        # Public
+        self.player = player
+
+    # Public
+    async def get_hourly(self):
+        """
+        Get the time when the player did his last hourly
+
+        --
+
+        :return: `int`
+        """
+
+        # Init
+        last_hourly = await self.__database.fetch_value("""
+                                                        SELECT player_hourly_time
+                                                        FROM player_time
+                                                        WHERE player_id = $1;
+                                                        """, [self.player.id])
+
+        return last_hourly
+
+    async def get_daily(self):
+        """
+        Get the time when the player did his last daily
+
+        --
+
+        :return: `int`
+        """
+
+        # Init
+        last_daily = await self.__database.fetch_value("""
+                                                       SELECT player_daily_time
+                                                       FROM player_time
+                                                       WHERE player_id = $1;
+                                                       """, [self.player.id])
+
+        return last_daily
+
+    async def get_hourly_combo(self):
+        """
+        Get the player's hourly combo
+
+        --
+
+        :return: `int`
+        """
+
+        # Init
+        hourly_combo = await self.__database.fetch_value("""
+                                                         SELECT player_hourly_combo
+                                                         FROM player_time
+                                                         WHERE player_id = $1;
+                                                         """, [self.player.id])
+
+        return hourly_combo
+
+    async def get_daily_combo(self):
+        """
+        Get the player's daily combo
+
+        --
+
+        :return: `int`
+        """
+
+        # Init
+        daily_combo = await self.__database.fetch_value("""
+                                                        SELECT player_daily_combo
+                                                        FROM player_time
+                                                        WHERE player_id = $1;
+                                                        """, [self.player.id])
+
+        return daily_combo
+
+    async def update_hourly_combo(self, value):
+        """
+        Update the player's hourly combo value
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_hourly_combo = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return
+
+    async def update_daily_combo(self, value):
+        """
+        Update the player's daily combo value
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_daily_combo = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return
+
+    async def update_hourly_time(self, value):
+        """
+        Update the value of the player hourly time
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_hourly_time = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return
+
+    async def update_daily_time(self, value):
+        """
+        Update the value of the player daily time
+
+        :param value: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      UPDATE player_time
+                                      SET player_daily_time = $1
+                                      WHERE player_id = $2;
+                                      """, [value, self.player.id])
+
+        return

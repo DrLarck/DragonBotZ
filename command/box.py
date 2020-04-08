@@ -49,7 +49,7 @@ class CommandBox(commands.Cog):
                 await box_tool.box_manager(player, rarity=value)
 
             else:
-                await context.send(f"Sorry, but I can't find the rarity `{rarity}`")
+                await context.send(f"Sorry, I can't find the rarity `{rarity}`")
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)

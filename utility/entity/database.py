@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 08/04/20 by DrLarck
 """
 
 import asyncio
@@ -190,6 +190,7 @@ class Database:
                 message TEXT
             );
             """,
+
             # player_info table
             """
             CREATE SEQUENCE IF NOT EXISTS player_info_reference_seq;
@@ -203,6 +204,7 @@ class Database:
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_reference_index ON player_info(reference);
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_id_index ON player_info(player_id);
             """,
+
             # player_experience table
             """
             CREATE SEQUENCE IF NOT EXISTS player_experience_reference_seq;
@@ -214,7 +216,8 @@ class Database:
                 player_experience BIGINT DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_experience_reference_index ON player_experience(reference);
-            """
+            """,
+
             # player_resource table
             """
             CREATE SEQUENCE IF NOT EXISTS player_resource_reference_seq;
@@ -227,6 +230,20 @@ class Database:
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_resource_reference_index ON player_resource(reference);
             """,
+
+            # player_time table
+            """
+            CREATE TABLE IF NOT EXISTS player_time(
+                player_id BIGINT,
+                player_name TEXT,
+                player_hourly_time BIGINT DEFAULT 0,
+                player_daily_time BIGINT DEFAULT 0,
+                player_hourly_combo BIGINT DEFAULT 0,
+                player_daily_combo BIGINT DEFAULT 0
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS player_time_index ON player_time(player_id);
+            """,
+
             # character_reference table
             """
             CREATE SEQUENCE IF NOT EXISTS character_reference_reference_seq;
@@ -249,17 +266,7 @@ class Database:
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_reference_reference_index ON character_reference(reference);
             """,
-            # banner table
-            """
-            CREATE SEQUENCE IF NOT EXISTS banner_reference_seq;
-            CREATE TABLE IF NOT EXISTS banner(
-                reference BIGINT PRIMARY KEY DEFAULT nextval('banner_reference_seq') NOT NULL,
-                banner_name TEXT,
-                banner_image TEXT,
-                banner_content TEXT
-            );
-            CREATE UNIQUE INDEX IF NOT EXISTS banner_reference_index ON banner(reference);
-            """,
+
             # character_unique table
             """
             CREATE SEQUENCE IF NOT EXISTS character_unique_reference_seq;
@@ -280,6 +287,18 @@ class Database:
                 character_training_ki INTEGER DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
+            """,
+
+            # banner table
+            """
+            CREATE SEQUENCE IF NOT EXISTS banner_reference_seq;
+            CREATE TABLE IF NOT EXISTS banner(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('banner_reference_seq') NOT NULL,
+                banner_name TEXT,
+                banner_image TEXT,
+                banner_content TEXT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS banner_reference_index ON banner(reference);
             """
         ]
 
