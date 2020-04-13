@@ -281,10 +281,7 @@ class Database:
                 character_experience BIGINT DEFAULT 0,
                 character_dokkan_rate INTEGER DEFAULT 0,
                 character_star INTEGER DEFAULT 0,
-                character_training_armor INTEGER DEFAULT 0,
-                character_training_spirit INTEGER DEFAULT 0,
-                character_training_physical INTEGER DEFAULT 0,
-                character_training_ki INTEGER DEFAULT 0
+                character_training_item TEXT DEFAULT 'NONE'
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """,
