@@ -6,6 +6,11 @@ Author : DrLarck
 
 Last update: 13/04/20 by DrLarck"""
 
+import asyncio
+
+# tool
+from utility.global_tool import GlobalTool
+
 
 class TrainingItem:
 
@@ -24,6 +29,7 @@ class TrainingItem:
 
         # Private
         self.__database = client.database
+        self.__global_tool = GlobalTool()
 
     # Public method
     async def apply_effect(self):
@@ -49,3 +55,34 @@ class TrainingItem:
                                                     """, [unique_id])
         
         return reference
+
+    async def set_unique_id(self):
+        """Generate an unique id for the training items that have 'NONE' as unique id
+
+        --
+
+        :return: `None`"""
+
+        # Get the items that have 'NONE' as unique id
+        items = await self.__database.fetch_row("""
+                                                SELECT reference
+                                                FROM training_item
+                                                WHERE unique_id = 'NONE';
+                                                """)
+
+        # Generate a unique id for all those items
+        for item in items:
+            await asyncio.sleep(0)
+
+            # Get the unique item's reference
+            reference = item[0]
+            unique_id = await self.__global_tool.generate_unique_id(reference)
+
+            # Update the unique id
+            await self.__database.execute("""
+                                          UPDATE training_item
+                                          SET unique_id = $1
+                                          WHERE reference = $2;
+                                          """, [unique_id, reference])
+
+        return
