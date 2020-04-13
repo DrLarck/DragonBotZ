@@ -1,4 +1,10 @@
-"""Represents a Training Item"""
+"""Represents a Training Item
+
+--
+
+Author : DrLarck
+
+Last update: 13/04/20 by DrLarck"""
 
 
 class TrainingItem:
@@ -11,6 +17,10 @@ class TrainingItem:
         # Public
         self.character = character
         self.reference = 0
+
+        # Info
+        self.name = ""
+        self.icon = ""
 
         # Private
         self.__database = client.database
