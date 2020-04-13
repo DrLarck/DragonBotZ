@@ -1,4 +1,10 @@
-"""Represent a capsule"""
+"""Represent a capsule
+
+--
+
+Author : DrLarck
+
+Last update : 13/04/20 by DrLarck"""
 
 import random
 
@@ -17,6 +23,10 @@ class Capsule:
         self.context = context
         self.player = player
 
+        # Info
+        self.name = ""
+        self.icon = ""
+
         # Private
         # Rewards
         self.__dragonstone = 0
@@ -32,25 +42,21 @@ class Capsule:
         self.__rate_experience = 0
         self.__rate_item = 0
 
-        # Public method
-        async def open(self):
-            """Open the capsule and send the reward to the player
-            
-            --
-            
-            :return: `None`"""
+    # Public method
+    async def open(self):
+        """Open the capsule and send the reward to the player
 
-            return
-        
-        async def display(self, reward_type, reward):
-            """Send a message using `context` according to the reward type and the reward
+        --
 
-            :param reward_type: (`int`)
+        :return: `None`"""
 
-            :param reward: (`int`)
+        # Get the player's roll
+        roll = random.uniform(0, 100)
 
-            --
-
-            :return: `None`"""
-            
-            return
+        # Check if the item list is not empty
+        if len(self.__item) > 0:
+            # Check if the player has loot a training item
+            if roll <= self.__rate_item:
+                item = random.choice(self.__item)
+                
+        return
