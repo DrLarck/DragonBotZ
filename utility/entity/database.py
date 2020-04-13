@@ -300,8 +300,10 @@ class Database:
 
             # training item table
             """
+            CREATE SEQUENCE IF NOT EXISTS training_item_reference_seq;
             CREATE TABLE IF NOT EXISTS training_item(
-                reference BIGINT,
+                reference BIGINT PRIMARY KEY DEFAULT nextval('training_item_reference_seq') NOT NULL,
+                training_item_reference BIGINT,
                 unique_id TEXT DEFAULT 'NONE',
                 owner_id BIGINT,
                 owner_name TEXT,
@@ -312,8 +314,10 @@ class Database:
 
             # capsule table
             """
+            CREATE SEQUENCE IF NOT EXISTS capsule_reference_seq;
             CREATE TABLE IF NOT EXISTS capsule(
-                reference BIGINT,
+                reference BIGINT PRIMARY KEY DEFAULT nextval('capsule_reference_seq') NOT NULL,,
+                capsule_reference BIGINT,
                 unique_id TEXT DEFAULT 'NONE',
                 owner_id BIGINT,
                 owner_name TEXT
