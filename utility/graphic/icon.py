@@ -21,6 +21,9 @@ class GameIcon:
         # Sword
         self.sword_0 = "<:training_item_sword1:699284678087147551>"
 
+        # Capsule
+        self.capsule_0 = "<:capsule_0:699284657530863626>"
+
         # Private
         self.__rarity = [
                         "<:n_:582922492402860053>", "<:r_:582922493644374047>", "<:sr:582922500409786368>",
