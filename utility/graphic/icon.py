@@ -5,7 +5,7 @@ Game icon
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 13/04/20 by DrLarck
 """
 
 
@@ -16,6 +16,10 @@ class GameIcon:
         # Resource
         self.dragonstone = "<:dragonstone:594954189579354112>"
         self.zeni = "<:zenis:594954191999336514>"
+
+        # Training item
+        # Sword
+        self.sword_0 = "<:training_item_sword1:699284678087147551>"
 
         # Private
         self.__rarity = [
