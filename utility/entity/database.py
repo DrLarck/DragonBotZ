@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 08/04/20 by DrLarck
+Last update : 13/04/20 by DrLarck
 """
 
 import asyncio
@@ -299,6 +299,29 @@ class Database:
                 banner_content TEXT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS banner_reference_index ON banner(reference);
+            """,
+
+            # training item table
+            """
+            CREATE TABLE IF NOT EXISTS training_item(
+                reference BIGINT,
+                unique_id TEXT DEFAULT 'NONE',
+                owner_id BIGINT,
+                owner_name TEXT,
+                equipped_on TEXT DEFAULT 'NONE'
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS training_item_unique_id ON training_item(unique_id);
+            """,
+
+            # capsule table
+            """
+            CREATE TABLE IF NOT EXISTS capsule(
+                reference BIGINT,
+                unique_id TEXT DEFAULT 'NONE',
+                owner_id BIGINT,
+                owner_name TEXT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS capsule_unique_id ON capsule(unique_id);
             """
         ]
 
