@@ -17,8 +17,9 @@ from utility.entity.capsule import Capsule
 
 class Player:
 
-    def __init__(self, client, user):
+    def __init__(self, context, client, user):
         # Public
+        self.context = context
         self.client = client
         self.name = user.name
         self.avatar = user.avatar_url
@@ -395,8 +396,36 @@ class PlayerItem:
 
         # Private
         self.__database = self.player.client.database
+        self.__capsule = Capsule(self.player.context, self.player.client, self.player)
 
     # Public
+    async def add_capsule(self, rarity):
+        """
+        Add a capsule into the player's inventory
+
+        :param rarity: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        # Init
+        if rarity < 0:
+            rarity = 0
+
+        elif rarity > 5:
+            rarity = 5
+
+        await self.__database.execute("""
+                                      INSERT INTO capsule(capsule_reference, owner_id)
+                                      VALUES($1, $2);
+                                      """, [rarity, self.player.id])
+
+        await self.__capsule.set_unique_id()
+
+        return
+
     async def get_capsule(self, context):
         """
         Get the player's capsules
