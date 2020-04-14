@@ -4,7 +4,7 @@
 
 Author : DrLarck
 
-Last update : 13/04/20 by DrLarck"""
+Last update : 14/04/20 by DrLarck"""
 
 import random
 import asyncio
@@ -32,23 +32,23 @@ class Capsule:
         self.icon = ""
         self.reference = 0
 
-        # Private
-        self.__database = self.client.database
-        self.__global_tool = GlobalTool()
-
         # Rewards
-        self.__dragonstone = 0
-        self.__zeni = 0
-        self.__experience = 0
-        self.__item = []
+        self.dragonstone = 0
+        self.zeni = 0
+        self.experience = 0
+        self.item = []
 
         # Rate
         # As %
         # One of the rates must be 100 as we eliminate
-        self.__rate_dragonstone = 0
-        self.__rate_zeni = 0
-        self.__rate_experience = 0
-        self.__rate_item = 0
+        self.rate_dragonstone = 0
+        self.rate_zeni = 0
+        self.rate_experience = 0
+        self.rate_item = 0
+
+        # Private
+        self.__database = self.client.database
+        self.__global_tool = GlobalTool()
 
     # Public method
     async def open(self):
@@ -62,10 +62,13 @@ class Capsule:
         roll = random.uniform(0, 100)
 
         # Check if the item list is not empty
-        if len(self.__item) > 0:
+        if len(self.item) > 0:
             # Check if the player has loot a training item
-            if roll <= self.__rate_item:
-                item = random.choice(self.__item)
+            if roll <= self.rate_item:
+                item = random.choice(self.item)
+
+                # Set the item
+                item = item(self.client)
 
                 # Add the item into the database
                 await self.__database.execute("""
