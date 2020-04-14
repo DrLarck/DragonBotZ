@@ -12,6 +12,9 @@ Last update : 13/04/20 by DrLarck
 from utility.entity.capsule import Capsule
 from utility.graphic.icon import GameIcon
 
+# item
+from utility.entity.item.training_item.sword_0 import Sword0
+
 
 class CapsuleN(Capsule):
 
@@ -32,4 +35,8 @@ class CapsuleN(Capsule):
         self.name = "Normal Capsule"
         self.icon = GameIcon().capsule_0
 
-        # Private
+        # Rates
+        self.rate_item = 100
+
+        # Set the list of items the player can obtain in the capsule
+        self.item = [Sword0]
