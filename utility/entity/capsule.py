@@ -130,23 +130,6 @@ class Capsule:
 
         return
 
-    async def generate_capsule(self):
-        """
-        Generate a capsule and add it to the player's inventory
-
-        --
-
-        :return: `None`
-        """
-
-        # TEST
-        await self.__database.execute("""
-                                      INSERT INTO capsule(capsule_reference, owner_id)
-                                      VALUES($1, $2);
-                                      """, [0, self.player.id])
-
-        return
-
     async def get_capsule_by_reference(self, reference):
         """
         Return a capsule object according to the passed reference

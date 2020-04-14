@@ -43,7 +43,7 @@ class CommandStart(commands.Cog):
         """
 
         # Init
-        player = Player(self.client, context.message.author)
+        player = Player(context, self.client, context.message.author)
         date = time.strftime("%d/%m/%y - %H:%M", time.gmtime())
         database = self.client.database
         await CommandLogger(self.client).log(context)

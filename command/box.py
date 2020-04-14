@@ -33,7 +33,7 @@ class CommandBox(commands.Cog):
         await self.client.logger.log(context)
         
         # Init
-        player = Player(self.client, context.message.author)
+        player = Player(context, self.client, context.message.author)
         box_tool = ToolBox(self.client, context)
         global_tool = GlobalTool()
 
@@ -59,7 +59,7 @@ class CommandBox(commands.Cog):
         await self.client.logger.log(context)
 
         # Init
-        player = Player(self.client, context.message.author)
+        player = Player(context, self.client, context.message.author)
         box_tool = ToolBox(self.client, context)
 
         # Display the unique box
