@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 13/04/20 by DrLarck
+Last update : 14/04/20 by DrLarck
 """
 
 import asyncio
@@ -316,7 +316,7 @@ class Database:
             """
             CREATE SEQUENCE IF NOT EXISTS capsule_reference_seq;
             CREATE TABLE IF NOT EXISTS capsule(
-                reference BIGINT PRIMARY KEY DEFAULT nextval('capsule_reference_seq') NOT NULL,,
+                reference BIGINT PRIMARY KEY DEFAULT nextval('capsule_reference_seq') NOT NULL,
                 capsule_reference BIGINT,
                 unique_id TEXT DEFAULT 'NONE',
                 owner_id BIGINT,
