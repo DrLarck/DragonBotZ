@@ -15,7 +15,7 @@ from utility.graphic.icon import GameIcon
 
 class Sword0(TrainingItem):
 
-    def __init__(self, client, character):
+    def __init__(self, client, character=None):
         """
         :param client: (`discord.ext.commands.Bot`)
 

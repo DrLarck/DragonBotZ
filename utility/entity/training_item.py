@@ -14,7 +14,7 @@ from utility.global_tool import GlobalTool
 
 class TrainingItem:
 
-    def __init__(self, client, character):
+    def __init__(self, client, character=None):
         """:param character: (`Character`)
 
            :param client: (`discord.ext.commands.Bot`)"""
