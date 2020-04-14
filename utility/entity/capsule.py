@@ -12,6 +12,9 @@ import asyncio
 # tool
 from utility.global_tool import GlobalTool
 
+# capsules
+from utility.entity.item.capsule.capsule_0 import CapsuleN
+
 
 class Capsule:
 
@@ -31,6 +34,7 @@ class Capsule:
         self.name = ""
         self.icon = ""
         self.reference = 0
+        self.unique_id = ""
 
         # Rewards
         self.dragonstone = 0
@@ -49,6 +53,14 @@ class Capsule:
         # Private
         self.__database = self.client.database
         self.__global_tool = GlobalTool()
+
+        # Generation %
+        self.__gen_n = 100
+        self.__gen_r = 66
+        self.__gen_sr = 33
+        self.__gen_ssr = 16.5
+        self.__gen_ur = 8.25
+        self.__gen_lr = 3
 
     # Public method
     async def open(self):
@@ -117,3 +129,39 @@ class Capsule:
                                           """, [unique_id, reference])
 
         return
+
+    async def generate_capsule(self):
+        """
+        Generate a capsule and add it to the player's inventory
+
+        --
+
+        :return: `None`
+        """
+
+        # TEST
+        await self.__database.execute("""
+                                      INSERT INTO capsule(capsule_reference, owner_id)
+                                      VALUES($1, $2);
+                                      """, [0, self.player.id])
+
+        return
+
+    async def get_capsule_by_reference(self, reference):
+        """
+        Return a capsule object according to the passed reference
+
+        :param reference: (`int`)
+
+        --
+
+        :return: `Capsule` or `None` if not found
+        """
+
+        # Init
+        capsule = None
+
+        if reference is 0:
+            capsule = CapsuleN(self.context, self.client, self.player)
+
+        return capsule
