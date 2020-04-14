@@ -12,7 +12,7 @@ import asyncio
 
 # util
 # items
-from utility.entity.item.capsule.capsule_0 import CapsuleN
+from utility.entity.capsule import Capsule
 
 
 class Player:
@@ -419,6 +419,7 @@ class PlayerItem:
         # If the player has capsules
         if player_capsule is not None:
             # Init
+            capsule_ref = Capsule(context, self.player.client, self.player)
             capsule_ = None
 
             # Add the capsules objects to the capsules list
@@ -430,14 +431,13 @@ class PlayerItem:
                 unique_id = capsule[2]
 
                 # Get the capsule object
-                # Get normal capsule
-                if ref is 0:
-                    capsule_ = CapsuleN(context, self.player.client, self.player)
+                capsule_ = await capsule_ref.get_capsule_by_reference(ref)
 
-                    # Setup the capsule
-                    capsule_.unique_id = unique_id
+                # Setup the capsule
+                capsule_.unique_id = unique_id
 
-                # In the end, add the capsule to the list
-                capsules.append(capsule_)
+                if capsule_ref is not None:
+                    # In the end, add the capsule to the list
+                    capsules.append(capsule_)
 
         return capsules
