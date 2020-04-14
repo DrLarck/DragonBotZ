@@ -418,9 +418,9 @@ class PlayerItem:
             rarity = 5
 
         await self.__database.execute("""
-                                      INSERT INTO capsule(capsule_reference, owner_id)
-                                      VALUES($1, $2);
-                                      """, [rarity, self.player.id])
+                                      INSERT INTO capsule(capsule_reference, owner_id, owner_name)
+                                      VALUES($1, $2, $3);
+                                      """, [rarity, self.player.id, self.player.name])
 
         await self.__capsule.set_unique_id()
 
