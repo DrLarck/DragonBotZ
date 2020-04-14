@@ -12,9 +12,6 @@ import asyncio
 # tool
 from utility.global_tool import GlobalTool
 
-# capsules
-from utility.entity.item.capsule.capsule_0 import CapsuleN
-
 
 class Capsule:
 
@@ -110,7 +107,7 @@ class Capsule:
         capsules = await self.__database.fetch_row("""
                                                    SELECT reference
                                                    FROM capsule
-                                                   WHERE capsule_unique_id = 'NONE';
+                                                   WHERE unique_id = 'NONE';
                                                    """)
 
         # Generate an unique id for each of those capsules
@@ -145,6 +142,8 @@ class Capsule:
         capsule = None
 
         if reference is 0:
+            from utility.entity.item.capsule.capsule_0 import CapsuleN
+
             capsule = CapsuleN(self.context, self.client, self.player)
 
         return capsule
