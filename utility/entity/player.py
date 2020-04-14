@@ -5,8 +5,14 @@ Player object
 
 Author : DrLarck
 
-Last update : 08/04/20 by DrLarck
+Last update : 14/04/20 by DrLarck
 """
+
+import asyncio
+
+# util
+# items
+from utility.entity.item.capsule.capsule_0 import CapsuleN
 
 
 class Player:
@@ -19,6 +25,7 @@ class Player:
         self.id = user.id
 
         self.resource = PlayerResource(self)
+        self.item = PlayerItem(self)
         self.experience = PlayerExperience(self)
         self.time = PlayerTime(self)
 
@@ -374,3 +381,63 @@ class PlayerTime:
                                       """, [value, self.player.id])
 
         return
+
+
+class PlayerItem:
+
+    def __init__(self, player):
+        """
+        :param player: (`Player`)
+        """
+
+        # Public
+        self.player = player
+
+        # Private
+        self.__database = self.player.client.database
+
+    # Public
+    async def get_capsule(self, context):
+        """
+        Get the player's capsules
+
+        :param context: (`discord.ext.commands.Context`)
+
+        --
+
+        :return: `list` of `Capsule` objects
+        """
+
+        # Init
+        capsules = []
+        player_capsule = await self.__database.fetch_row("""
+                                                         SELECT *
+                                                         FROM capsule
+                                                         WHERE owner_id = $1;
+                                                         """, [self.player.id])
+
+        # If the player has capsules
+        if player_capsule is not None:
+            # Init
+            capsule_ = None
+
+            # Add the capsules objects to the capsules list
+            for capsule in player_capsule:
+                await asyncio.sleep(0)
+
+                # Get capsule's info
+                ref = capsule[1]
+                unique_id = capsule[2]
+
+                # Get the capsule object
+                # Get normal capsule
+                if ref is 0:
+                    capsule_ = CapsuleN(context, self.player.client, self.player)
+
+                    # Setup the capsule
+                    capsule_.unique_id = unique_id
+
+                # In the end, add the capsule to the list
+                capsules.append(capsule_)
+
+        return capsules
