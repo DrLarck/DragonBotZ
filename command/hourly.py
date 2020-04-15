@@ -44,7 +44,7 @@ class CommandHourly(commands.Cog):
         await self.client.logger.log(context)
 
         # Init
-        player = Player(self.client, context.message.author)
+        player = Player(context, self.client, context.message.author)
         current_time = time.time()
         icon = GameIcon()
 

@@ -72,7 +72,7 @@ class CommandChecker:
 
         # Init
         client = context.bot
-        player = Player(client, context.message.author)
+        player = Player(context, client, context.message.author)
         database = client.database
 
         # Check if the player is in the database
@@ -103,7 +103,7 @@ class CommandChecker:
 
         # Init
         client = context.bot
-        player = Player(client, context.message.author)
+        player = Player(context, client, context.message.author)
         database = client.database
 
         # Check if the player is in the database

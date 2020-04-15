@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 08/04/20 by DrLarck
+Last update : 14/04/20 by DrLarck
 """
 
 import asyncio
@@ -281,10 +281,7 @@ class Database:
                 character_experience BIGINT DEFAULT 0,
                 character_dokkan_rate INTEGER DEFAULT 0,
                 character_star INTEGER DEFAULT 0,
-                character_training_armor INTEGER DEFAULT 0,
-                character_training_spirit INTEGER DEFAULT 0,
-                character_training_physical INTEGER DEFAULT 0,
-                character_training_ki INTEGER DEFAULT 0
+                character_training_item TEXT DEFAULT 'NONE'
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """,
@@ -299,6 +296,33 @@ class Database:
                 banner_content TEXT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS banner_reference_index ON banner(reference);
+            """,
+
+            # training item table
+            """
+            CREATE SEQUENCE IF NOT EXISTS training_item_reference_seq;
+            CREATE TABLE IF NOT EXISTS training_item(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('training_item_reference_seq') NOT NULL,
+                training_item_reference BIGINT,
+                unique_id TEXT DEFAULT 'NONE',
+                owner_id BIGINT,
+                owner_name TEXT,
+                equipped_on TEXT DEFAULT 'NONE'
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS training_item_unique_id ON training_item(unique_id);
+            """,
+
+            # capsule table
+            """
+            CREATE SEQUENCE IF NOT EXISTS capsule_reference_seq;
+            CREATE TABLE IF NOT EXISTS capsule(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('capsule_reference_seq') NOT NULL,
+                capsule_reference BIGINT,
+                unique_id TEXT DEFAULT 'NONE',
+                owner_id BIGINT,
+                owner_name TEXT
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS capsule_unique_id ON capsule(unique_id);
             """
         ]
 

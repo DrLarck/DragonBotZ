@@ -5,20 +5,29 @@ Player object
 
 Author : DrLarck
 
-Last update : 08/04/20 by DrLarck
+Last update : 15/04/20 by DrLarck
 """
+
+import asyncio
+
+# util
+# items
+from utility.entity.capsule import Capsule
+from utility.entity.training_item import TrainingItem
 
 
 class Player:
 
-    def __init__(self, client, user):
+    def __init__(self, context, client, user):
         # Public
+        self.context = context
         self.client = client
         self.name = user.name
         self.avatar = user.avatar_url
         self.id = user.id
 
         self.resource = PlayerResource(self)
+        self.item = PlayerItem(self)
         self.experience = PlayerExperience(self)
         self.time = PlayerTime(self)
 
@@ -372,5 +381,177 @@ class PlayerTime:
                                       SET player_daily_time = $1
                                       WHERE player_id = $2;
                                       """, [value, self.player.id])
+
+        return
+
+
+class PlayerItem:
+
+    def __init__(self, player):
+        """
+        :param player: (`Player`)
+        """
+
+        # Public
+        self.player = player
+
+        # Private
+        self.__database = self.player.client.database
+        self.__capsule = Capsule(self.player.context, self.player.client, self.player)
+        self.__training_item = TrainingItem(self.player.client)
+
+    # Public
+    async def add_training_item(self, reference):
+        """
+        Add a training item into the player's inventory
+
+        :param reference: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      INSERT INTO training_item(training_item_reference, owner_id, owner_name)
+                                      VALUES($1, $2, $3);
+                                      """, [reference, self.player.id, self.player.name])
+
+        await self.__training_item.set_unique_id()
+
+        return
+
+    async def add_capsule(self, rarity):
+        """
+        Add a capsule into the player's inventory
+
+        :param rarity: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        # Init
+        if rarity < 0:
+            rarity = 0
+
+        elif rarity > 5:
+            rarity = 5
+
+        await self.__database.execute("""
+                                      INSERT INTO capsule(capsule_reference, owner_id, owner_name)
+                                      VALUES($1, $2, $3);
+                                      """, [rarity, self.player.id, self.player.name])
+
+        await self.__capsule.set_unique_id()
+
+        return
+
+    async def get_capsule(self):
+        """
+        Get the player's capsules
+
+        --
+
+        :return: `list` of `Capsule` objects
+        """
+
+        # Init
+        capsules = []
+        player_capsule = await self.__database.fetch_row("""
+                                                         SELECT *
+                                                         FROM capsule
+                                                         WHERE owner_id = $1;
+                                                         """, [self.player.id])
+
+        # If the player has capsules
+        if player_capsule is not None:
+            # Init
+            capsule_ref = Capsule(self.player.context, self.player.client, self.player)
+
+            # Add the capsules objects to the capsules list
+            for capsule in player_capsule:
+                await asyncio.sleep(0)
+
+                # Get capsule's info
+                ref = capsule[1]
+                unique_id = capsule[2]
+
+                # Get the capsule object
+                capsule_ = await capsule_ref.get_capsule_by_reference(ref)
+
+                if capsule_ is not None:
+                    # Setup the capsule
+                    capsule_.unique_id = unique_id
+
+                    # In the end, add the capsule to the list
+                    capsules.append(capsule_)
+
+        return capsules
+
+    async def get_capsule_by_rarity(self, rarity):
+        """
+        Return a list of capsule of the passed rarity
+
+        :param rarity: (`int`)
+
+        --
+
+        :return: `list` of `Capsule`
+        """
+
+        # Init
+        capsules = []
+        player_capsule = await self.__database.fetch_row("""
+                                                         SELECT *
+                                                         FROM capsule
+                                                         WHERE capsule_reference = $1 AND owner_id = $2;
+                                                         """, [rarity, self.player.id])
+
+        # If the player has capsules of the passed rarity
+        if player_capsule is not None:
+            # Get the capsule objects
+            capsule_ref = Capsule(self.player.context, self.player.client, self.player)
+
+            for capsule in player_capsule:
+                await asyncio.sleep(0)
+                # Get capsule info
+                reference = capsule[1]
+                unique_id = capsule[2]
+
+                # Get the capsule object
+                capsule_ = await capsule_ref.get_capsule_by_reference(reference)
+
+                if capsule_ is not None:
+                    # Setup the object
+                    capsule_.unique_id = unique_id
+
+                    # Add the capsule in the list
+                    capsules.append(capsule_)
+
+        return capsules
+
+    async def open_capsule(self, rarity):
+        """
+        Open a random capsule of the rarity
+
+        :param rarity: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        # Get the player's capsule by rarity
+        player_capsule = await self.get_capsule_by_rarity(rarity)
+
+        # If the player has capsules
+        if len(player_capsule) > 0:
+            # Select a capsule to open
+            capsule_to_open = player_capsule[0]
+
+            # Open the capsule
+            await capsule_to_open.open()
 
         return

@@ -5,16 +5,18 @@ Banner object
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 13/04/20 by DrLarck
 """
 
 import asyncio
 import random
 
-from string import ascii_letters
 
 # util
 from utility.entity.character import CharacterGetter
+
+# tool
+from utility.global_tool import GlobalTool
 
 
 class Banner:
@@ -42,6 +44,9 @@ class Banner:
         self.__sr_droprate = 33
         self.__r_droprate = 50
         self.__n_droprate = 100
+
+        # tool
+        self.__global_tool = GlobalTool()
 
     # Public
     async def sort(self):
@@ -201,45 +206,6 @@ class Banner:
 
         return self
 
-    # noinspection PyMethodMayBeStatic
-    async def generate_unique_id(self, reference):
-        """
-        Generate a unique id from the reference
-
-        :param reference: (`int`)
-
-        --
-
-        :return: `str`
-        """
-
-        # Init
-        letters = ascii_letters
-
-        # Generation
-        # First of all, store the highest value in 'number'
-        number = int(reference / pow(52, 4))
-        reference -= number * pow(52, 4)
-
-        # Then deal the value with the letters
-        # Each letter can store (52^index - 1) values
-        # The first_letter (tier 1) can handle 52 values
-        first_letter = int(reference / pow(52, 3))
-        reference -= first_letter * pow(52, 3)
-
-        second_letter = int(reference / pow(52, 2))
-        reference -= second_letter * pow(52, 2)
-
-        third_letter = int(reference / 52)
-        reference -= third_letter * 52
-
-        fourth_letter = reference
-
-        # Get the unique id
-        id_ = f"{letters[fourth_letter]}{letters[third_letter]}{letters[second_letter]}{letters[first_letter]}{number}"
-
-        return id_
-
     async def set_unique_id(self, client):
         """
         Generate an unique id for the characters that have 'NONE' as unique id
@@ -262,7 +228,7 @@ class Banner:
 
             # Get the unique character's reference
             reference = character[0]
-            unique_id = await self.generate_unique_id(reference)
+            unique_id = await self.__global_tool.generate_unique_id(reference)
 
             # Update the character's unique id
             await client.database.execute("""

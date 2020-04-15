@@ -37,17 +37,17 @@ class CommandProfile(commands.Cog):
 
         # Init
         # Get the command caller
-        caller = Player(self.client, context.message.author)
+        caller = Player(context, self.client, context.message.author)
 
         # If no target is provided
         # The player is the message author
         if target is None:
-            player = Player(self.client, context.message.author)
+            player = Player(context, self.client, context.message.author)
 
         # If the target is provided
         # The player is the target
         else:
-            player = Player(self.client, target)
+            player = Player(context, self.client, target)
 
         embed = CustomEmbed()
 
