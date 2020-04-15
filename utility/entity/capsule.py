@@ -80,13 +80,7 @@ class Capsule:
                 item = item(self.client)
 
                 # Add the item into the database
-                await self.__database.execute("""
-                                              INSERT INTO training_item(training_item_reference, owner_id, owner_name)
-                                              VALUES($1, $2, $3);
-                                              """, [item.reference, self.player.id, self.player.name])
-
-                # Generate a unique id for the item
-                await item.set_unique_id()
+                await self.player.item.add_training_item(item.reference)
 
                 # Display the message
                 msg = f"You've opened a {self.icon}**{self.name}** capsule and found {item.icon}**{item.name}** in it"
