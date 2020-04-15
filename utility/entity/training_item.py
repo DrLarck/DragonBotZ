@@ -14,14 +14,11 @@ from utility.global_tool import GlobalTool
 
 class TrainingItem:
 
-    def __init__(self, client, character=None):
-        """:param character: (`Character`)
-
-           :param client: (`discord.ext.commands.Bot`)"""
+    def __init__(self, client):
+        """:param client: (`discord.ext.commands.Bot`)"""
 
         # Public
         self.client = client
-        self.character = character
         self.reference = 0
 
         # Info
@@ -33,8 +30,10 @@ class TrainingItem:
         self.__global_tool = GlobalTool()
 
     # Public method
-    async def apply_effect(self):
+    async def apply_effect(self, character):
         """Apply the item's effects to the character
+
+        :param character: (`Character`)
         
         --
         
