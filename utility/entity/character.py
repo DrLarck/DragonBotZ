@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 15/04/20 by DrLarck
 """
 
 import asyncio
@@ -24,6 +24,7 @@ class Character:
 
         self.name = ""
         self.id = 0
+        self.unique_id = ""
         self.level = 1
 
         self.image = CharacterImage()
@@ -296,6 +297,60 @@ class CharacterDefense:
         # Public
         self.fixed = 0
         self.floating = 0
+
+
+class CharacterTrainingItem:
+
+    def __init__(self, character):
+        """
+        :param character: (`Character`)
+        """
+
+        # Public
+        self.character = character
+        self.equipped = []
+
+        # Private
+        self.__database = self.character.client.database
+
+    # Private
+    async def __get_equipped(self):
+        """
+        Get the equipped training items
+
+        --
+
+        :return: `None`
+        """
+
+        # Get the equipped items' unique id
+        unique_items = await self.__database.fetch_value("""
+                                                         SELECT training_item
+                                                         FROM character_unique
+                                                         WHERE character_unique_id = $1;
+                                                         """, [self.character.unique_id])
+
+        # Get the list of items
+        unique_items = unique_items.split()
+
+        # Set the equipped list
+        self.equipped = unique_items
+
+        return
+
+    # Public
+    async def apply_effect(self):
+        """
+        Apply the equipped items effects on the character
+
+        --
+
+        :return: `None`
+        """
+
+        
+
+        return
 
 
 class CharacterGetter:
