@@ -5,7 +5,7 @@ Represent a Normal capsule
 
 Author : DrLarck
 
-Last update : 13/04/20 by DrLarck
+Last update : 15/04/20 by DrLarck
 """
 
 # util
@@ -35,8 +35,12 @@ class CapsuleN(Capsule):
         self.name = "Normal Capsule"
         self.icon = GameIcon().capsule_0
 
-        # Rates
-        self.rate_item = 100
-
-        # Set the list of items the player can obtain in the capsule
+        # Rewards
+        self.dragonstone = 5000
+        self.zeni = 150000
         self.item = [Sword0]
+
+        # Rates
+        self.rate_item = 20
+        self.rate_dragonstone = 50
+        self.rate_zeni = 100
