@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 14/04/20 by DrLarck
+Last update : 15/04/20 by DrLarck
 """
 
 import asyncio
@@ -426,7 +426,7 @@ class PlayerItem:
 
         return
 
-    async def get_capsule(self, context):
+    async def get_capsule(self):
         """
         Get the player's capsules
 
@@ -448,7 +448,7 @@ class PlayerItem:
         # If the player has capsules
         if player_capsule is not None:
             # Init
-            capsule_ref = Capsule(context, self.player.client, self.player)
+            capsule_ref = Capsule(self.player.context, self.player.client, self.player)
             capsule_ = None
 
             # Add the capsules objects to the capsules list
@@ -462,11 +462,77 @@ class PlayerItem:
                 # Get the capsule object
                 capsule_ = await capsule_ref.get_capsule_by_reference(ref)
 
-                # Setup the capsule
-                capsule_.unique_id = unique_id
+                if capsule_ is not None:
+                    # Setup the capsule
+                    capsule_.unique_id = unique_id
 
-                if capsule_ref is not None:
                     # In the end, add the capsule to the list
                     capsules.append(capsule_)
 
         return capsules
+
+    async def get_capsule_by_rarity(self, rarity):
+        """
+        Return a list of capsule of the passed rarity
+
+        :param rarity: (`int`)
+
+        --
+
+        :return: `list` of `Capsule`
+        """
+
+        # Init
+        capsules = []
+        player_capsule = await self.__database.fetch_row("""
+                                                         SELECT *
+                                                         FROM capsule
+                                                         WHERE capsule_reference = $1, owner_id = $2;
+                                                         """, [rarity, self.player.id])
+
+        # If the player has capsules of the passed rarity
+        if player_capsule is not None:
+            # Get the capsule objects
+            capsule_ref = Capsule(self.player.context, self.player.client, self.player)
+            for capsule in capsules:
+                await asyncio.sleep(0)
+
+                # Get capsule info
+                reference = capsule[1]
+                unique_id = capsule[2]
+
+                # Get the capsule object
+                capsule_ = await capsule_ref.get_capsule_by_reference(reference)
+
+                if capsule_ is not None:
+                    # Setup the object
+                    capsule_.unique_id = unique_id
+
+                    # Add the capsule in the list
+                    capsules.append(capsule_)
+
+        return capsules
+
+    async def open_capsule(self, rarity):
+        """
+        Open a random capsule of the rarity
+
+        :param rarity: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        # Get the player's capsule by rarity
+        player_capsule = await self.get_capsule_by_rarity(rarity)
+
+        # If the player has capsules
+        if len(player_capsule) > 0:
+            # Select a capsule to open
+            capsule_to_open = player_capsule[0]
+
+            # Open the capsule
+            await capsule_to_open.open()
+
+        return
