@@ -348,7 +348,11 @@ class CharacterTrainingItem:
         :return: `None`
         """
 
-        
+        # Apply the effect of each items
+        for item in self.equipped:
+            await asyncio.sleep(0)
+
+            await item.apply_effect(self)
 
         return
 
