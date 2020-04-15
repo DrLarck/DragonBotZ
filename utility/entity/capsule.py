@@ -4,7 +4,7 @@
 
 Author : DrLarck
 
-Last update : 14/04/20 by DrLarck"""
+Last update : 15/04/20 by DrLarck"""
 
 import random
 import asyncio
@@ -92,6 +92,9 @@ class Capsule:
                 msg = f"You've opened a {self.icon}**{self.name}** capsule and found {item.icon}**{item.name}** in it"
                 await self.context.send(msg)
 
+        # Delete the capsule
+        await self.delete()
+
         return
 
     async def set_unique_id(self):
@@ -147,3 +150,19 @@ class Capsule:
             capsule = CapsuleN(self.context, self.client, self.player)
 
         return capsule
+
+    async def delete(self):
+        """
+        Delete the capsule from the database
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      DELETE FROM capsule
+                                      WHERE unique_id = $1;
+                                      """, [self.unique_id])
+
+        return
