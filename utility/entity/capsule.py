@@ -9,6 +9,9 @@ Last update : 15/04/20 by DrLarck"""
 import random
 import asyncio
 
+# util
+from utility.graphic.icon import GameIcon
+
 # tool
 from utility.global_tool import GlobalTool
 
@@ -26,6 +29,7 @@ class Capsule:
         self.client = client
         self.context = context
         self.player = player
+        self.game_icon = GameIcon()
 
         # Info
         self.name = ""
@@ -47,6 +51,9 @@ class Capsule:
         self.rate_experience = 0
         self.rate_item = 0
 
+        # Reward gap
+        self.reward_gap = 0.9  # 10 %
+
         # Private
         self.__database = self.client.database
         self.__global_tool = GlobalTool()
@@ -67,27 +74,70 @@ class Capsule:
 
         :return: `None`"""
 
+        # Init
+        icon, name, qt = "", "", 0
+        rewarded = False
+
         # Get the player's roll
         roll = random.uniform(0, 100)
 
         # Check if the item list is not empty
         if len(self.item) > 0:
             # Check if the player has loot a training item
-            if roll <= self.rate_item:
+            if roll <= self.rate_item and rewarded is False:
                 item = random.choice(self.item)
 
                 # Set the item
                 item = item(self.client)
 
+                # Setup the reward info
+                name = item.name
+                icon = item.icon
+
                 # Add the item into the database
                 await self.player.item.add_training_item(item.reference)
 
-                # Display the message
-                msg = f"You've opened a {self.icon}**{self.name}** capsule and found {item.icon}**{item.name}** in it"
-                await self.context.send(msg)
+                rewarded = True
+
+        # Check the ds loot
+        if roll <= self.rate_dragonstone and rewarded is False:
+            # Generate a ds reward
+            qt = random.randint(self.dragonstone * self.reward_gap, self.dragonstone)
+
+            # Setup the reward info
+            name = "Dragon Stones"
+            icon = self.game_icon.dragonstone
+
+            # Add the reward into the player's inventory
+            await self.player.resource.add_dragonstone(qt)
+
+            rewarded = True
+
+        # Check the zenis loot
+        if roll <= self.rate_zeni and rewarded is False:
+            # Generate the zeni reward
+            qt = random.randint(self.zeni * self.reward_gap, self.zeni)
+
+            # Setup the reward info
+            name = "Zenis"
+            icon = self.game_icon.zeni
+
+            # Add the reward into the player's inventory
+            await self.player.resource.add_zeni(qt)
+
+            rewarded = True
 
         # Delete the capsule
         await self.delete()
+
+        # Display the message
+        if qt > 0:
+            msg = f"You've opened a {self.icon}**{self.name}** capsule and found **{qt:,}**{icon}"
+
+        else:
+            msg = f"You've opened a {self.icon}**{self.name}** capsule and found {icon}**{name}**"
+
+        await self.context.send(msg)
 
         return
 
