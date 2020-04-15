@@ -5,8 +5,10 @@ Moderation commands
 
 Author : DrLarck
 
-Last update : 13/03/20 by DrLarck
+Last update : 14/04/20 by DrLarck
 """
+
+import asyncio
 
 from discord.ext import commands
 
@@ -31,7 +33,7 @@ class CommandModeration(commands.Cog):
         # Init
         await CommandLogger(self.client).log(context)
 
-        player = Player(self.client, context.message.author)
+        player = Player(context, self.client, context.message.author)
 
         dragonstone = await player.resource.get_dragonstone()
 
@@ -42,6 +44,35 @@ class CommandModeration(commands.Cog):
         dragonstone = await player.resource.get_dragonstone()
 
         print(dragonstone)
+
+    @commands.command()
+    async def get_capsule(self, context):
+        # log
+        await self.client.logger.log(context)
+
+        player = Player(context, self.client, context.message.author)
+
+        await player.item.add_capsule(0)
+
+    @commands.command()
+    async def display_capsule(self, context):
+        player = Player(context, self.client, context.message.author)
+        capsules = await player.item.get_capsule()
+
+        display = ""
+
+        for capsule in capsules:
+            await asyncio.sleep(0)
+
+            display += f"{capsule.icon}{capsule.name}\n"
+
+        await context.send(display)
+
+    @commands.command()
+    async def open(self, context, rarity: int):
+        player = Player(context, self.client, context.message.author)
+
+        await player.item.open_capsule(rarity)
 
 
 def setup(client):
