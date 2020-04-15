@@ -530,8 +530,6 @@ class PlayerItem:
                     # Add the capsule in the list
                     capsules.append(capsule_)
 
-        print(player_capsule)
-        print(capsules)
         return capsules
 
     async def open_capsule(self, rarity):
