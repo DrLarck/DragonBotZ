@@ -13,6 +13,7 @@ import asyncio
 # util
 # items
 from utility.entity.capsule import Capsule
+from utility.entity.training_item import TrainingItem
 
 
 class Player:
@@ -397,8 +398,29 @@ class PlayerItem:
         # Private
         self.__database = self.player.client.database
         self.__capsule = Capsule(self.player.context, self.player.client, self.player)
+        self.__training_item = TrainingItem(self.player.client)
 
     # Public
+    async def add_training_item(self, reference):
+        """
+        Add a training item into the player's inventory
+
+        :param reference: (`int`)
+
+        --
+
+        :return: `None`
+        """
+
+        await self.__database.execute("""
+                                      INSERT INTO training_item(training_item_reference, owner_id, owner_name)
+                                      VALUES($1, $2, $3);
+                                      """, [reference, self.player.id, self.player.name])
+
+        await self.__training_item.set_unique_id()
+
+        return
+
     async def add_capsule(self, rarity):
         """
         Add a capsule into the player's inventory
@@ -430,8 +452,6 @@ class PlayerItem:
         """
         Get the player's capsules
 
-        :param context: (`discord.ext.commands.Context`)
-
         --
 
         :return: `list` of `Capsule` objects
@@ -449,7 +469,6 @@ class PlayerItem:
         if player_capsule is not None:
             # Init
             capsule_ref = Capsule(self.player.context, self.player.client, self.player)
-            capsule_ = None
 
             # Add the capsules objects to the capsules list
             for capsule in player_capsule:
@@ -487,16 +506,16 @@ class PlayerItem:
         player_capsule = await self.__database.fetch_row("""
                                                          SELECT *
                                                          FROM capsule
-                                                         WHERE capsule_reference = $1, owner_id = $2;
+                                                         WHERE capsule_reference = $1 AND owner_id = $2;
                                                          """, [rarity, self.player.id])
 
         # If the player has capsules of the passed rarity
         if player_capsule is not None:
             # Get the capsule objects
             capsule_ref = Capsule(self.player.context, self.player.client, self.player)
-            for capsule in capsules:
-                await asyncio.sleep(0)
 
+            for capsule in player_capsule:
+                await asyncio.sleep(0)
                 # Get capsule info
                 reference = capsule[1]
                 unique_id = capsule[2]
@@ -511,6 +530,8 @@ class PlayerItem:
                     # Add the capsule in the list
                     capsules.append(capsule_)
 
+        print(player_capsule)
+        print(capsules)
         return capsules
 
     async def open_capsule(self, rarity):
