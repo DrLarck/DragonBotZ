@@ -40,6 +40,9 @@ class Character:
         self.armor = CharacterDefense()
         self.spirit = CharacterDefense()
 
+        # Items
+        self.training_item = CharacterTrainingItem(self)
+
         # Private
         self.__embed = CustomEmbed()
 
