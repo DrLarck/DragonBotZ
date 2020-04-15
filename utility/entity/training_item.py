@@ -4,7 +4,7 @@
 
 Author : DrLarck
 
-Last update: 13/04/20 by DrLarck"""
+Last update: 15/04/20 by DrLarck"""
 
 import asyncio
 
@@ -20,6 +20,7 @@ class TrainingItem:
            :param client: (`discord.ext.commands.Bot`)"""
 
         # Public
+        self.client = client
         self.character = character
         self.reference = 0
 
@@ -55,6 +56,26 @@ class TrainingItem:
                                                     """, [unique_id])
         
         return reference
+
+    async def get_from_reference(self, reference):
+        """
+        Generate a training item according to the reference
+
+        :param reference: (`int`)
+
+        --
+
+        :return: `TrainingItem` or `None`
+        """
+
+        # Init
+        training_item = None
+
+        if reference is 0:
+            from utility.entity.item.training_item.sword_0 import Sword0
+            training_item = Sword0(self.client)
+
+        return training_item
 
     async def set_unique_id(self):
         """Generate an unique id for the training items that have 'NONE' as unique id
