@@ -5,7 +5,7 @@ Represent lv.1 Z-Sword
 
 Author : DrLarck
 
-Last update : 13/04/20 by DrLarck
+Last update : 15/04/20 by DrLarck
 """
 
 # util
@@ -15,15 +15,13 @@ from utility.graphic.icon import GameIcon
 
 class Sword0(TrainingItem):
 
-    def __init__(self, client, character=None):
+    def __init__(self, client):
         """
         :param client: (`discord.ext.commands.Bot`)
-
-        :param character: (`Character`)
         """
 
         # Inheritance
-        TrainingItem.__init__(self, client, character)
+        TrainingItem.__init__(self, client)
 
         # Public
         self.reference = 0

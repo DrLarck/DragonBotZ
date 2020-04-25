@@ -4,7 +4,7 @@
 
 Author : DrLarck
 
-Last update: 13/04/20 by DrLarck"""
+Last update: 15/04/20 by DrLarck"""
 
 import asyncio
 
@@ -14,13 +14,11 @@ from utility.global_tool import GlobalTool
 
 class TrainingItem:
 
-    def __init__(self, client, character=None):
-        """:param character: (`Character`)
-
-           :param client: (`discord.ext.commands.Bot`)"""
+    def __init__(self, client):
+        """:param client: (`discord.ext.commands.Bot`)"""
 
         # Public
-        self.character = character
+        self.client = client
         self.reference = 0
 
         # Info
@@ -32,8 +30,10 @@ class TrainingItem:
         self.__global_tool = GlobalTool()
 
     # Public method
-    async def apply_effect(self):
+    async def apply_effect(self, character):
         """Apply the item's effects to the character
+
+        :param character: (`Character`)
         
         --
         
@@ -55,6 +55,26 @@ class TrainingItem:
                                                     """, [unique_id])
         
         return reference
+
+    async def get_from_reference(self, reference):
+        """
+        Generate a training item according to the reference
+
+        :param reference: (`int`)
+
+        --
+
+        :return: `TrainingItem` or `None`
+        """
+
+        # Init
+        training_item = None
+
+        if reference is 0:
+            from utility.entity.item.training_item.sword_0 import Sword0
+            training_item = Sword0(self.client)
+
+        return training_item
 
     async def set_unique_id(self):
         """Generate an unique id for the training items that have 'NONE' as unique id
