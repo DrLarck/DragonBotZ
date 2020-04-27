@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 15/04/20 by DrLarck
+Last update : 27/04/20 by DrLarck
 """
 
 import asyncio
@@ -152,6 +152,17 @@ __Level__ : **{self.level}**
         embed.set_image(url=self.image.card)
 
         return embed
+
+    async def init(self):
+        """
+        Init the character for combat purpose.
+
+        --
+
+        :return: `None`
+        """
+
+        return
 
 
 class CharacterImage:
@@ -422,3 +433,33 @@ class CharacterGetter:
         else:
             print(f"Character {reference} not found.")
             return None
+
+    async def get_from_unique(self, database, unique_id):
+        """
+        Get a Character object from a unique id
+
+        :param database: (`Database`)
+
+        :param unique_id: (`str`)
+
+        --
+
+        :return: `Character` or `None` if not found
+        """
+
+        character_row = await database.fetch_row("""
+                                                 SELECT *
+                                                 FROM character_unique
+                                                 WHERE character_unique_id = $1;
+                                                 """, [unique_id])
+
+        if character_row is not None:
+            # Get the character object according to the character's reference
+            character = await self.get_reference_character(character_row[1])
+
+            # Setup the character object
+            character.level = 6
+
+            await character.init()
+
+        return
