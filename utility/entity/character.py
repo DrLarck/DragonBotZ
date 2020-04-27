@@ -27,6 +27,9 @@ class Character:
         self.unique_id = ""
         self.level = 1
 
+        self.npc = False  # Tells if it's a non playable character
+        self.posture = 0
+
         self.image = CharacterImage()
         self.type = CharacterType()
         self.rarity = CharacterRarity()
@@ -163,6 +166,34 @@ __Level__ : **{self.level}**
         """
 
         return
+
+    async def is_playable(self):
+        """
+        Tells if the character is playable or not
+
+        --
+
+        :return: `bool`
+        """
+
+        # Init
+        playable = True
+
+        # If the character is not a non playable character
+        if not self.npc:
+            # If the character is stunned
+            if self.posture == 3:
+                playable = False
+
+            # If the character is dead
+            elif self.health.current <= 0:
+                playable = False
+
+            # If the character has posture a normal posture
+            else:
+                playable = True
+
+        return playable
 
 
 class CharacterImage:
