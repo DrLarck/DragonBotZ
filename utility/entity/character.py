@@ -452,6 +452,7 @@ class CharacterGetter:
                                                  FROM character_unique
                                                  WHERE character_unique_id = $1;
                                                  """, [unique_id])
+        character_row = character_row[0]
 
         if character_row is not None:
             # Get the character object according to the character's reference
@@ -461,5 +462,7 @@ class CharacterGetter:
             character.level = 6
 
             await character.init()
+
+            return character
 
         return
