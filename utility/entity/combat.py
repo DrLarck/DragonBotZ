@@ -14,8 +14,14 @@ import asyncio
 
 class Combat:
 
-    def __init__(self):
+    def __init__(self, context):
+        """
+        :param context: (`discord.ext.commands.Context`)
+        """
+        
         # Public
+        self.context = context
+
         # Player
         self.player_a, self.player_b = None, None
         self.team_a, self.team_b = [], []
