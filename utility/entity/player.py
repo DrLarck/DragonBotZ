@@ -601,7 +601,7 @@ class PlayerCombat:
             for unique_id in player_team:
                 await asyncio.sleep(0)
 
-                character = await char_getter.get_from_unique(unique_id)
+                character = await char_getter.get_from_unique(self.__database, unique_id)
 
                 # Add the character to the team list
                 team.append(character)
