@@ -46,6 +46,9 @@ class Character:
         # Items
         self.training_item = CharacterTrainingItem(self)
 
+        # Abilities
+        self.ability = []
+
         # Private
         self.__embed = CustomEmbed()
 
