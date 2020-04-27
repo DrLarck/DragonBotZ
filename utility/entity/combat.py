@@ -17,11 +17,15 @@ from utility.interactive.button import Button
 
 class Combat:
 
-    def __init__(self, client, context):
+    def __init__(self, client, context, player_a, player_b):
         """
         :param client: (`discord.ext.commands.Bot`)
 
         :param context: (`discord.ext.commands.Context`)
+
+        :param player_a: (`Player` or `CPU`)
+
+        :param player_b: (`Player` or `CPU`)
         """
 
         # Public
@@ -29,7 +33,7 @@ class Combat:
         self.context = context
 
         # Player
-        self.player_a, self.player_b = None, None
+        self.player_a, self.player_b = player_a, player_b
         self.team_a, self.team_b = [], []
 
         # Move
@@ -208,6 +212,7 @@ class CombatTool:
 
         return
 
+
 class Move:
 
     def __init__(self, client, context, player):
@@ -293,5 +298,10 @@ class Move:
 
         # Add the buttons to the message
         await button_manager.add(reactions)
+
+        # Get the player's action
+        pressed = await button_manager.get_pressed(reactions, self.player)
+
+        print(pressed)
 
         return
