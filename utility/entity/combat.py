@@ -25,6 +25,7 @@ class Combat:
         """
 
         # Public
+        self.client = client
         self.context = context
 
         # Player
@@ -32,7 +33,7 @@ class Combat:
         self.team_a, self.team_b = [], []
 
         # Move
-        self.move_a, self.move_b = Move(), Move()
+        self.move_a, self.move_b = None, None
 
         # Private
         self.__combat_tool = CombatTool(self)
@@ -97,7 +98,11 @@ class Combat:
             playable = await character.is_playable()
 
             if playable:
+                # Get the move object
+                move = await self.__combat_tool.get_move_by_index(player_index)
 
+                # Get the player's move
+                await move.get_move(character)
 
         return
 
@@ -148,6 +153,23 @@ class CombatTool:
         else:
             return self.combat.team_b
 
+    async def get_move_by_index(self, player_index):
+        """
+        Return the right move object according to the player index
+
+        :param player_index: (`int`
+
+        --
+
+        :return: `Move`
+        """
+
+        if player_index == 0:
+            return self.combat.move_a
+
+        else:
+            return self.combat.move_b
+
     async def define_play_order(self):
         """
         Redefine player_a and player_b to define a play order
@@ -163,7 +185,10 @@ class CombatTool:
         # If the first player to play is the player b
         if roll == 1:
             self.combat.player_a = self.combat.player_b
+            self.combat.move_a = Move(self.combat.client, self.combat.context, self.combat.player_a)
+
             self.combat.player_b = self.combat.player_a
+            self.combat.move_b = Move(self.combat.client, self.combat.context, self.combat.player_b)
 
         # else doesn't change anything
 
