@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 14/04/20 by DrLarck
+Last update : 27/04/20 by DrLarck
 """
 
 import asyncio
@@ -242,6 +242,15 @@ class Database:
                 player_daily_combo BIGINT DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_time_index ON player_time(player_id);
+            """,
+            # player_combat table
+            """
+            CREATE TABLE IF NOT EXISTS player_combat(
+                player_id BIGINT,
+                player_name TEXT,
+                player_team TEXT DEFAULT ''
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS player_team_index ON player_combat(player_id);
             """,
 
             # character_reference table
