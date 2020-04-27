@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 15/04/20 by DrLarck
+Last update : 27/04/20 by DrLarck
 """
 
 import asyncio
@@ -30,6 +30,8 @@ class Player:
         self.item = PlayerItem(self)
         self.experience = PlayerExperience(self)
         self.time = PlayerTime(self)
+
+        self.combat = PlayerCombat(self)
 
 
 class PlayerResource:
@@ -555,3 +557,11 @@ class PlayerItem:
             await capsule_to_open.open()
 
         return
+
+
+class PlayerCombat:
+
+    def __init__(self, player):
+        """
+        :param player: (`Player`)
+        """
