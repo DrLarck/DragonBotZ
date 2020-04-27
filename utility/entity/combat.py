@@ -18,7 +18,7 @@ class Combat:
         """
         :param context: (`discord.ext.commands.Context`)
         """
-        
+
         # Public
         self.context = context
 
@@ -180,7 +180,11 @@ class CombatTool:
 
 class Move:
 
-    def __init__(self):
+    def __init__(self, player):
+        """
+        :param player: (`Player`)
+        """
+
         # Public
         self.index = 0
         self.target = None
@@ -197,5 +201,21 @@ class Move:
 
         self.index = 0
         self.target = None
+
+        return
+
+    async def get_move(self, character):
+        """
+        Get the player's move for his playing character
+
+        :param character: (`Character`)
+
+        --
+
+        :return: `None`
+        """
+
+
+
 
         return
