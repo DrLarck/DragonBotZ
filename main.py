@@ -10,6 +10,7 @@ Author : DrLarck
 Last update : 27/04/20 by DrLarck
 """
 
+import logging
 import discord
 import os
 
@@ -46,6 +47,8 @@ class Main:
         
         client = commands.Bot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
+
+        logging.basicConfig(level=logging.INFO)
 
         # Create the database attribute for client
         client.database = Database()
