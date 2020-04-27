@@ -11,11 +11,16 @@ Last update : 27/04/20 by DrLarck
 import random
 import asyncio
 
+# util
+from utility.interactive.button import Button
+
 
 class Combat:
 
-    def __init__(self, context):
+    def __init__(self, client, context):
         """
+        :param client: (`discord.ext.commands.Bot`)
+
         :param context: (`discord.ext.commands.Context`)
         """
 
@@ -180,12 +185,16 @@ class CombatTool:
 
 class Move:
 
-    def __init__(self, player):
+    def __init__(self, client, context, player):
         """
         :param player: (`Player`)
         """
 
         # Public
+        self.client = client
+        self.context = context
+        self.player = player
+
         self.index = 0
         self.target = None
 
@@ -215,7 +224,49 @@ class Move:
         :return: `None`
         """
 
+        # Set of buttons
+        action = [
+                  ":zero:", ":one:", ":two:",
+                  ":three:", ":four:", ":five:",
+                  ":six:", ":seven:", ":eight:",
+                  ":nine:"
+                  ]
 
+        action_second = ["🏃"]
 
+        # Message
+        display = f"Please select an action among the followings for **{character.name}**{character.type.icon} :\n"
+
+        # Add ability name to the display
+        count = 0  # Count for the emote
+
+        for ability in character.ability:
+            await asyncio.sleep(0)
+
+            display += f"{action[count]} - **{ability.name}**\n"
+
+            # Pass the to the next emote
+            count += 1
+
+        # Send the message
+        message = await self.context.send(display)
+
+        # Define the button manager
+        button_manager = Button(self.client, message)
+
+        # Get the reactions to add
+        reactions = []
+
+        # Add the necessary buttons
+        for i in range(count):
+            await asyncio.sleep(0)
+
+            reactions.append(action[i])
+
+        # Add all the secondary actions
+        reactions += action_second
+
+        # Add the buttons to the message
+        await button_manager.add(reactions)
 
         return
