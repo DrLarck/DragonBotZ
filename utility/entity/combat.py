@@ -9,6 +9,7 @@ Last update : 27/04/20 by DrLarck
 """
 
 import random
+import asyncio
 
 
 class Combat:
@@ -18,6 +19,9 @@ class Combat:
         # Player
         self.player_a, self.player_b = None, None
         self.team_a, self.team_b = [], []
+
+        # Move
+        self.move_a, self.move_b = Move(), Move()
 
         # Private
         self.__combat_tool = CombatTool(self)
@@ -32,7 +36,32 @@ class Combat:
         :return: `Player` as winner
         """
 
+        # Set the play order
+        await self.__combat_tool.define_play_order()
 
+        # Set the teams
+        await self.__combat_tool.init_teams()
+
+        # Start combat
+        turn = 1     # Start at turn 1
+        end = False  # Set the variable to True to end the fight
+
+        while not end:
+            await asyncio.sleep(0)
+
+            # Run the turn of each player
+            players = [0, 1]  # Player index
+
+            # Run the turn of each player according to the player's index
+            # stored in the players variable
+            for player in players:
+                await asyncio.sleep(0)
+
+                # Run the player's turn
+                await self.run_turn(player)
+
+            # End of the turn
+            turn += 1
 
         return
 
@@ -49,6 +78,15 @@ class Combat:
 
         # Init
         player_team = await self.__combat_tool.get_player_team_by_index(player_index)
+
+        # Run the turn of each character
+        for character in player_team:
+            await asyncio.sleep(0)
+
+            playable = await character.is_playable()
+
+            if playable:
+
 
         return
 
@@ -117,5 +155,41 @@ class CombatTool:
             self.combat.player_b = self.combat.player_a
 
         # else doesn't change anything
+
+        return
+
+    async def reset_moves(self):
+        """
+        Reset the moves instances
+
+        --
+
+        :return: `None`
+        """
+
+        await self.combat.move_a.reset()
+        await self.combat.move_b.reset()
+
+        return
+
+class Move:
+
+    def __init__(self):
+        # Public
+        self.index = 0
+        self.target = None
+
+    # Public
+    async def reset(self):
+        """
+        Reset the move's attributes
+
+        --
+
+        :return: `None`
+        """
+
+        self.index = 0
+        self.target = None
 
         return
