@@ -74,6 +74,17 @@ class CommandModeration(commands.Cog):
 
         await player.item.open_capsule(rarity)
 
+    @commands.command()
+    async def team(self, context):
+        player = Player(context, self.client, context.message.author)
+
+        player_team = await player.combat.get_team()
+
+        for character in player_team:
+            await asyncio.sleep(0)
+
+            await context.send(character.name)
+
 
 def setup(client):
     client.add_cog(CommandModeration(client))
