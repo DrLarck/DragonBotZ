@@ -111,6 +111,10 @@ class Combat:
                 # Get the move object
                 move = await self.__combat_tool.get_move_by_index(player_index)
 
+                # Get character card display
+                card = await character.get_combat_card(self.client, player_index)
+                await self.context.send(embed=card)
+
                 # Get the player's move
                 await move.get_move(character)
 
