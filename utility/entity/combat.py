@@ -5,7 +5,7 @@ Represents the combat object
 
 Author : DrLarck
 
-Last update : 27/04/20 by DrLarck
+Last update : 28/04/20 by DrLarck
 """
 
 import random
@@ -37,7 +37,8 @@ class Combat:
         self.team_a, self.team_b = [], []
 
         # Move
-        self.move_a, self.move_b = None, None
+        self.move_a = Move(self.client, self.context, self.player_a)
+        self.move_b = Move(self.client, self.context, self.player_b)
 
         # Private
         self.__combat_tool = CombatTool(self)
@@ -65,6 +66,8 @@ class Combat:
         while not end:
             await asyncio.sleep(0)
 
+            print("combat start")
+
             # Run the turn of each player
             players = [0, 1]  # Player index
 
@@ -74,10 +77,12 @@ class Combat:
                 await asyncio.sleep(0)
 
                 # Run the player's turn
+                print("player turn")
                 await self.run_turn(player)
 
             # End of the turn
             turn += 1
+            end = True
 
         return
 
@@ -95,12 +100,13 @@ class Combat:
         # Init
         player_team = await self.__combat_tool.get_player_team_by_index(player_index)
 
+        print(player_team)
         # Run the turn of each character
         for character in player_team:
             await asyncio.sleep(0)
 
             playable = await character.is_playable()
-
+            print(character.health.current, character.health.maximum, playable)
             if playable:
                 # Get the move object
                 move = await self.__combat_tool.get_move_by_index(player_index)
@@ -189,10 +195,7 @@ class CombatTool:
         # If the first player to play is the player b
         if roll == 1:
             self.combat.player_a = self.combat.player_b
-            self.combat.move_a = Move(self.combat.client, self.combat.context, self.combat.player_a)
-
             self.combat.player_b = self.combat.player_a
-            self.combat.move_b = Move(self.combat.client, self.combat.context, self.combat.player_b)
 
         # else doesn't change anything
 
@@ -254,12 +257,12 @@ class Move:
         :return: `None`
         """
 
+        print("move")
         # Set of buttons
         action = [
-                  ":zero:", ":one:", ":two:",
-                  ":three:", ":four:", ":five:",
-                  ":six:", ":seven:", ":eight:",
-                  ":nine:"
+                  "🇦", "🇧", "🇨",
+                  "🇩", "🇪", "🇫",
+                  "🇬", "🇭", "🇮"
                   ]
 
         action_second = ["🏃"]
@@ -269,6 +272,7 @@ class Move:
 
         # Add ability name to the display
         count = 0  # Count for the emote
+        print(character.ability)
 
         for ability in character.ability:
             await asyncio.sleep(0)
@@ -295,6 +299,7 @@ class Move:
 
         # Add all the secondary actions
         reactions += action_second
+        print(reactions)
 
         # Add the buttons to the message
         await button_manager.add(reactions)
