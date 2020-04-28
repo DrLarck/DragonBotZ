@@ -28,20 +28,22 @@ class CommandStatus(commands.Cog):
         embed = await CustomEmbed().setup(self.client,
                                           title="Game status", description="Display the status of each shard")
 
+        server = context.message.guild
+
         # Get the current shard id
-        current_shard = self.client.shard_id
+        current_shard = server.shard_id
 
         # Get the list of shards latencies
         shards_info = self.client.latencies
 
-        display = f"Server's shard : #{current_shard}\n\n__Shards status__ :\n"
+        display = f"Server shard : `#{current_shard}`\n\n__Shards status__ :\n"
 
         # Get the display
         for shard in shards_info:
             await asyncio.sleep(0)
 
             # Id 0 : Shard id | Id 1 : Latency in seconds
-            display += f"**Shard #{shard[0]} : {int(shard[1])}ms\n"
+            display += f"**Shard** `#{shard[0]}` : {int(shard[1])}ms\n"
 
         # Setup the embed
         embed.add_field(name="Shards status",
