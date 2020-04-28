@@ -184,7 +184,14 @@ __Level__ : **{self.level}**
         else:
             color = color.player_b
 
-        embed = await self.__embed.setup(client, color=color)
+        # Thumbnail
+        if self.image.thumbnail == "":
+            thumb = self.image.card
+
+        else:
+            thumb = self.image.thumbnail
+
+        embed = await self.__embed.setup(client, color=color, thumbnail_url=thumb)
 
         # Setting up the character display
         display_info = f"""
@@ -193,10 +200,15 @@ __Level__ : {self.level:,}
 __Health__ : :hearts:**{self.health.current:,}**/{self.health.maximum:,}
 __Ki__ : :fire:**{self.ki.current}**/{self.ki.maximum}
 """
+        # Damage
+        phy_min = await self.damage.get_physical_min()
+        ki_min = await self.damage.get_ki_min()
+
         display_damage = f"""
-__Physical__ : :punch: {await self.damage.get_physical_min()} - {self.damage.physical}
-__Ki power__ : ☄️ {await self.damage.get_ki_min()} - {self.damage.ki}
+__Physical__ : :punch: {phy_min:,} - {self.damage.physical:,}
+__Ki power__ : ☄️ {ki_min:,} - {self.damage.ki:,}
 """
+        # Defense
         display_defense = f"""
 __Armor__ : ⛰️{self.armor.fixed:,} | 🛡️ {self.armor.floating:,}
 __Spirit__ : 💠 {self.spirit.fixed:,} |  🏵️ {self.spirit.floating:,}
