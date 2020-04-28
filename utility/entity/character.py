@@ -50,7 +50,7 @@ class Character:
         self.training_item = CharacterTrainingItem(self)
 
         # Abilities
-        self.ability = [Test()]
+        self.ability = [Test(), Test(),Test(),Test(),Test(),Test(),Test()]
 
         # Private
         self.__embed = CustomEmbed()
@@ -170,6 +170,9 @@ __Level__ : **{self.level}**
 
         :return: `None`
         """
+
+        # Init health
+        await self.health.init()
 
         return
 
