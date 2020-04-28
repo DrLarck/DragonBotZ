@@ -82,7 +82,6 @@ class Combat:
 
             # End of the turn
             turn += 1
-            end = True
 
         return
 
@@ -100,13 +99,12 @@ class Combat:
         # Init
         player_team = await self.__combat_tool.get_player_team_by_index(player_index)
 
-        print(player_team)
         # Run the turn of each character
         for character in player_team:
             await asyncio.sleep(0)
 
             playable = await character.is_playable()
-            print(character.health.current, character.health.maximum, playable)
+
             if playable:
                 # Get the move object
                 move = await self.__combat_tool.get_move_by_index(player_index)
