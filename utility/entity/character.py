@@ -185,9 +185,11 @@ __Level__ : **{self.level}**
             color = color.player_b
 
         # Thumbnail
+        # If the thumbnail is not defined, use the card image
         if self.image.thumbnail == "":
             thumb = self.image.card
 
+        # Use the defined thumbnail image
         else:
             thumb = self.image.thumbnail
 
