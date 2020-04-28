@@ -162,6 +162,60 @@ __Level__ : **{self.level}**
 
         return embed
 
+    async def get_combat_card(self, client, team_index):
+        """
+        Return the combat format display card
+
+        :param client: (`discord.ext.commands.Bot`)
+
+        :param team_index: (`int`)
+
+        --
+
+        :return: `Embed`
+        """
+
+        # Init
+        color = GameColor()
+
+        if team_index == 0:
+            color = color.player_a
+
+        else:
+            color = color.player_b
+
+        embed = await self.__embed.setup(client, color=color)
+
+        # Setting up the character display
+        display_info = f"""
+__Name__ : {self.image.icon}**{self.name}**{self.type.icon}
+__Level__ : {self.level:,}
+__Health__ : :hearts:**{self.health.current:,}**/{self.health.maximum:,}
+__Ki__ : :fire:**{self.ki.current}**/{self.ki.maximum}
+"""
+        display_damage = f"""
+__Physical__ : :punch: {await self.damage.get_physical_min()} - {self.damage.physical}
+__Ki power__ : ☄️ {await self.damage.get_ki_min()} - {self.damage.ki}
+"""
+        display_defense = f"""
+__Armor__ : ⛰️{self.armor.fixed:,} | 🛡️ {self.armor.floating:,}
+__Spirit__ : 💠 {self.spirit.fixed:,} |  🏵️ {self.spirit.floating:,}
+"""
+        # Fields
+        embed.add_field(name=f"**{self.name}** info",
+                        value=display_info,
+                        inline=False)
+
+        embed.add_field(name="Damage",
+                        value=display_damage,
+                        inline=False)
+
+        embed.add_field(name="Defense",
+                        value=display_defense,
+                        inline=False)
+
+        return embed
+
     async def init(self):
         """
         Init the character for combat purpose.
