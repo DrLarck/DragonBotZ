@@ -354,7 +354,9 @@ class Database:
 
                 apply_effect TEXT DEFAULT 'NONE',
 
-                cleanse BOOLEAN DEFAULT FALSE
+                cleanse BOOLEAN DEFAULT FALSE,
+
+                ki_regen INTEGER DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS ability_reference ON character_ability(reference);
             """
