@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 14/04/20 by DrLarck
+Last update : 01/07/20 by DrLarck
 """
 
 import asyncio
@@ -323,6 +323,40 @@ class Database:
                 owner_name TEXT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS capsule_unique_id ON capsule(unique_id);
+            """,
+
+            # character_ability table
+            """
+            CREATE SEQUENCE IF NOT EXISTS ability_reference_seq;
+            CREATE TABLE IF NOT EXISTS character_ability(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('ability_reference_seq') NOT NULL,
+                name TEXT NOT NULL,
+                description TEXT DEFAULT 'NONE',
+                tooltip TEXT DEFAULT 'NONE',
+                icon TEXT DEFAULT 'NONE',
+
+                cost INTEGER DEFAULT 0,
+                cooldown INTEGER DEFAULT 0,
+
+                need_target BOOLEAN DEFAULT TRUE,
+                target_ally BOOLEAN DEFAULT FALSE,
+                target_enemy BOOLEAN DEFAULT TRUE,
+                target_number INTEGER DEFAULT 1,
+
+                damage_direct BIGINT DEFAULT 0,
+                damage_physical BIGINT DEFAULT 0,
+                damage_ki BIGINT DEFAULT 0,
+
+                self_heal BOOLEAN DEFAULT FALSE,
+                heal_direct BIGINT DEFAULT 0,
+                heal_physical BIGINT DEFAULT 0,
+                heal_ki BIGINT DEFAULT 0,
+
+                apply_effect TEXT DEFAULT 'NONE',
+
+                cleanse BOOLEAN DEFAULT FALSE
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS ability_reference ON character_ability(reference);
             """
         ]
 
