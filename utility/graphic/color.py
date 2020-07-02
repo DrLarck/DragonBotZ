@@ -5,7 +5,7 @@ Game color object
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 28/04/20 by DrLarck
 """
 
 
@@ -20,6 +20,10 @@ class GameColor:
         self.sr = 0xfe871a
         self.r = 0xdcdede
         self.n = 0xad5f25
+
+        # Combat
+        self.player_a = 0x009dff
+        self.player_b = 0xff0000
 
     # Public
     async def get_rarity_color(self, rarity):

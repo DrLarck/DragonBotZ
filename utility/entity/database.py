@@ -243,6 +243,15 @@ class Database:
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_time_index ON player_time(player_id);
             """,
+            # player_combat table
+            """
+            CREATE TABLE IF NOT EXISTS player_combat(
+                player_id BIGINT,
+                player_name TEXT,
+                player_team TEXT DEFAULT ''
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS player_team_index ON player_combat(player_id);
+            """,
 
             # character_reference table
             """
