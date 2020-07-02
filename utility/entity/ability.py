@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 01/07/20 by DrLarck"""
+@update 02/07/20 by DrLarck"""
 
 
 class Ability:
@@ -63,13 +63,13 @@ class Ability:
         # Ability info
         self.name = data[1]
 
-        if data[1] is not "NONE":
+        if data[1] is not None:
             self.description = data[2]
         
-        if data[2] is not "NONE":
+        if data[2] is not None:
             self.tooltip = data[3]
         
-        if data[3] is not "NONE":
+        if data[3] is not None:
             self.icon = data[4]
         
         # Ability condition
