@@ -66,8 +66,6 @@ class Combat:
         while not end:
             await asyncio.sleep(0)
 
-            print("combat start")
-
             # Run the turn of each player
             players = [0, 1]  # Player index
 
@@ -77,7 +75,6 @@ class Combat:
                 await asyncio.sleep(0)
 
                 # Run the player's turn
-                print("player turn")
                 await self.run_turn(player)
 
             # End of the turn
@@ -259,7 +256,6 @@ class Move:
         :return: `None`
         """
 
-        print("move")
         # Set of buttons
         action = [
                   "🇦", "🇧", "🇨",
@@ -274,7 +270,6 @@ class Move:
 
         # Add ability name to the display
         count = 0  # Count for the emote
-        print(character.ability)
 
         for ability in character.ability:
             await asyncio.sleep(0)
@@ -301,14 +296,11 @@ class Move:
 
         # Add all the secondary actions
         reactions += action_second
-        print(reactions)
 
         # Add the buttons to the message
         await button_manager.add(reactions)
 
         # Get the player's action
         pressed = await button_manager.get_pressed(reactions, self.player)
-
-        print(pressed)
 
         return
