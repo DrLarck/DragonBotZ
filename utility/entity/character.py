@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 28/04/20 by DrLarck
+Last update : 02/07/20 by DrLarck
 """
 
 import asyncio
