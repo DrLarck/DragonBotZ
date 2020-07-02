@@ -85,6 +85,20 @@ class CommandModeration(commands.Cog):
 
             await context.send(character.name)
 
+    @commands.command()
+    async def combat(self, context):
+        player = Player(context, self.client, context.message.author)
+
+        from utility.entity.combat import Combat
+
+        combat = Combat(self.client, context, player, player)
+
+        await combat.run()
+
+    @commands.command()
+    async def ping(self, context):
+        await context.send(f"{int(self.client.latency * 1000)}ms")
+
 
 def setup(client):
     client.add_cog(CommandModeration(client))
