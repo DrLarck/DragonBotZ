@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 28/04/20 by DrLarck
+Last update : 02/07/20 by DrLarck
 """
 
 import logging
@@ -28,7 +28,7 @@ class Main:
 
     def __init__(self):
         self.__TOKEN = os.environ["dev-dbz-token"]
-        self.__version = "2.1.0.117"
+        self.__version = "2.1.0.129"
         self.__phase = ["ALPHA", "BETA", "RELEASE", "STABLE"]
 
         self.__prefix = ["d!", "D!", "db", "Db"]
