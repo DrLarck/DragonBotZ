@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 15/04/20 by DrLarck
+Last update : 02/07/20 by DrLarck
 """
 
 import asyncio
@@ -14,6 +14,9 @@ import asyncio
 from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
 from utility.graphic.color import GameColor
+
+# TEST
+from utility.entity.character_.ability.test import Test
 
 
 class Character:
@@ -26,6 +29,9 @@ class Character:
         self.id = 0
         self.unique_id = ""
         self.level = 1
+
+        self.npc = False  # Tells if it's a non playable character
+        self.posture = 0
 
         self.image = CharacterImage()
         self.type = CharacterType()
@@ -42,6 +48,9 @@ class Character:
 
         # Items
         self.training_item = CharacterTrainingItem(self)
+
+        # Abilities
+        self.ability = [Test(), Test(),Test(),Test(),Test(),Test(),Test()]
 
         # Private
         self.__embed = CustomEmbed()
@@ -152,6 +161,116 @@ __Level__ : **{self.level}**
         embed.set_image(url=self.image.card)
 
         return embed
+
+    async def get_combat_card(self, client, team_index):
+        """
+        Return the combat format display card
+
+        :param client: (`discord.ext.commands.Bot`)
+
+        :param team_index: (`int`)
+
+        --
+
+        :return: `Embed`
+        """
+
+        # Init
+        color = GameColor()
+
+        if team_index == 0:
+            color = color.player_a
+
+        else:
+            color = color.player_b
+
+        # Thumbnail
+        # If the thumbnail is not defined, use the card image
+        if self.image.thumbnail == "":
+            thumb = self.image.card
+
+        # Use the defined thumbnail image
+        else:
+            thumb = self.image.thumbnail
+
+        embed = await self.__embed.setup(client, color=color, thumbnail_url=thumb)
+
+        # Setting up the character display
+        display_info = f"""
+__Name__ : {self.image.icon}**{self.name}**{self.type.icon}
+__Level__ : {self.level:,}
+__Health__ : :hearts:**{self.health.current:,}**/{self.health.maximum:,}
+__Ki__ : :fire:**{self.ki.current}**/{self.ki.maximum}
+"""
+        # Damage
+        phy_min = await self.damage.get_physical_min()
+        ki_min = await self.damage.get_ki_min()
+
+        display_damage = f"""
+__Physical__ : :punch: {phy_min:,} - {self.damage.physical:,}
+__Ki power__ : ☄️ {ki_min:,} - {self.damage.ki:,}
+"""
+        # Defense
+        display_defense = f"""
+__Armor__ : ⛰️{self.armor.fixed:,} | 🛡️ {self.armor.floating:,}
+__Spirit__ : 💠 {self.spirit.fixed:,} |  🏵️ {self.spirit.floating:,}
+"""
+        # Fields
+        embed.add_field(name=f"**{self.name}** info",
+                        value=display_info,
+                        inline=False)
+
+        embed.add_field(name="Damage",
+                        value=display_damage,
+                        inline=False)
+
+        embed.add_field(name="Defense",
+                        value=display_defense,
+                        inline=False)
+
+        return embed
+
+    async def init(self):
+        """
+        Init the character for combat purpose.
+
+        --
+
+        :return: `None`
+        """
+
+        # Init health
+        await self.health.init()
+
+        return
+
+    async def is_playable(self):
+        """
+        Tells if the character is playable or not
+
+        --
+
+        :return: `bool`
+        """
+
+        # Init
+        playable = True
+
+        # If the character is not a non playable character
+        if not self.npc:
+            # If the character is stunned
+            if self.posture == 3:
+                playable = False
+
+            # If the character is dead
+            elif self.health.current <= 0:
+                playable = False
+
+            # If the character has posture a normal posture
+            else:
+                playable = True
+
+        return playable
 
 
 class CharacterImage:
@@ -422,3 +541,36 @@ class CharacterGetter:
         else:
             print(f"Character {reference} not found.")
             return None
+
+    async def get_from_unique(self, database, unique_id):
+        """
+        Get a Character object from a unique id
+
+        :param database: (`Database`)
+
+        :param unique_id: (`str`)
+
+        --
+
+        :return: `Character` or `None` if not found
+        """
+
+        character_row = await database.fetch_row("""
+                                                 SELECT *
+                                                 FROM character_unique
+                                                 WHERE character_unique_id = $1;
+                                                 """, [unique_id])
+        character_row = character_row[0]
+
+        if character_row is not None:
+            # Get the character object according to the character's reference
+            character = await self.get_reference_character(character_row[1])
+
+            # Setup the character object
+            character.level = 6
+
+            await character.init()
+
+            return character
+
+        return

@@ -5,12 +5,14 @@ Player object
 
 Author : DrLarck
 
-Last update : 15/04/20 by DrLarck
+Last update : 27/04/20 by DrLarck
 """
 
 import asyncio
 
 # util
+from utility.entity.character import CharacterGetter
+
 # items
 from utility.entity.capsule import Capsule
 from utility.entity.training_item import TrainingItem
@@ -30,6 +32,8 @@ class Player:
         self.item = PlayerItem(self)
         self.experience = PlayerExperience(self)
         self.time = PlayerTime(self)
+
+        self.combat = PlayerCombat(self)
 
 
 class PlayerResource:
@@ -555,3 +559,51 @@ class PlayerItem:
             await capsule_to_open.open()
 
         return
+
+
+class PlayerCombat:
+
+    def __init__(self, player):
+        """
+        :param player: (`Player`)
+        """
+
+        # Public
+        self.player = player
+
+        # Private
+        self.__database = self.player.client.database
+
+    async def get_team(self):
+        """
+        Get the player's team
+
+        --
+
+        :return: `list` of `Character`
+        """
+
+        # Init
+        team = []
+        player_team = await self.__database.fetch_value("""
+                                                        SELECT player_team
+                                                        FROM player_combat
+                                                        WHERE player_id = $1;
+                                                        """, [self.player.id])
+
+        player_team = player_team.split()
+
+        # Check if the player has a team set up
+        if len(player_team) > 0:
+            char_getter = CharacterGetter()
+
+            # Get the instance of each character
+            for unique_id in player_team:
+                await asyncio.sleep(0)
+
+                character = await char_getter.get_from_unique(self.__database, unique_id)
+
+                # Add the character to the team list
+                team.append(character)
+
+        return team

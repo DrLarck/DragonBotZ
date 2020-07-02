@@ -7,9 +7,10 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 27/04/20 by DrLarck
+Last update : 28/04/20 by DrLarck
 """
 
+import logging
 import discord
 import os
 
@@ -44,8 +45,10 @@ class Main:
         # Init
         activity = discord.Game(name=f"d!help | v{self.__version} - {self.__phase[0]}")
         
-        client = commands.Bot(command_prefix=self.__prefix, help_command=None,
+        client = commands.AutoShardedBot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
+
+        logging.basicConfig(level=logging.INFO)
 
         # Create the database attribute for client
         client.database = Database()
