@@ -15,9 +15,6 @@ from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
 from utility.graphic.color import GameColor
 
-# TEST
-from utility.entity.character_.ability.test import Test
-
 
 class Character:
 
@@ -50,7 +47,7 @@ class Character:
         self.training_item = CharacterTrainingItem(self)
 
         # Abilities
-        self.ability = [Test(), Test(),Test(),Test(),Test(),Test(),Test()]
+        self.ability = []
 
         # Private
         self.__embed = CustomEmbed()
