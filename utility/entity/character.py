@@ -488,7 +488,7 @@ class CharacterGetter:
     __cache_ok = False  # Indicates if the cache has already been filled
 
     # Public
-    async def set_cache(self, client, context):
+    async def set_cache(self, client):
         """
         Set the character cache
 
