@@ -531,7 +531,8 @@ class CharacterGetter:
                         ability = int(ability)
                         current = await super_ability.get_ability_data(ability)
 
-                        character_ability.append(current)
+                        if current is not None:
+                            character_ability.append(current)
 
                     character_ = await Character(client).generate(
                         char_id=data[0], name=data[1], type_value=data[2],
