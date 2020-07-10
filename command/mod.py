@@ -37,13 +37,9 @@ class CommandModeration(commands.Cog):
 
         dragonstone = await player.resource.get_dragonstone()
 
-        print(dragonstone)
-
         await player.resource.add_dragonstone(500)
 
         dragonstone = await player.resource.get_dragonstone()
-
-        print(dragonstone)
 
     @commands.command()
     async def get_capsule(self, context):

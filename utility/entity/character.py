@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 02/07/20 by DrLarck
+Last update : 10/07/20 by DrLarck
 """
 
 import asyncio
@@ -14,9 +14,7 @@ import asyncio
 from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
 from utility.graphic.color import GameColor
-
-# TEST
-from utility.entity.character_.ability.test import Test
+from utility.entity.ability import Ability
 
 
 class Character:
@@ -50,7 +48,7 @@ class Character:
         self.training_item = CharacterTrainingItem(self)
 
         # Abilities
-        self.ability = [Test(), Test(),Test(),Test(),Test(),Test(),Test()]
+        self.ability = []
 
         # Private
         self.__embed = CustomEmbed()
@@ -61,7 +59,8 @@ class Character:
                        type_value=0, rarity_value=0, health=0,
                        ki=100, physical=0, ki_power=0,
                        crit_chance=0, crit_bonus=0, armor_fixed=0,
-                       armor_floating=0, spirit_fixed=0, spirit_floating=0):
+                       armor_floating=0, spirit_fixed=0, spirit_floating=0,
+                       ability=[]):
         """
         Generate a character instance.
 
@@ -82,6 +81,7 @@ class Character:
         :param armor_floating: (`int`)
         :param spirit_fixed: (`int`)
         :param spirit_floating: (`int`)
+        :param ability: (`list`)
 
         --
 
@@ -115,6 +115,8 @@ class Character:
         self.spirit.fixed = spirit_fixed
         self.spirit.floating = spirit_floating
 
+        self.ability = ability
+
         # Init sub-attributes
 
         # Get the icons
@@ -144,19 +146,9 @@ class Character:
 __Name__ : **{self.name}**{self.type.icon}
 __Reference__ : `#{self.id}`
 __Rarity__ : {self.rarity.icon}
-__Level__ : **{self.level}**
         """
 
-        health = f"**{self.health.maximum:,}** :hearts:"
-        ki = f"**{self.ki.maximum:,}** :fire:"
-
-        damage = [await self.damage.get_physical_min(), self.damage.physical]
-        damage_ = f"**{damage[0]:,}** - **{damage[1]:,}** :crossed_swords:"
-
         embed.add_field(name="Info :", value=info, inline=False)
-        embed.add_field(name="Health :", value=health, inline=False)
-        embed.add_field(name="Damage :", value=damage_, inline=False)
-        embed.add_field(name="Ki :", value=ki, inline=False)
 
         embed.set_image(url=self.image.card)
 
@@ -199,21 +191,21 @@ __Level__ : **{self.level}**
         display_info = f"""
 __Name__ : {self.image.icon}**{self.name}**{self.type.icon}
 __Level__ : {self.level:,}
-__Health__ : :hearts:**{self.health.current:,}**/{self.health.maximum:,}
-__Ki__ : :fire:**{self.ki.current}**/{self.ki.maximum}
+__Health__ : **{self.health.current:,}**/{self.health.maximum:,} :hearts:
+__Ki__ : **{self.ki.current}**/{self.ki.maximum} :fire:
 """
         # Damage
         phy_min = await self.damage.get_physical_min()
         ki_min = await self.damage.get_ki_min()
 
         display_damage = f"""
-__Physical__ : :punch: {phy_min:,} - {self.damage.physical:,}
-__Ki power__ : ☄️ {ki_min:,} - {self.damage.ki:,}
+__Physical__ : **{phy_min:,}** - **{self.damage.physical:,}** :punch:
+__Ki power__ : **{ki_min:,}** - **{self.damage.ki:,}** ☄️
 """
         # Defense
         display_defense = f"""
-__Armor__ : ⛰️{self.armor.fixed:,} | 🛡️ {self.armor.floating:,}
-__Spirit__ : 💠 {self.spirit.fixed:,} |  🏵️ {self.spirit.floating:,}
+__Armor__ : **{self.armor.fixed:,}** | **{self.armor.floating:,} %** :shield:
+__Spirit__ : **{self.spirit.fixed:,}** | **{self.spirit.floating:,} %** 🏵️
 """
         # Fields
         embed.add_field(name=f"**{self.name}** info",
@@ -490,6 +482,9 @@ class CharacterGetter:
         """
         Set the character cache
 
+        :param client: object discord.Bot
+        :param context: object discord.ext.commands.Context
+
         --
 
         :return: `None`
@@ -502,15 +497,40 @@ class CharacterGetter:
                                                  ORDER BY reference;
                                                  """)
 
+            data = data[0]
+
             if len(data) > 0:
                 # Storing each character in the cache as Character objects
                 for character in data:
                     await asyncio.sleep(0)
 
-                    character_ = await Character(client).generate(char_id=character[0], name=character[1],
-                                                                  type_value=character[2], rarity_value=character[3],
-                                                                  card=character[4], health=character[5],
-                                                                  physical=character[6])
+                    # Get the set of character's abilities
+
+                    ability_set = data[15]
+                    ability_set = ability_set.split()
+
+                    # Add an instance of the ability in the character's
+                    # ability list
+                    character_ability = []
+
+                    # Get the instance of each ability
+                    super_ability = Ability(client)
+                    for ability in ability_set:
+                        await asyncio.sleep(0)
+
+                        ability = int(ability)
+                        current = await super_ability.get_ability_data(ability)
+
+                        if current is not None:
+                            character_ability.append(current)
+
+                    character_ = await Character(client).generate(
+                        char_id=data[0], name=data[1], type_value=data[2],
+                        rarity_value=data[3], card=data[4], thumbnail=data[4], 
+                        health=data[5], ki=data[6], physical=data[7],
+                        ki_power=data[8], armor_fixed=data[9], armor_floating=data[10],
+                        spirit_fixed=data[11], spirit_floating=data[12], ability=character_ability
+                    )
 
                     self.__cache.append(character_)
 

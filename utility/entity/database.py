@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 27/04/20 by DrLarck
+Last update : 10/07/20 by DrLarck
 """
 
 import asyncio
@@ -262,17 +262,25 @@ class Database:
                 character_type INTEGER,
                 character_rarity INTEGER,
                 character_card TEXT,
-                character_health BIGINT,
-                character_damage BIGINT,
-                character_attack1_name TEXT,
-                character_attack1_damage BIGINT,
-                character_attack2_name TEXT,
-                character_attack2_damage BIGINT,
-                character_attack3_name TEXT,
-                character_attack3_damage BIGINT,
-                character_attack4_name TEXT,
-                character_attack4_damage BIGINT
+
+                character_health BIGINT DEFAULT 1,
+                character_ki INTEGER DEFAULT 100,
+
+                character_physical BIGINT DEFAULT 0,
+                character_ki_power BIGINT DEFAULT 0,
+
+                character_armor_fixed BIGINT DEFAULT 0,
+                character_armor_floating BIGINT DEFAULT 0,
+
+                character_spirit_fixed BIGINT DEFAULT 0,
+                character_spirit_floating BIGINT DEFAULT 0,
+
+                character_leader TEXT,
+                character_passive TEXT,
+
+                character_ability TEXT
             );
+
             CREATE UNIQUE INDEX IF NOT EXISTS character_reference_reference_index ON character_reference(reference);
             """,
 
@@ -282,7 +290,7 @@ class Database:
             CREATE TABLE IF NOT EXISTS character_unique(
                 reference BIGINT PRIMARY KEY DEFAULT nextval('character_unique_reference_seq') NOT NULL,
                 character_reference BIGINT,
-                character_unique_id TEXT DEFAULT 'NONE',
+                character_unique_id TEXT,
                 character_owner_id BIGINT,
                 character_owner_name TEXT,
                 character_rarity INTEGER,
@@ -290,7 +298,7 @@ class Database:
                 character_experience BIGINT DEFAULT 0,
                 character_dokkan_rate INTEGER DEFAULT 0,
                 character_star INTEGER DEFAULT 0,
-                character_training_item TEXT DEFAULT 'NONE'
+                character_training_item TEXT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """,
@@ -313,10 +321,10 @@ class Database:
             CREATE TABLE IF NOT EXISTS training_item(
                 reference BIGINT PRIMARY KEY DEFAULT nextval('training_item_reference_seq') NOT NULL,
                 training_item_reference BIGINT,
-                unique_id TEXT DEFAULT 'NONE',
+                unique_id TEXT,
                 owner_id BIGINT,
                 owner_name TEXT,
-                equipped_on TEXT DEFAULT 'NONE'
+                equipped_on TEXT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS training_item_unique_id ON training_item(unique_id);
             """,
@@ -327,11 +335,47 @@ class Database:
             CREATE TABLE IF NOT EXISTS capsule(
                 reference BIGINT PRIMARY KEY DEFAULT nextval('capsule_reference_seq') NOT NULL,
                 capsule_reference BIGINT,
-                unique_id TEXT DEFAULT 'NONE',
+                unique_id TEXT,
                 owner_id BIGINT,
                 owner_name TEXT
             );
             CREATE UNIQUE INDEX IF NOT EXISTS capsule_unique_id ON capsule(unique_id);
+            """,
+
+            # character_ability table
+            """
+            CREATE SEQUENCE IF NOT EXISTS ability_reference_seq;
+            CREATE TABLE IF NOT EXISTS character_ability(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('ability_reference_seq') NOT NULL,
+                name TEXT NOT NULL,
+                description TEXT,
+                tooltip TEXT,
+                icon TEXT,
+
+                cost INTEGER DEFAULT 0,
+                cooldown INTEGER DEFAULT 0,
+
+                need_target BOOLEAN DEFAULT TRUE,
+                target_ally BOOLEAN DEFAULT FALSE,
+                target_enemy BOOLEAN DEFAULT TRUE,
+                target_number INTEGER DEFAULT 1,
+
+                damage_direct BIGINT DEFAULT 0,
+                damage_physical BIGINT DEFAULT 0,
+                damage_ki BIGINT DEFAULT 0,
+
+                self_heal BOOLEAN DEFAULT FALSE,
+                heal_direct BIGINT DEFAULT 0,
+                heal_physical BIGINT DEFAULT 0,
+                heal_ki BIGINT DEFAULT 0,
+
+                apply_effect TEXT,
+
+                cleanse BOOLEAN DEFAULT FALSE,
+
+                ki_regen INTEGER DEFAULT 0
+            );
+            CREATE UNIQUE INDEX IF NOT EXISTS ability_reference ON character_ability(reference);
             """
         ]
 
