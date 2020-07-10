@@ -5,7 +5,7 @@ Banner object
 
 Author : DrLarck
 
-Last update : 13/04/20 by DrLarck
+Last update : 10/07/20 by DrLarck
 """
 
 import asyncio
@@ -245,7 +245,7 @@ class BannerGetter:
     # Private
     __cache = []
     __cache_ok = False
-    __current_banner = 35
+    __current_banner = 1
 
     # Public
     async def set_cache(self, client):
