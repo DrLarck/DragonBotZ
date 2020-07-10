@@ -507,13 +507,16 @@ class CharacterGetter:
                                                  ORDER BY reference;
                                                  """)
 
+            data = data[0]
+
             if len(data) > 0:
                 # Storing each character in the cache as Character objects
                 for character in data:
                     await asyncio.sleep(0)
 
                     # Get the set of character's abilities
-                    ability_set = data[11]
+
+                    ability_set = data[15]
                     ability_set = ability_set.split()
 
                     # Add an instance of the ability in the character's
@@ -525,7 +528,7 @@ class CharacterGetter:
                     for ability in ability_set:
                         await asyncio.sleep(0)
 
-                        current = super_ability.get_ability_data(ability)
+                        current = await super_ability.get_ability_data(ability)
 
                         character_ability.append(current)
 
