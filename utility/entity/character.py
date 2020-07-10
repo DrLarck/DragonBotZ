@@ -521,7 +521,7 @@ class CharacterGetter:
                     character_ability = []
 
                     # Get the instance of each ability
-                    super_ability = Ability(client, context)
+                    super_ability = Ability(client)
                     for ability in ability_set:
                         await asyncio.sleep(0)
 
