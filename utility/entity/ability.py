@@ -4,14 +4,13 @@
 
 @author DrLarck
 
-@update 02/07/20 by DrLarck"""
+@update 10/07/20 by DrLarck"""
 
 
 class Ability:
 
-    def __init__(self, client, context):
+    def __init__(self, client):
         self.client  = client
-        self.context = context
 
         self.id          = 0
         self.name        = ""
