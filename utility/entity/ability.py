@@ -55,52 +55,56 @@ class Ability:
                                                     WHERE reference = $1;
                                                     """, [ability_id])
 
-        # Configure the ability object, according to the 
-        # fetched data
-        data = data[0]
+        if len(data) > 0:
+            # Configure the ability object, according to the 
+            # fetched data
+            data = data[0]
 
-        # Ability info
-        self.name = data[1]
+            # Ability info
+            self.name = data[1]
 
-        if data[1] is not None:
-            self.description = data[2]
+            if data[1] is not None:
+                self.description = data[2]
+            
+            if data[2] is not None:
+                self.tooltip = data[3]
+            
+            if data[3] is not None:
+                self.icon = data[4]
+            
+            # Ability condition
+            self.cost = data[5]
+            self.cooldown = data[6]
+
+            self.need_target = data[7]
+            
+            self.target_ally = data[8]
+            self.target_enemy = data[9]
+
+            self.target_number = data[10]
+
+            # Ability damage
+            self.damage_direct = data[11]
+            self.damage_physical = data[12]
+            self.damage_ki = data[13]
+
+            # Ability heal
+            self.self_heal = data[14]
+
+            self.heal_direct = data[15]
+            self.heal_physical = data[16]
+            self.heal_ki = data[17]
+
+            # Ability effect applying
+            effect_to_apply = data[18]
+
+            # Get the list of effect id
+            self.apply_effect = effect_to_apply.split(" ")
+
+            # Cleansing info
+            self.cleanse = data[19]
+
+            return self
         
-        if data[2] is not None:
-            self.tooltip = data[3]
-        
-        if data[3] is not None:
-            self.icon = data[4]
-        
-        # Ability condition
-        self.cost = data[5]
-        self.cooldown = data[6]
-
-        self.need_target = data[7]
-        
-        self.target_ally = data[8]
-        self.target_enemy = data[9]
-
-        self.target_number = data[10]
-
-        # Ability damage
-        self.damage_direct = data[11]
-        self.damage_physical = data[12]
-        self.damage_ki = data[13]
-
-        # Ability heal
-        self.self_heal = data[14]
-
-        self.heal_direct = data[15]
-        self.heal_physical = data[16]
-        self.heal_ki = data[17]
-
-        # Ability effect applying
-        effect_to_apply = data[18]
-
-        # Get the list of effect id
-        self.apply_effect = effect_to_apply.split(" ")
-
-        # Cleansing info
-        self.cleanse = data[19]
-
-        return self
+        else:
+            return None

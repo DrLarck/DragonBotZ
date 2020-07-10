@@ -528,6 +528,7 @@ class CharacterGetter:
                     for ability in ability_set:
                         await asyncio.sleep(0)
 
+                        ability = int(ability)
                         current = await super_ability.get_ability_data(ability)
 
                         character_ability.append(current)
