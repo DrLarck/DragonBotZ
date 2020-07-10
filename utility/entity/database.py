@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 02/07/20 by DrLarck
+Last update : 10/07/20 by DrLarck
 """
 
 import asyncio
@@ -268,6 +268,12 @@ class Database:
 
                 character_physical BIGINT DEFAULT 0,
                 character_ki_power BIGINT DEFAULT 0,
+
+                character_armor_fixed BIGINT DEFAULT 0,
+                character_armor_floating BIGINT DEFAULT 0,
+
+                character_spirit_fixed BIGINT DEFAULT 0,
+                character_spirit_floating BIGINT DEFAULT 0,
 
                 character_leader TEXT,
                 character_passive TEXT,
