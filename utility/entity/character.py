@@ -59,7 +59,8 @@ class Character:
                        type_value=0, rarity_value=0, health=0,
                        ki=100, physical=0, ki_power=0,
                        crit_chance=0, crit_bonus=0, armor_fixed=0,
-                       armor_floating=0, spirit_fixed=0, spirit_floating=0):
+                       armor_floating=0, spirit_fixed=0, spirit_floating=0,
+                       ability=[]):
         """
         Generate a character instance.
 
@@ -80,6 +81,7 @@ class Character:
         :param armor_floating: (`int`)
         :param spirit_fixed: (`int`)
         :param spirit_floating: (`int`)
+        :param ability: (`list`)
 
         --
 
@@ -112,6 +114,8 @@ class Character:
 
         self.spirit.fixed = spirit_fixed
         self.spirit.floating = spirit_floating
+
+        self.ability = ability
 
         # Init sub-attributes
 
@@ -525,10 +529,12 @@ class CharacterGetter:
 
                         character_ability.append(current)
 
-                    character_ = await Character(client).generate(char_id=character[0], name=character[1],
-                                                                  type_value=character[2], rarity_value=character[3],
-                                                                  card=character[4], health=character[5],
-                                                                  physical=character[6])
+                    character_ = await Character(client).generate(
+                        char_id=data[0], name=data[1], type_value=data[2],
+                        rarity_value=data[3], card=data[4], thumbnail=data[4], 
+                        health=data[5], ki=data[6], physical=data[7],
+                        ki_power=data[8]
+                    )
 
                     self.__cache.append(character_)
 
