@@ -191,21 +191,21 @@ __Rarity__ : {self.rarity.icon}
         display_info = f"""
 __Name__ : {self.image.icon}**{self.name}**{self.type.icon}
 __Level__ : {self.level:,}
-__Health__ : :hearts:**{self.health.current:,}**/{self.health.maximum:,}
-__Ki__ : :fire:**{self.ki.current}**/{self.ki.maximum}
+__Health__ : **{self.health.current:,}**/{self.health.maximum:,} :hearts:
+__Ki__ : **{self.ki.current}**/{self.ki.maximum} :fire:
 """
         # Damage
         phy_min = await self.damage.get_physical_min()
         ki_min = await self.damage.get_ki_min()
 
         display_damage = f"""
-__Physical__ : :punch: {phy_min:,} - {self.damage.physical:,}
-__Ki power__ : ☄️ {ki_min:,} - {self.damage.ki:,}
+__Physical__ : **{phy_min:,}** - **{self.damage.physical:,}** :punch:
+__Ki power__ : **{ki_min:,}** - **{self.damage.ki:,}** ☄️
 """
         # Defense
         display_defense = f"""
-__Armor__ : ⛰️{self.armor.fixed:,} | 🛡️ {self.armor.floating:,}
-__Spirit__ : 💠 {self.spirit.fixed:,} |  🏵️ {self.spirit.floating:,}
+__Armor__ : **{self.armor.fixed:,}** | **{self.armor.floating:,} %** :shield:
+__Spirit__ : **{self.spirit.fixed:,}** | **{self.spirit.floating:,} %** 🏵️
 """
         # Fields
         embed.add_field(name=f"**{self.name}** info",
