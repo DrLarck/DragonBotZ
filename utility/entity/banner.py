@@ -219,7 +219,7 @@ class Banner:
         characters = await client.database.fetch_row("""
                                                SELECT reference 
                                                FROM character_unique
-                                               WHERE character_unique_id = 'NONE';
+                                               WHERE character_unique_id is NULL;
                                                """)
 
         # Generate a unique id for each of them
