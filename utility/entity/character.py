@@ -533,7 +533,8 @@ class CharacterGetter:
                         char_id=data[0], name=data[1], type_value=data[2],
                         rarity_value=data[3], card=data[4], thumbnail=data[4], 
                         health=data[5], ki=data[6], physical=data[7],
-                        ki_power=data[8]
+                        ki_power=data[8], armor_fixed=data[9], armor_floating=data[10],
+                        spirit_fixed=data[11], spirit_floating=data[12], ability=character_ability
                     )
 
                     self.__cache.append(character_)
