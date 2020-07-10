@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 02/07/20 by DrLarck
+Last update : 10/07/20 by DrLarck
 """
 
 import asyncio
@@ -14,6 +14,7 @@ import asyncio
 from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
 from utility.graphic.color import GameColor
+from utility.entity.ability import Ability
 
 
 class Character:
@@ -483,9 +484,12 @@ class CharacterGetter:
     __cache_ok = False  # Indicates if the cache has already been filled
 
     # Public
-    async def set_cache(self, client):
+    async def set_cache(self, client, context):
         """
         Set the character cache
+
+        :param client: object discord.Bot
+        :param context: object discord.ext.commands.Context
 
         --
 
@@ -503,6 +507,23 @@ class CharacterGetter:
                 # Storing each character in the cache as Character objects
                 for character in data:
                     await asyncio.sleep(0)
+
+                    # Get the set of character's abilities
+                    ability_set = data[11]
+                    ability_set = ability_set.split()
+
+                    # Add an instance of the ability in the character's
+                    # ability list
+                    character_ability = []
+
+                    # Get the instance of each ability
+                    super_ability = Ability(client, context)
+                    for ability in ability_set:
+                        await asyncio.sleep(0)
+
+                        current = super_ability.get_ability_data(ability)
+
+                        character_ability.append(current)
 
                     character_ = await Character(client).generate(char_id=character[0], name=character[1],
                                                                   type_value=character[2], rarity_value=character[3],
