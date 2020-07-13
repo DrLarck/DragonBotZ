@@ -386,8 +386,67 @@ class Move:
 
         return targets
 
+    async def get_target(self, entities):
+        """Allow the player to choose a target
+        among the past entities
 
-    async def use_ability(self, ability):
+        --
+
+        @return None"""
+
+        # Set of buttons
+        action = [
+                  "🇦", "🇧", "🇨",
+                  "🇩", "🇪", "🇫"
+                 ]
+
+        display = "Please select a target among the followings :\n"
+
+        # Add target name to the display
+        count = 0
+        for character in entities:
+            await asyncio.sleep(0)
+
+            info = f"**{character.name}**{character.type.icon}"
+
+            display += f"{action[count]} - {info}\n"
+
+            count += 1
+        
+        # Send the message
+        message = await self.context.send(display)
+
+        button_manager = Button(self.client, message)
+
+        # Get the reactions to add
+        reactions = []
+
+        # Add necessary buttons
+        for i in range(count):
+            await asyncio.sleep(0)
+
+            reactions.append(action[i])
+
+        # Add the reactions under the message
+        await button_manager.add(reactions)
+
+        # Get the player's action
+        pressed = await button_manager.get_pressed(reactions, self.player)
+
+        # Get the index of the pressed button
+        index = 0
+        for button in reactions:
+            await asyncio.sleep(0)
+
+            if pressed == button:
+                self.target = entities[index]
+            
+            else:
+                index += 1
+
+        return
+
+    async def use_ability(self, ability, ally_team, enemy_team):
         """Use the ability
 
         --
@@ -396,8 +455,20 @@ class Move:
 
         # Setup the ability
         if ability.need_target:
+            targets = []
+
             # Get the allied targets
             if ability.target_ally:
-                
+                allies = await self.get_ally_target(ally_team)
+
+                targets += allies
+
+            # Get the enemy targets
+            if ability.target_enemy:
+                enemies = await self.get_enemy_target(enemy_team)
+
+                targets += enemies
+
+            await self.get_target(targets)
 
         return
