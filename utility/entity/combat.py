@@ -123,8 +123,10 @@ class Combat:
                 if move.index is None:
                     return None
 
-                # Otherwise, launch the ability
-
+                # Otherwise, use the ability
+                else:
+                    ability = character.ability[move.index]
+                    await move.use_ability(ability)
 
         return move.index
 
@@ -333,5 +335,69 @@ class Move:
 
                 else:
                     index += 1
+
+        return
+    
+    async def get_enemy_target(self, enemy_team):
+        """Get the available enemy targets
+
+        --
+
+        @return list of Character"""
+
+        targets = []
+
+        # First, get the defenders
+        defenders = []
+        for enemy in enemy_team:
+            await asyncio.sleep(0)
+
+            # If the enemy is alive and defending
+            if enemy.posture == 2 and enemy.health.current > 0:
+                defenders.append(enemy)
+        
+        # If there is no defenders, append the rest
+        if len(defenders) == 0:
+            for enemy_ in enemy_team:
+                await asyncio.sleep(0)
+
+                if enemy_.health.current > 0:
+                    targets.append(enemy_)
+        
+        else:
+            targets = defenders
+
+        return targets
+
+    async def get_ally_target(self, ally_team):
+        """Get the available allied targets
+
+        --
+
+        @return list of Character"""
+
+        targets = []
+
+        for ally in ally_team:
+            await asyncio.sleep(0)
+
+            if ally.health.current > 0:
+                targets.append(ally)
+
+        return targets
+
+
+    async def use_ability(self, ability):
+        """Use the ability
+
+        --
+
+        @return None"""
+
+        # Setup the ability
+        if ability.need_target:
+            # Get the allied targets
+            if ability.target_ally:
+                
 
         return
