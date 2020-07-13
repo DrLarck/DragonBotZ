@@ -111,6 +111,9 @@ class Ability:
         
         else:
             return None
+    
+    async def use(self, target):
+        return
 
 
 class AbilityDamage:

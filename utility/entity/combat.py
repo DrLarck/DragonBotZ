@@ -127,7 +127,7 @@ class Combat:
                 # Otherwise, use the ability
                 else:
                     ability = character.ability[move.index]
-                    await move.use_ability(ability, player_team, enemy_team)
+                    await move.use_ability(character, ability, player_team, enemy_team)
 
         return move.index
 
@@ -463,7 +463,7 @@ class Move:
 
         return
 
-    async def use_ability(self, ability, ally_team, enemy_team):
+    async def use_ability(self, caster, ability, ally_team, enemy_team):
         """Use the ability
 
         --
@@ -487,5 +487,11 @@ class Move:
                 targets += enemies
 
             await self.get_target(targets)
+        
+        # If no target required, self target
+        else:
+            self.target = caster
+
+        await ability.use()
 
         return
