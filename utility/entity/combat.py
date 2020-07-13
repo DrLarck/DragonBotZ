@@ -81,6 +81,7 @@ class Combat:
                 # the combat ends
                 if combat_status is None:
                     end = True
+                    break
 
             # End of the turn
             turn += 1
@@ -118,7 +119,14 @@ class Combat:
                 # Get the player's move
                 await move.get_move(character)
 
-        return
+                # Check if the player decided to flee the combat
+                if move.index is None:
+                    return None
+
+                # Otherwise, launch the ability
+
+
+        return move.index
 
 
 class CombatTool:
@@ -313,7 +321,7 @@ class Move:
         if pressed == action_second[0]:
             self.index = None
 
-        if pressed is not None:
+        if self.index is not None:
             # Look for the index of the pressed button in the list
             index = 0
             for button in reactions:
