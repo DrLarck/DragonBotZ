@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 10/07/20 by DrLarck"""
+@update 13/07/20 by DrLarck"""
 
 
 class Ability:
@@ -96,10 +96,11 @@ class Ability:
             self.heal_ki = data[17]
 
             # Ability effect applying
-            effect_to_apply = data[18]
+            if data[18] is not None:
+                effect_to_apply = data[18]
 
-            # Get the list of effect id
-            self.apply_effect = effect_to_apply.split(" ")
+                # Get the list of effect id
+                self.apply_effect = effect_to_apply.split()
 
             # Cleansing info
             self.cleanse = data[19]
