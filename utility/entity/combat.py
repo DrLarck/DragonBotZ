@@ -101,6 +101,7 @@ class Combat:
 
         # Init
         player_team = await self.__combat_tool.get_player_team_by_index(player_index)
+        enemy_team  = await self.__combat_tool.get_enemy_team_by_index(player_index)
 
         # Run the turn of each character
         for character in player_team:
@@ -126,7 +127,7 @@ class Combat:
                 # Otherwise, use the ability
                 else:
                     ability = character.ability[move.index]
-                    await move.use_ability(ability)
+                    await move.use_ability(ability, player_team, enemy_team)
 
         return move.index
 
@@ -176,6 +177,20 @@ class CombatTool:
 
         else:
             return self.combat.team_b
+    
+    async def get_enemy_team_by_index(self, player_index):
+        """Return the player's enemy team by player index
+
+        @param player_index int
+
+        --
+
+        @return list of Character"""
+
+        if player_index == 0:
+            return self.combat.team_b
+        else:
+            return self.combat.team_a
 
     async def get_move_by_index(self, player_index):
         """
