@@ -422,7 +422,9 @@ class Move:
         for character in entities:
             await asyncio.sleep(0)
 
-            info = f"**{character.name}**{character.type.icon}"
+            health = character.health.current
+            health_rate = int((character.health.current * character.health.maximum) / 100)
+            info = f"**{character.name}**{character.type.icon} **{health:,}**:hearts: *({health_rate} %)*"
 
             display += f"{action[count]} - {info}\n"
 
