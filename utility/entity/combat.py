@@ -75,7 +75,12 @@ class Combat:
                 await asyncio.sleep(0)
 
                 # Run the player's turn
-                await self.run_turn(player)
+                combat_status = await self.run_turn(player)
+
+                # If the run_turn method returns NoneType,
+                # the combat ends
+                if combat_status is None:
+                    end = True
 
             # End of the turn
             turn += 1
@@ -253,7 +258,7 @@ class Move:
 
         --
 
-        :return: `int` or `None` (if the player fleed or didn't react)
+        :return: `None`
         """
 
         # Set of buttons
@@ -306,7 +311,7 @@ class Move:
         # If the pressed button is the flee button
         # return flee
         if pressed == action_second[0]:
-            return None
+            self.index = None
 
         if pressed is not None:
             # Look for the index of the pressed button in the list
@@ -315,10 +320,10 @@ class Move:
                 await asyncio.sleep(0)
 
                 if pressed == button:
-                    pressed = index
+                    self.index = index
                     break
 
                 else:
                     index += 1
 
-        return pressed
+        return
