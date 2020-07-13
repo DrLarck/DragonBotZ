@@ -5,7 +5,7 @@ Represents the combat object
 
 Author : DrLarck
 
-Last update : 28/04/20 by DrLarck
+Last update : 13/07/20 by DrLarck
 """
 
 import random
@@ -253,7 +253,7 @@ class Move:
 
         --
 
-        :return: `None`
+        :return: `int`
         """
 
         # Set of buttons
@@ -274,7 +274,7 @@ class Move:
         for ability in character.ability:
             await asyncio.sleep(0)
 
-            display += f"{action[count]} - **{ability.name}**\n"
+            display += f"{action[count]} - {ability.icon}**{ability.name}**\n"
 
             # Pass the to the next emote
             count += 1
@@ -303,4 +303,14 @@ class Move:
         # Get the player's action
         pressed = await button_manager.get_pressed(reactions, self.player)
 
-        return
+        # Look for the index of the pressed button in the list
+        index = 0
+        for button in reactions:
+            await asyncio.sleep(0)
+
+            if pressed == button:
+                break
+
+            index += 1
+
+        return index
