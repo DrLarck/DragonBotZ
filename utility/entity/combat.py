@@ -253,7 +253,7 @@ class Move:
 
         --
 
-        :return: `int`
+        :return: `int` or `None` (if the player fleed or didn't react)
         """
 
         # Set of buttons
@@ -303,14 +303,22 @@ class Move:
         # Get the player's action
         pressed = await button_manager.get_pressed(reactions, self.player)
 
-        # Look for the index of the pressed button in the list
-        index = 0
-        for button in reactions:
-            await asyncio.sleep(0)
+        # If the pressed button is the flee button
+        # return flee
+        if pressed == action_second[0]:
+            return None
 
-            if pressed == button:
-                break
+        if pressed is not None:
+            # Look for the index of the pressed button in the list
+            index = 0
+            for button in reactions:
+                await asyncio.sleep(0)
 
-            index += 1
+                if pressed == button:
+                    pressed = index
+                    break
 
-        return index
+                else:
+                    index += 1
+
+        return pressed
