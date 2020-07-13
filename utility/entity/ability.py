@@ -6,6 +6,8 @@
 
 @update 13/07/20 by DrLarck"""
 
+import asyncio
+
 
 class Ability:
 
@@ -109,3 +111,126 @@ class Ability:
         
         else:
             return None
+
+
+class AbilityDamage:
+
+    def __init__(self, ability, caster):
+        self.ability = ability
+        self.caster  = caster
+
+        self.direct   = 0
+        self.physical = 0
+        self.ki       = 0
+
+        self.heal = 0
+
+    async def calculate_damage(self):
+        """Calculate the damage/heal that the ability
+        is going to deal/provide
+
+        --
+
+        @return object AbilityDamage"""
+
+        if self.ability.damage_direct > 0:
+            # Direct damage calculation
+            # Check for the caster's stats, the direct damage
+            # are based on the highest character's stat (phy, ki)
+            highest_stat = 0
+            if self.caster.damage.physical > self.caster.damage.ki:
+                highest_stat = self.caster.damage.physical
+            else:
+                highest_stat = self.caster.damage.ki
+            
+            self.direct = int((self.ability.damage_direct * highest_stat) / 100)
+
+        if self.ability.damage_physical > 0:
+            # Physical damage calculation
+            physical = self.caster.damage.physical
+
+            self.physical = int((self.ability.damage_physical * physical) / 100)
+        
+        if self.ability.damage_ki > 0:
+            # Ki damage calculation
+            ki = self.caster.damage.Ki
+
+            self.ki = int((self.ability.damage_ki * ki) / 100)
+
+        return self
+
+    async def inflict_damage(self, target):
+        """Inflict the damage to the target
+
+        --
+
+        @return str"""
+        
+        # Get the damage
+        await self.calculate_damage()
+
+        display      = "__Damage__ : "
+        total_damage = 0
+        damages      = []
+
+        if self.direct > 0:
+            # Inflict the damage
+            target.health.current -= self.direct
+            await target.health.limit()
+
+            total_damage += self.direct
+
+            damages.append(f"*{self.direct:,}*💢")
+        
+        if self.physical > 0:
+            physical_reduction = 1 - (target.armor.floating / 100)
+
+            physical_dealt = int(self.physical * physical_reduction)
+            physical_dealt = int(physical_dealt - target.armor.fixed)
+
+            if physical_dealt < 0:
+                physical_dealt = 0
+
+            target.health.current -= physical_dealt
+            await target.health.limit()
+            
+            total_damage += physical_dealt
+
+            damages.append(f"*{physical_dealt}*:punch:")
+        
+        if self.ki > 0:
+            ki_reduction = 1 - (target.spirit.floating / 100)
+
+            ki_dealt = int(self.ki * ki_reduction)
+            ki_dealt = int(ki_dealt - target.spirit.fixed)
+
+            if ki_dealt < 0:
+                ki_dealt = 0
+
+            target.health.current -= ki_dealt
+            await target.health.limit()
+            
+            total_damage += ki_dealt
+
+            damages.append(f"*{physical_dealt}*:comet:")
+
+        # Set the display
+        display += f"**- {total_damage:,}** ("
+
+        details = len(damages)
+        index = 0
+        for damage in damages:
+            await asyncio.sleep(0)
+
+            display += f"{damage}"
+
+            # Add a separator if we didn't finish iterate the 
+            # list
+            if index < details - 1:
+                display += " | "
+
+            index += 1
+        
+        display += ")"
+
+        return display
