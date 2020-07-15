@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 13/07/20 by DrLarck"""
+@update 15/07/20 by DrLarck"""
 
 import asyncio
 
@@ -112,8 +112,22 @@ class Ability:
         else:
             return None
     
-    async def use(self, target):
-        return
+    async def use(self, caster, target):
+        """Use the ability
+
+        @param caster object Character
+
+        @param target object Character
+
+        --
+
+        @return str"""
+
+        damage = AbilityDamage(self, caster)
+
+        damage_display = await damage.inflict_damage(target)
+
+        return damage_display
 
 
 class AbilityDamage:
@@ -183,7 +197,7 @@ class AbilityDamage:
 
             total_damage += self.direct
 
-            damages.append(f"*{self.direct:,}*💢")
+            damages.append(f"*- {self.direct:,}* 💢")
         
         if self.physical > 0:
             physical_reduction = 1 - (target.armor.floating / 100)
@@ -199,7 +213,7 @@ class AbilityDamage:
             
             total_damage += physical_dealt
 
-            damages.append(f"*{physical_dealt}*:punch:")
+            damages.append(f"*- {physical_dealt}* :punch:")
         
         if self.ki > 0:
             ki_reduction = 1 - (target.spirit.floating / 100)
@@ -215,7 +229,7 @@ class AbilityDamage:
             
             total_damage += ki_dealt
 
-            damages.append(f"*{physical_dealt}*:comet:")
+            damages.append(f"*- {physical_dealt}* :comet:")
 
         # Set the display
         display += f"**- {total_damage:,}** ("
