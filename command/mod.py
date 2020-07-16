@@ -5,9 +5,10 @@ Moderation commands
 
 Author : DrLarck
 
-Last update : 14/04/20 by DrLarck
+Last update : 16/07/20 by DrLarck
 """
 
+import discord
 import asyncio
 
 from discord.ext import commands
@@ -82,12 +83,19 @@ class CommandModeration(commands.Cog):
             await context.send(character.name)
 
     @commands.command()
-    async def combat(self, context):
-        player = Player(context, self.client, context.message.author)
+    async def combat(self, context, target: discord.Member=None):
+        player_a = Player(context, self.client, context.message.author)
+
+        if target is not None:
+            player_b = Player(context, self.client, target)
 
         from utility.entity.combat import Combat
 
-        combat = Combat(self.client, context, player, player)
+        if target is not None:
+            combat = Combat(self.client, context, player_a, player_b)
+        
+        else:
+            combat = Combat(self.client, context, player_a, player_a)
 
         await combat.run()
 
