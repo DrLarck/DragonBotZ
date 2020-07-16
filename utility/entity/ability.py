@@ -229,7 +229,7 @@ class AbilityDamage:
             
             total_damage += ki_dealt
 
-            damages.append(f"*- {physical_dealt}* :comet:")
+            damages.append(f"*- {ki_dealt}* :comet:")
 
         # Set the display
         display += f"**- {total_damage:,}** ("
