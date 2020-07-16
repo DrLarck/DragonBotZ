@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 15/07/20 by DrLarck"""
+@update 16/07/20 by DrLarck"""
 
 import asyncio
 
@@ -170,7 +170,7 @@ class AbilityDamage:
         
         if self.ability.damage_ki > 0:
             # Ki damage calculation
-            ki = self.caster.damage.Ki
+            ki = self.caster.damage.ki
 
             self.ki = int((self.ability.damage_ki * ki) / 100)
 
