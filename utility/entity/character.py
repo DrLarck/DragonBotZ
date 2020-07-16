@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 10/07/20 by DrLarck
+Last update : 16/07/20 by DrLarck
 """
 
 import asyncio
@@ -88,43 +88,46 @@ class Character:
         :return: `Character`
         """
 
+        # New character instance
+        new_char = Character(self.client)
+
         # Init all the attributes
-        self.name = name
-        self.id = char_id
-        self.level = level
+        new_char.name = name
+        new_char.id = char_id
+        new_char.level = level
 
-        self.image.card = card
-        self.image.thumbnail = thumbnail
+        new_char.image.card = card
+        new_char.image.thumbnail = thumbnail
 
-        self.type.value = type_value
-        self.rarity.value = rarity_value
+        new_char.type.value = type_value
+        new_char.rarity.value = rarity_value
 
-        self.health.maximum = health
+        new_char.health.maximum = health
 
-        self.ki.maximum = ki
+        new_char.ki.maximum = ki
 
-        self.damage.physical = physical
-        self.damage.ki = ki_power
+        new_char.damage.physical = physical
+        new_char.damage.ki = ki_power
 
-        self.critical.chance = crit_chance
-        self.critical.bonus = crit_bonus
+        new_char.critical.chance = crit_chance
+        new_char.critical.bonus = crit_bonus
 
-        self.armor.fixed = armor_fixed
-        self.armor.floating = armor_floating
+        new_char.armor.fixed = armor_fixed
+        new_char.armor.floating = armor_floating
 
-        self.spirit.fixed = spirit_fixed
-        self.spirit.floating = spirit_floating
+        new_char.spirit.fixed = spirit_fixed
+        new_char.spirit.floating = spirit_floating
 
-        self.ability = ability
+        new_char.ability = ability
 
         # Init sub-attributes
 
         # Get the icons
-        self.rarity.icon = await GameIcon().get_rarity_icon(self.rarity.value)
-        self.type.icon = await GameIcon().get_type_icon(self.type.value)
+        new_char.rarity.icon = await GameIcon().get_rarity_icon(new_char.rarity.value)
+        new_char.type.icon = await GameIcon().get_type_icon(new_char.type.value)
 
         # Return the character
-        return self
+        return new_char
 
     async def get_display_card(self, client):
         """
@@ -586,11 +589,21 @@ class CharacterGetter:
             # Get the character object according to the character's reference
             character = await self.get_reference_character(character_row[1])
 
-            # Setup the character object
-            character.level = 6
+            # Create a copy of the character
+            copy = await character.generate(
+                name=character.name, char_id=character.id,
+                level=character_row[6], card=character.image.card,
+                thumbnail=character.image.thumbnail,
+                type_value=character.type.value,
+                rarity_value=character.rarity.value,
+                health=character.health.maximum, ki=character.ki.maximum,
+                physical=character.damage.physical, ki_power=character.damage.ki,
+                spirit_fixed=character.spirit.fixed, spirit_floating=character.spirit.floating,
+                ability=character.ability
+            )
 
-            await character.init()
+            await copy.init()
 
-            return character
+            return copy
 
         return
