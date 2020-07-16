@@ -598,6 +598,7 @@ class CharacterGetter:
                 rarity_value=character.rarity.value,
                 health=character.health.maximum, ki=character.ki.maximum,
                 physical=character.damage.physical, ki_power=character.damage.ki,
+                armor_fixed=character.armor.fixed, armor_floating=character.armor.floating,
                 spirit_fixed=character.spirit.fixed, spirit_floating=character.spirit.floating,
                 ability=character.ability
             )
