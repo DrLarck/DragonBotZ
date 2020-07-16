@@ -7,6 +7,7 @@
 @update 16/07/20 by DrLarck"""
 
 import asyncio
+import random
 
 
 class Ability:
@@ -160,17 +161,19 @@ class AbilityDamage:
             else:
                 highest_stat = self.caster.damage.ki
             
+            # Random direct damage roll
+            highest_stat = random.randint(int(highest_stat * 0.9), highest_stat)
             self.direct = int((self.ability.damage_direct * highest_stat) / 100)
 
         if self.ability.damage_physical > 0:
             # Physical damage calculation
-            physical = self.caster.damage.physical
+            physical = random.randint(await self.caster.damage.get_physical_min(), self.caster.damage.physical)
 
             self.physical = int((self.ability.damage_physical * physical) / 100)
         
         if self.ability.damage_ki > 0:
             # Ki damage calculation
-            ki = self.caster.damage.ki
+            ki = random.randint(await self.caster.damage.get_ki_min(), self.caster.damage.ki)
 
             self.ki = int((self.ability.damage_ki * ki) / 100)
 
