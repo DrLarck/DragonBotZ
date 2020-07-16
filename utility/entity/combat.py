@@ -5,7 +5,7 @@ Represents the combat object
 
 Author : DrLarck
 
-Last update : 15/07/20 by DrLarck
+Last update : 16/07/20 by DrLarck
 """
 
 import random
@@ -495,6 +495,6 @@ class Move:
         display = await ability.use(caster, self.target)
 
         await self.context.send(display)
-        
+
 
         return
