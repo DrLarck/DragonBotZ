@@ -5,7 +5,7 @@ Game icon
 
 Author : DrLarck
 
-Last update : 13/04/20 by DrLarck
+Last update : 17/07/20 by DrLarck
 """
 
 
@@ -23,6 +23,9 @@ class GameIcon:
 
         # Capsule
         self.capsule_0 = "<:capsule_0:699284657530863626>"
+
+        # Ability icon
+        self.ability_not_found = "<:notfound:617735236473585694>"
 
         # Private
         self.__rarity = [
