@@ -5,7 +5,7 @@ Represents the combat object
 
 Author : DrLarck
 
-Last update : 16/07/20 by DrLarck
+Last update : 17/07/20 by DrLarck
 """
 
 import random
@@ -13,6 +13,8 @@ import asyncio
 
 # util
 from utility.interactive.button import Button
+from utility.graphic.embed import CustomEmbed
+from utility.graphic.color import GameColor
 
 
 class Combat:
@@ -36,9 +38,12 @@ class Combat:
         self.player_a, self.player_b = player_a, player_b
         self.team_a, self.team_b = [], []
 
+        # Graphic
+        self.color = GameColor()
+
         # Move
-        self.move_a = Move(self.client, self.context, self.player_a)
-        self.move_b = Move(self.client, self.context, self.player_b)
+        self.move_a = Move(self.client, self.context, self.player_a, self.color.player_a)
+        self.move_b = Move(self.client, self.context, self.player_b, self.color.player_b)
 
         # Private
         self.__combat_tool = CombatTool(self)
@@ -247,7 +252,7 @@ class CombatTool:
 
 class Move:
 
-    def __init__(self, client, context, player):
+    def __init__(self, client, context, player, color):
         """
         :param player: (`Player`)
         """
@@ -256,6 +261,8 @@ class Move:
         self.client = client
         self.context = context
         self.player = player
+
+        self.color = color
 
         self.index = 0
         self.target = None
@@ -492,9 +499,15 @@ class Move:
         else:
             self.target = caster
 
+        # Set the display
+        embed_title = f"{caster.image.icon}{caster.name}'s action to {self.target.image.icon}{self.target.name}"
+        embed = await CustomEmbed().setup(self.client, title=embed_title, thumbnail_url=caster.image.thumbnail,
+                                          color=self.color)
+
         display = await ability.use(caster, self.target)
 
-        await self.context.send(display)
+        embed.add_field(name=f"Action : {ability.icon}{ability.name}", value=display, inline=False)
 
+        await self.context.send(embed=embed)
 
         return
