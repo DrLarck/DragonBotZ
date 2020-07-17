@@ -311,7 +311,7 @@ class Move:
         for ability in character.ability:
             await asyncio.sleep(0)
 
-            display += f"{action[count]} - {ability.icon}**{ability.name}**\n"
+            display += f"{action[count]} - {ability.icon}**{ability.name}** : {ability.tooltip}\n"
 
             # Pass the to the next emote
             count += 1
