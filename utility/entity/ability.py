@@ -4,10 +4,12 @@
 
 @author DrLarck
 
-@update 16/07/20 by DrLarck"""
+@update 17/07/20 by DrLarck"""
 
 import asyncio
 import random
+
+from utility.graphic.icon import GameIcon
 
 
 class Ability:
@@ -19,7 +21,7 @@ class Ability:
         self.name        = ""
         self.description = ""
         self.tooltip     = ""
-        self.icon        = ""
+        self.icon        = GameIcon().ability_not_found
         
         self.cost     = 0
         self.cooldown = 0
@@ -66,13 +68,13 @@ class Ability:
             # Ability info
             self.name = data[1]
 
-            if data[1] is not None:
+            if data[2] is not None:
                 self.description = data[2]
             
-            if data[2] is not None:
+            if data[3] is not None:
                 self.tooltip = data[3]
             
-            if data[3] is not None:
+            if data[4] is not None:
                 self.icon = data[4]
             
             # Ability condition
