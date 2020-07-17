@@ -71,7 +71,7 @@ class Ability:
             ability_behaviour += f"\n__Ki__ : **+ {self.ki_regen:,}** :fire:"
     
         if ability_behaviour != "":
-            self.tooltip += ability_behaviour
+            self.tooltip += ability_behaviour + '\n'
 
         return
 
@@ -92,59 +92,61 @@ class Ability:
                                                     """, [ability_id])
 
         if len(data) > 0:
+            copy = Ability(self.client)
+
             # Configure the ability object, according to the 
             # fetched data
             data = data[0]
 
             # Ability info
-            self.name = data[1]
+            copy.name = data[1]
 
             if data[2] is not None:
-                self.description = data[2]
+                copy.description = data[2]
             
             if data[3] is not None:
-                self.tooltip = data[3]
+                copy.tooltip = data[3]
             
             if data[4] is not None:
-                self.icon = data[4]
+                copy.icon = data[4]
             
             # Ability condition
-            self.cost = data[5]
-            self.cooldown = data[6]
+            copy.cost = data[5]
+            copy.cooldown = data[6]
 
-            self.need_target = data[7]
+            copy.need_target = data[7]
             
-            self.target_ally = data[8]
-            self.target_enemy = data[9]
+            copy.target_ally = data[8]
+            copy.target_enemy = data[9]
 
-            self.target_number = data[10]
+            copy.target_number = data[10]
 
             # Ability damage
-            self.damage_direct = data[11]
-            self.damage_physical = data[12]
-            self.damage_ki = data[13]
+            copy.damage_direct = data[11]
+            copy.damage_physical = data[12]
+            copy.damage_ki = data[13]
 
             # Ability heal
-            self.self_heal = data[14]
+            copy.self_heal = data[14]
 
-            self.heal_direct = data[15]
-            self.heal_physical = data[16]
-            self.heal_ki = data[17]
+            copy.heal_direct = data[15]
+            copy.heal_physical = data[16]
+            copy.heal_ki = data[17]
 
             # Ability effect applying
             if data[18] is not None:
                 effect_to_apply = data[18]
 
                 # Get the list of effect id
-                self.apply_effect = effect_to_apply.split()
+                copy.apply_effect = effect_to_apply.split()
 
             # Cleansing info
-            self.cleanse = data[19]
+            copy.cleanse = data[19]
 
             # Ability ki regen
-            self.ki_regen = data[20]
+            copy.ki_regen = data[20]
 
-            return self
+            return copy
         
         else:
             return None
