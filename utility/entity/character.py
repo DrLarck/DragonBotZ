@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 16/07/20 by DrLarck
+Last update : 17/07/20 by DrLarck
 """
 
 import asyncio
@@ -523,6 +523,9 @@ class CharacterGetter:
 
                         ability = int(ability)
                         current = await super_ability.get_ability_data(ability)
+
+                        # Init the ability
+                        await current.init()
 
                         if current is not None:
                             character_ability.append(current)
