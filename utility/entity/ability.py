@@ -41,9 +41,39 @@ class Ability:
         self.heal_physical = 0
         self.heal_ki       = 0
 
+        self.ki_regen = 0
+
         self.apply_effect = []
 
         self.cleanse = False
+
+    async def init(self):
+        """Init the ability
+
+        --
+
+        @return None"""
+
+        # Set the display of the ability's behaviour
+        # for the ability tooltip
+        ability_behaviour = ""
+
+        if self.damage_direct > 0:
+            ability_behaviour += f"\n__Damage__ :anger: : **{self.damage_direct:,} %** of your **highest** stat"
+        
+        if self.damage_physical > 0:
+            ability_behaviour += f"\n__Damage__ :punch: : **{self.damage_physical:,} %** of your :punch: stat"
+        
+        if self.damage_ki > 0:
+            ability_behaviour += f"\n__Damage__ :comet: : **{self.damage_ki:,} %** of your :comet: stat"
+
+        if self.ki_regen > 0:
+            ability_behaviour += f"\n__Ki__ : **+ {self.ki_regen:,}** :fire:"
+    
+        if ability_behaviour != "":
+            self.tooltip += ability_behaviour
+
+        return
 
     async def get_ability_data(self, ability_id):
         """Get the ability data from the database
@@ -110,6 +140,9 @@ class Ability:
 
             # Cleansing info
             self.cleanse = data[19]
+
+            # Ability ki regen
+            self.ki_regen = data[20]
 
             return self
         
