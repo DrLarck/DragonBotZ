@@ -23,8 +23,9 @@ class Ability:
         self.tooltip     = ""
         self.icon        = GameIcon().ability_not_found
         
-        self.cost     = 0
-        self.cooldown = 0
+        self.cost       = 0
+        self.cooldown   = 0
+        self.current_cd = 0
 
         self.need_target   = False
         self.target_ally   = False
