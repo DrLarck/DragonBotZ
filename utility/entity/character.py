@@ -522,12 +522,12 @@ class CharacterGetter:
                         await asyncio.sleep(0)
 
                         ability = int(ability)
+
                         current = await super_ability.get_ability_data(ability)
 
-                        # Init the ability
-                        await current.init()
-
                         if current is not None:
+                            # Init the ability
+                            await current.init()
                             character_ability.append(current)
 
                     character_ = await Character(client).generate(
