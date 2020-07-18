@@ -71,6 +71,14 @@ class Combat:
         while not end:
             await asyncio.sleep(0)
 
+            # Show players
+            if turn == 1:
+                message_intro = f"{self.player_a.circle}**{self.player_a.name}** VS {self.player_b.circle}**{self.player_b.name}**"
+                await self.context.send(message_intro)
+
+            # Send the turn id
+            await self.context.send(f"📣 ROUND {turn} !")
+
             # Run the turn of each player
             players = [0, 1]  # Player index
 
@@ -88,10 +96,11 @@ class Combat:
                     end = True
 
                     # Flee message
-                    player_name = await self.__combat_tool.get_player_by_index(player)
-                    player_name = player_name.name
+                    player_ = await self.__combat_tool.get_player_by_index(player)
+                    player_name   = player_.name
+                    player_circle = player_.circle
 
-                    end_message = f"🏃‍♂️ {player_name} has fled the combat"
+                    end_message = f"{player_circle} {player_name} has fled the combat 🏃‍♂️"
 
                     await self.context.send(end_message)
 
@@ -114,8 +123,14 @@ class Combat:
         """
 
         # Init
+        player      = await self.__combat_tool.get_player_by_index(player_index) 
         player_team = await self.__combat_tool.get_player_team_by_index(player_index)
         enemy_team  = await self.__combat_tool.get_enemy_team_by_index(player_index)
+
+        embed = await CustomEmbed().setup(self.client, title=f"{player.circle}{player.name}'s turn",
+                                          thumbnail_url=player.avatar, color=player.color)
+
+        await self.context.send(embed=embed)
 
         # Run the turn of each character
         for character in player_team:
@@ -251,10 +266,27 @@ class CombatTool:
 
         # If the first player to play is the player b
         if roll == 1:
-            self.combat.player_a = self.combat.player_b
-            self.combat.player_b = self.combat.player_a
+            # Save a copy of the player to avoid losing it
+            copy_a      = self.combat.player_a
+            copy_move_a = self.combat.move_a
+
+            self.combat.player_a        = self.combat.player_b
+            self.combat.move_a          = self.combat.move_b
+            self.combat.player_a.color  = self.combat.color.player_a
+            self.combat.player_a.circle = self.combat.color.player_a_circle
+
+            self.combat.player_b        = copy_a
+            self.combat.move_b          = copy_move_a
+            self.combat.player_b.color  = self.combat.color.player_b
+            self.combat.player_b.circle = self.combat.color.player_b_circle
 
         # else doesn't change anything
+        else:
+            self.combat.player_a.color  = self.combat.color.player_a
+            self.combat.player_a.circle = self.combat.color.player_a_circle
+
+            self.combat.player_b.color  = self.combat.color.player_b
+            self.combat.player_b.circle = self.combat.color.player_b_circle
 
         return
 
