@@ -363,7 +363,6 @@ class Move:
 
                 if pressed == button:
                     self.index = usable_index[index]
-                    print(self.index)
                     break
 
                 else:
