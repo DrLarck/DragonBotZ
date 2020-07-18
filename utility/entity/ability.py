@@ -208,6 +208,10 @@ class Ability:
         # Set cd
         if self.cooldown > 0:
             self.current_cd = self.cooldown
+        
+        # Consum cost
+        caster.ki.current -= self.cost
+        await caster.ki.limit()
 
         return display
 
