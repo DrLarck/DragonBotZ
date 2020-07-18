@@ -150,6 +150,28 @@ class Ability:
         
         else:
             return None
+        
+    async def is_usable(self, caster):
+        """Tells if the ability is usable or not and why
+
+        --
+
+        @return bool, str"""
+
+        usable = True
+        reason = ""
+
+        # Check CD
+        if self.current_cd > 0:
+            usable = False
+            reason = f"Ability on cooldown ! *({self.current_cd} ⌛)*"
+        
+        # Check cost
+        elif caster.ki.current < self.cost:
+            usable = False
+            reason = f"Not enough ki ! *({caster.ki.current}/**{self.cost}** :fire:)*"
+
+        return usable, reason
     
     async def use(self, caster, target):
         """Use the ability
@@ -182,6 +204,10 @@ class Ability:
 
             # Set display for ki gain
             display += f"\n__Ki__ : **+ {ki_gain:,}** :fire:"
+
+        # Set cd
+        if self.cooldown > 0:
+            self.current_cd = self.cooldown
 
         return display
 
