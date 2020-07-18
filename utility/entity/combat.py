@@ -65,8 +65,9 @@ class Combat:
         await self.__combat_tool.init_teams()
 
         # Start combat
-        turn = 1     # Start at turn 1
-        end = False  # Set the variable to True to end the fight
+        turn   = 1     # Start at turn 1
+        end    = False  # Set the variable to True to end the fight
+        winner = None
 
         while not end:
             await asyncio.sleep(0)
@@ -103,6 +104,9 @@ class Combat:
                     end_message = f"{player_circle} {player_name} has fled the combat 🏃‍♂️"
 
                     await self.context.send(end_message)
+
+                    # Get the winner
+                    winner = await self.__combat_tool.get_player_by_index_reverse(player)
 
                     break
 
@@ -203,6 +207,20 @@ class CombatTool:
         
         else:
             return self.combat.player_b
+    
+    async def get_player_by_index_reverse(self, player_index):
+        """Works the same as get_player_by_index method
+        but returns the other player
+
+        --
+
+        @return object Player"""
+
+        if player_index == 0:
+            return self.combat.player_b
+        
+        else:
+            return self.combat.player_a
 
     async def get_player_team_by_index(self, player_index):
         """
