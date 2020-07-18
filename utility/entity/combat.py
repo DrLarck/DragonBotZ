@@ -685,6 +685,25 @@ class CombatGetter:
         self.__cache.append(instance)
 
         return
+
+    async def remove_combat_instance(self, player):
+        """Remove the combat instance where the specified
+        player is in
+
+        @param player object Player
+
+        --
+
+        @return None"""
+
+        for combat in self.__cache:
+            await asyncio.sleep(0)
+
+            if combat.player_a.id == player.id or combat.player_b.id == player.id:
+                self.__cache.remove(combat)
+                break
+
+        return
     
     async def player_is_fighting(self, player):
         """Find a Combat instance where the player is
