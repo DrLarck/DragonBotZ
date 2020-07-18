@@ -306,13 +306,23 @@ class Move:
         display = f"Please select an action among the followings for **{character.name}**{character.type.icon} :\n"
 
         # Add ability name to the display
-        count = 0  # Count for the emote
+        count        = 0  # Count for the emote
+        usable_index = []
 
         for ability in character.ability:
             await asyncio.sleep(0)
 
-            display += f"{action[count]} - {ability.icon}**{ability.name}** : {ability.tooltip}\n"
+            usable, reason = await ability.is_usable(character)
 
+            if usable:
+                display += f"{action[count]} - {ability.icon}**{ability.name}** : {ability.tooltip}\n"
+
+                # Add it to the usable list
+                usable_index.append(count)
+
+            else:
+                display += f"~~/ - {ability.icon}**{ability.name}** :~~ {reason}\n"
+            
             # Pass the to the next emote
             count += 1
 
@@ -326,10 +336,10 @@ class Move:
         reactions = []
 
         # Add the necessary buttons
-        for i in range(count):
+        for index in usable_index:
             await asyncio.sleep(0)
 
-            reactions.append(action[i])
+            reactions.append(action[index])
 
         # Add all the secondary actions
         reactions += action_second
@@ -352,7 +362,8 @@ class Move:
                 await asyncio.sleep(0)
 
                 if pressed == button:
-                    self.index = index
+                    self.index = usable_index[index]
+                    print(self.index)
                     break
 
                 else:
