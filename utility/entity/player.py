@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 27/04/20 by DrLarck
+Last update : 18/07/20 by DrLarck
 """
 
 import asyncio
@@ -27,6 +27,9 @@ class Player:
         self.name = user.name
         self.avatar = user.avatar_url
         self.id = user.id
+
+        self.color  = 0xffffff
+        self.circle = ""
 
         self.resource = PlayerResource(self)
         self.item = PlayerItem(self)
