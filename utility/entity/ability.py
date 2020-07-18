@@ -47,7 +47,7 @@ class Ability:
 
         self.cleanse = False
 
-    async def init(self):
+    async def init(self, caster):
         """Init the ability
 
         --
@@ -59,13 +59,43 @@ class Ability:
         ability_behaviour = ""
 
         if self.damage_direct > 0:
-            ability_behaviour += f"\n__Damage__ :anger: : **{self.damage_direct:,} %** of your **highest** stat"
+            # Get the highest stat
+            highest = caster.damage.physical
+
+            if caster.damage.ki > highest:
+                highest = caster.damage.ki
+
+            # Get the damage range
+            direct_range = []
+            highest_min  = int(highest * 0.9)
+
+            direct_range.append(int((highest_min * self.damage_direct)/100))
+            direct_range.append(int((highest * self.damage_direct)/100)) 
+
+            # Set display
+            ability_behaviour += f"\n__Damage__ :anger: : **{direct_range[0]:,}** - **{direct_range[1]:,}** direct damage"
         
         if self.damage_physical > 0:
-            ability_behaviour += f"\n__Damage__ :punch: : **{self.damage_physical:,} %** of your :punch: stat"
+            # Get the physical damage range
+            physical_range = []
+            phy_min        = await caster.damage.get_physical_min()
+            phy_max        = caster.damage.physical
+
+            physical_range.append(int((phy_min * self.damage_physical)/100))
+            physical_range.append(int((phy_max * self.damage_physical)/100))
+
+            ability_behaviour += f"\n__Damage__ :punch: : **{physical_range[0]:,}** - **{physical_range[1]:,}** physical damage"
         
         if self.damage_ki > 0:
-            ability_behaviour += f"\n__Damage__ :comet: : **{self.damage_ki:,} %** of your :comet: stat"
+            # Get the ki damage range
+            ki_range = []
+            ki_min   = await caster.damage.get_ki_min()
+            ki_max   = caster.damage.ki
+
+            ki_range.append(int((ki_min * self.damage_ki)/100))
+            ki_range.append(int((ki_max * self.damage_ki)/100))
+
+            ability_behaviour += f"\n__Damage__ :comet: : **{ki_range[0]:,}** - **{ki_range[1]:,}** ki damage"
 
         if self.ki_regen > 0:
             ability_behaviour += f"\n__Ki__ : **+ {self.ki_regen:,}** :fire:"
