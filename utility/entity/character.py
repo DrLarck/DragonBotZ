@@ -95,6 +95,8 @@ class Character:
         new_char.name = name
         new_char.id = char_id
         new_char.level = level
+        # Set bonus per lvl
+        level_bonus = pow(1.05, new_char.level-1)  # Default +5 % stat per level
 
         new_char.image.card = card
         new_char.image.thumbnail = thumbnail
@@ -102,20 +104,20 @@ class Character:
         new_char.type.value = type_value
         new_char.rarity.value = rarity_value
 
-        new_char.health.maximum = health
+        new_char.health.maximum = int(health * level_bonus)
 
         new_char.ki.maximum = ki
 
-        new_char.damage.physical = physical
-        new_char.damage.ki = ki_power
+        new_char.damage.physical = int(physical * level_bonus)
+        new_char.damage.ki = int(ki_power * level_bonus)
 
         new_char.critical.chance = crit_chance
         new_char.critical.bonus = crit_bonus
 
-        new_char.armor.fixed = armor_fixed
+        new_char.armor.fixed = int(armor_fixed * level_bonus)
         new_char.armor.floating = armor_floating
 
-        new_char.spirit.fixed = spirit_fixed
+        new_char.spirit.fixed = int(spirit_fixed * level_bonus)
         new_char.spirit.floating = spirit_floating
 
         new_char.ability = ability
@@ -236,6 +238,12 @@ __Spirit__ : **{self.spirit.fixed:,}** | **{self.spirit.floating:,} %** 🏵️
 
         # Init health
         await self.health.init()
+
+        # Init abilities
+        for ability in self.ability:
+            await asyncio.sleep(0)
+
+            await ability.init(self)
 
         return
 
@@ -535,7 +543,6 @@ class CharacterGetter:
 
                         if current is not None:
                             # Init the ability
-                            await current.init(character_)
                             character_ability.append(current)
                     
                     # Set the character ability
