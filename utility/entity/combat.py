@@ -466,7 +466,7 @@ class Move:
             await asyncio.sleep(0)
 
             health = character.health.current
-            health_rate = int((character.health.current * character.health.maximum) / 100)
+            health_rate = int((character.health.current * 100) / character.health.maximum)
             info = f"**{character.name}**{character.type.icon} **{health:,}**:hearts: *({health_rate} %)*"
 
             display += f"{action[count]} - {info}\n"
