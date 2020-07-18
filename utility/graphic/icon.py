@@ -5,7 +5,7 @@ Game icon
 
 Author : DrLarck
 
-Last update : 17/07/20 by DrLarck
+Last update : 18/07/20 by DrLarck
 """
 
 
@@ -26,6 +26,9 @@ class GameIcon:
 
         # Ability icon
         self.ability_not_found = "<:notfound:617735236473585694>"
+        self.sequence          = "<:sequence:734093224674721924>"
+        self.special_attack    = "<:special:734093228495732796>"
+        self.special_attack_2  = "<:special_2:734093229867270154>"
 
         # Private
         self.__rarity = [
