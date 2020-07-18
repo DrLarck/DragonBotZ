@@ -119,12 +119,12 @@ class Combat:
                 
                 # If player A win
                 elif winner_id == 1:
-                    winner = await self.__combat_tool.get_player_by_index(winner_id)
+                    winner = self.player_a
                     return winner
                 
                 # If player B win
                 elif winner_id == 2:
-                    winner = await self.__combat_tool.get_player_by_index(winner_id)
+                    winner = self.player_b
                     return winner
                 
                 # If both team are alive
@@ -350,8 +350,6 @@ class CombatTool:
 
         @return int (0 draw, 1 player a wins, 2 player b wins) or None if 
         both team are alive"""
-
-        winner = None
 
         # Check team a
         team_a_alive = False
