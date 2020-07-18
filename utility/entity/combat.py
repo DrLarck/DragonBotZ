@@ -46,7 +46,8 @@ class Combat:
         self.move_b = Move(self.client, self.context, self.player_b, self.color.player_b)
 
         # Private
-        self.__combat_tool = CombatTool(self)
+        self.__combat_tool  = CombatTool(self)
+        self.__combat_cache = CombatGetter()
 
     # Public
     async def run(self):
@@ -57,6 +58,9 @@ class Combat:
 
         :return: `Player` as winner
         """
+
+        # Add this combat in the cache
+        await self.__combat_cache.add_combat_instance(self)
 
         # Set the play order
         await self.__combat_tool.define_play_order()
@@ -662,3 +666,46 @@ class Move:
         await self.context.send(embed=embed)
 
         return
+
+
+class CombatGetter:
+
+    # Store Combat objects
+    __cache    = []
+
+    async def add_combat_instance(self, instance):
+        """Add an existing combat instance to the cache
+
+        @param instance object Combat
+
+        --
+
+        @return None"""
+        
+        self.__cache.append(instance)
+
+        return
+    
+    async def player_is_fighting(self, player):
+        """Find a Combat instance where the player is
+
+        @param player object Player
+
+        --
+
+        @return bool"""
+
+        fighting = False
+
+        for combat in self.__cache:
+            await asyncio.sleep(0)
+
+            if combat.player_a.id == player.id:
+                fighting = True
+                break
+
+            elif combat.player_b.id == player.id:
+                fighting = True
+                break
+
+        return fighting
