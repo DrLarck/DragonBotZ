@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 17/07/20 by DrLarck
+Last update : 18/07/20 by DrLarck
 """
 
 import asyncio
@@ -516,6 +516,14 @@ class CharacterGetter:
                     # ability list
                     character_ability = []
 
+                    character_ = await Character(client).generate(
+                        char_id=data[0], name=data[1], type_value=data[2],
+                        rarity_value=data[3], card=data[4], thumbnail=data[4], 
+                        health=data[5], ki=data[6], physical=data[7],
+                        ki_power=data[8], armor_fixed=data[9], armor_floating=data[10],
+                        spirit_fixed=data[11], spirit_floating=data[12]
+                    )
+
                     # Get the instance of each ability
                     super_ability = Ability(client)
                     for ability in ability_set:
@@ -527,16 +535,11 @@ class CharacterGetter:
 
                         if current is not None:
                             # Init the ability
-                            await current.init()
+                            await current.init(character_)
                             character_ability.append(current)
-
-                    character_ = await Character(client).generate(
-                        char_id=data[0], name=data[1], type_value=data[2],
-                        rarity_value=data[3], card=data[4], thumbnail=data[4], 
-                        health=data[5], ki=data[6], physical=data[7],
-                        ki_power=data[8], armor_fixed=data[9], armor_floating=data[10],
-                        spirit_fixed=data[11], spirit_floating=data[12], ability=character_ability
-                    )
+                    
+                    # Set the character ability
+                    character_.ability = character_ability
 
                     self.__cache.append(character_)
 
