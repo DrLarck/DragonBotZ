@@ -109,10 +109,31 @@ class Combat:
                     winner = await self.__combat_tool.get_player_by_index_reverse(player)
 
                     break
+                    
+                # Check if one of the team is defeated
+                winner_id = await self.__combat_tool.check_alive_team()
+
+                # If draw, return none winner
+                if winner_id == 0:
+                    return None
+                
+                # If player A win
+                elif winner_id == 1:
+                    winner = await self.__combat_tool.get_player_by_index(winner_id)
+                    return winner
+                
+                # If player B win
+                elif winner_id == 2:
+                    winner = await self.__combat_tool.get_player_by_index(winner_id)
+                    return winner
+                
+                # If both team are alive
+                elif winner_id is None:
+                    pass
 
             # End of the turn
             turn += 1
-
+        
         return
 
     async def run_turn(self, player_index):
@@ -321,6 +342,52 @@ class CombatTool:
         await self.combat.move_b.reset()
 
         return
+    
+    async def check_alive_team(self):
+        """Check which team is alive
+
+        --
+
+        @return int (0 draw, 1 player a wins, 2 player b wins) or None if 
+        both team are alive"""
+
+        winner = None
+
+        # Check team a
+        team_a_alive = False
+
+        for character_a in self.combat.team_a:
+            await asyncio.sleep(0)
+
+            if character_a.health.current > 0:
+                team_a_alive = True
+                break
+        
+        # Check team b
+        team_b_alive = False
+
+        for character_b in self.combat.team_b:
+            await asyncio.sleep(0)
+
+            if character_b.health.current > 0:
+                team_b_alive = True
+                break
+            
+        # Both team alive
+        if team_a_alive and team_b_alive:
+            return None
+
+        # Player a win
+        elif team_a_alive and not team_b_alive:
+            return 1
+        
+        # Player b win
+        elif team_b_alive and not team_a_alive:
+            return 2
+        
+        # Draw
+        else:
+            return 0
 
 
 class Move:
