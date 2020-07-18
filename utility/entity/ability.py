@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 17/07/20 by DrLarck"""
+@update 18/07/20 by DrLarck"""
 
 import asyncio
 import random
@@ -161,12 +161,29 @@ class Ability:
         --
 
         @return str"""
+        
+        display = ""
 
-        damage = AbilityDamage(self, caster)
+        if self.damage_direct > 0 or self.damage_physical > 0 or self.damage_ki > 0:
+            # Damage the target
+            damage = AbilityDamage(self, caster)
 
-        damage_display = await damage.inflict_damage(target)
+            display += await damage.inflict_damage(target)
 
-        return damage_display
+        # Regen
+        if self.ki_regen > 0:
+            # The character gains an amount of ki between 90 % of the
+            # ki regen up to 100 %
+            ki_gain = random.randint(int(self.ki_regen*0.9), self.ki_regen)
+            
+            # Add the ki to the caster
+            caster.ki.current += ki_gain
+            await caster.ki.limit()
+
+            # Set display for ki gain
+            display += f"\n__Ki__ : **+ {ki_gain:,}** :fire:"
+
+        return display
 
 
 class AbilityDamage:
