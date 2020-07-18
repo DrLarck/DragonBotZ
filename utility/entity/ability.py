@@ -337,7 +337,7 @@ class AbilityDamage:
             
             total_damage += physical_dealt
 
-            damages.append(f"*- {physical_dealt}* :punch:")
+            damages.append(f"*- {physical_dealt:,}* :punch:")
         
         if self.ki > 0:
             ki_reduction = 1 - (target.spirit.floating / 100)
@@ -353,7 +353,7 @@ class AbilityDamage:
             
             total_damage += ki_dealt
 
-            damages.append(f"*- {ki_dealt}* :comet:")
+            damages.append(f"*- {ki_dealt:,}* :comet:")
 
         # Set the display
         display += f"**- {total_damage:,}** ("
