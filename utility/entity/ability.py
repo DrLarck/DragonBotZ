@@ -22,7 +22,7 @@ class Ability:
         self.description = ""
         self.tooltip     = ""
         self.tooltip_set = False
-        self.icon        = GameIcon().ability_not_found
+        self.icon        = GameIcon().special_attack
         
         self.cost       = 0
         self.cooldown   = 0
