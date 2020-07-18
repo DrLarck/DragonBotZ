@@ -86,6 +86,15 @@ class Combat:
                 # the combat ends
                 if combat_status is None:
                     end = True
+
+                    # Flee message
+                    player_name = await self.__combat_tool.get_player_by_index(player)
+                    player_name = player_name.name
+
+                    end_message = f"🏃‍♂️ {player_name} has fled the combat"
+
+                    await self.context.send(end_message)
+
                     break
 
             # End of the turn
@@ -165,6 +174,20 @@ class CombatTool:
             self.combat.team_b = await self.combat.player_b.combat.get_team()
 
         return
+
+    async def get_player_by_index(self, player_index):
+        """Return the player object by index
+
+        --
+
+        @return object Player"""
+
+
+        if player_index == 0:
+            return self.combat.player_a
+        
+        else:
+            return self.combat.player_b
 
     async def get_player_team_by_index(self, player_index):
         """
@@ -352,6 +375,9 @@ class Move:
 
         # If the pressed button is the flee button
         # return flee
+        if pressed is None:
+            self.index = None
+
         if pressed == action_second[0]:
             self.index = None
 
