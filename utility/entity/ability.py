@@ -21,6 +21,7 @@ class Ability:
         self.name        = ""
         self.description = ""
         self.tooltip     = ""
+        self.tooltip_set = False
         self.icon        = GameIcon().ability_not_found
         
         self.cost       = 0
@@ -54,6 +55,9 @@ class Ability:
 
         @return None"""
 
+        if self.tooltip_set:
+            return
+            
         # Set the display of the ability's behaviour
         # for the ability tooltip
         ability_behaviour = ""
@@ -102,6 +106,8 @@ class Ability:
     
         if ability_behaviour != "":
             self.tooltip += ability_behaviour + '\n'
+
+        self.tooltip_set = True
 
         return
 
