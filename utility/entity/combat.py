@@ -5,7 +5,7 @@ Represents the combat object
 
 Author : DrLarck
 
-Last update : 17/07/20 by DrLarck
+Last update : 18/07/20 by DrLarck
 """
 
 import random
