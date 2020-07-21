@@ -83,6 +83,7 @@ class CommandModeration(commands.Cog):
             await context.send(character.name)
 
     @commands.command()
+    @commands.check(CommandChecker.not_fighting)
     async def combat(self, context, target: discord.Member=None):
         player_a = Player(context, self.client, context.message.author)
 
@@ -97,7 +98,13 @@ class CommandModeration(commands.Cog):
         else:
             combat = Combat(self.client, context, player_a, player_a)
 
-        await combat.run()
+        winner = await combat.run()
+
+        if winner is not None:
+            await context.send(f"{winner.name} has won the fight !")
+        
+        else:
+            await context.send("DRAW !!")
 
     @commands.command()
     async def ping(self, context):
