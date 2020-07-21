@@ -112,22 +112,29 @@ class Combat:
                     # Get the winner
                     winner = await self.__combat_tool.get_player_by_index_reverse(player)
 
-                    break
+                    # Return the player who won 
+                    return winner
+
+                    # Delete the combat instance
+                    await self.__combat_cache.remove_combat_instance(self.player_a)
                     
                 # Check if one of the team is defeated
                 winner_id = await self.__combat_tool.check_alive_team()
 
                 # If draw, return none winner
                 if winner_id == 0:
+                    await self.__combat_cache.remove_combat_instance(self.player_a)
                     return None
                 
                 # If player A win
                 elif winner_id == 1:
+                    await self.__combat_cache.remove_combat_instance(self.player_a)
                     winner = self.player_a
                     return winner
                 
                 # If player B win
                 elif winner_id == 2:
+                    await self.__combat_cache.remove_combat_instance(self.player_a)
                     winner = self.player_b
                     return winner
                 
