@@ -125,15 +125,21 @@ class Character:
         for ability_id in ability:
             await asyncio.sleep(0)
 
-            # Get the id as int
-            ability_id = int(ability_id)
+            # If the ability id is not an actual ability
+            if not isinstance(ability_id, Ability):
+                # Get the id as int
+                ability_id = int(ability_id)
 
-            # Get the ability instance
-            ability = await ability_ref.get_ability_data(ability_id)
+                # Get the ability instance
+                ability = await ability_ref.get_ability_data(ability_id)
 
-            # If the ability has been found, add it to the character
-            if ability is not None:
-                new_char.ability.append(ability)
+                # If the ability has been found, add it to the character
+                if ability is not None:
+                    new_char.ability.append(ability)
+        
+        # If the char has no abilities, add passed abilities as parameter
+        if len(new_char.ability) == 0:
+            new_char.ability = ability
 
         # Get the icons
         new_char.rarity.icon = await GameIcon().get_rarity_icon(new_char.rarity.value)
@@ -567,16 +573,26 @@ class CharacterGetter:
             char = self.__cache[reference - 1]
 
             copy = await Character(client).generate(
-                char_id=char.id,
+                char_id=char.id, name=char.name, card=char.image.card,
+                thumbnail=char.image.thumbnail, type_value=char.type.value,
+                rarity_value=char.rarity.value, health=char.health.maximum,
+                ki=char.ki.maximum, physical=char.damage.physical, ki_power=char.damage.ki,
+                armor_fixed=char.armor.fixed, armor_floating=char.armor.floating,
+                spirit_fixed=char.spirit.fixed, spirit_floating=char.spirit.floating,
+                ability=char.ability
             )
+
+            return copy
 
         else:
             print(f"Character {reference} not found.")
             return None
 
-    async def get_from_unique(self, database, unique_id):
+    async def get_from_unique(self, client, database, unique_id):
         """
         Get a Character object from a unique id
+
+        :param client: discord.ext.commands.Bot
 
         :param database: (`Database`)
 
