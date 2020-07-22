@@ -5,7 +5,7 @@ Banner object
 
 Author : DrLarck
 
-Last update : 10/07/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import asyncio
@@ -158,11 +158,12 @@ class Banner:
 
         return characters
 
-    async def generate(self, name="",
+    async def generate(self, client, name="",
                        image="", characters=""):
         """
         Generate a banner object
 
+        :param client: discord.ext.commands.Bot
         :param name: (`str`)
         :param image: (`str`) Valid url
         :param characters: (`str`)
@@ -193,7 +194,7 @@ class Banner:
             # Convert the str reference to int
             reference = int(reference)
 
-            character = await getter.get_reference_character(reference)
+            character = await getter.get_reference_character(reference, client)
 
             # Add the character into the list
             new_character_list.append(character)
@@ -271,7 +272,7 @@ class BannerGetter:
                     # Generate the banner object
                     banner_ = Banner()
 
-                    await banner_.generate(name=banner[0], image=banner[1], characters=banner[2])
+                    await banner_.generate(client, name=banner[0], image=banner[1], characters=banner[2])
 
                     self.__cache.append(banner_)
 

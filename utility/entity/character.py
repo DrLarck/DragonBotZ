@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 18/07/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import asyncio
@@ -120,9 +120,20 @@ class Character:
         new_char.spirit.fixed = int(spirit_fixed * level_bonus)
         new_char.spirit.floating = spirit_floating
 
-        new_char.ability = ability
+        # Get the character's abilities 
+        ability_ref = Ability(self.client)
+        for ability_id in ability:
+            await asyncio.sleep(0)
 
-        # Init sub-attributes
+            # Get the id as int
+            ability_id = int(ability_id)
+
+            # Get the ability instance
+            ability = await ability_ref.get_ability_data(ability_id)
+
+            # If the ability has been found, add it to the character
+            if ability is not None:
+                new_char.ability.append(ability)
 
         # Get the icons
         new_char.rarity.icon = await GameIcon().get_rarity_icon(new_char.rarity.value)
@@ -516,39 +527,19 @@ class CharacterGetter:
                     await asyncio.sleep(0)
 
                     # Get the set of character's abilities
-
                     ability_set = data[15]
                     ability_set = ability_set.split()
 
-                    # Add an instance of the ability in the character's
-                    # ability list
-                    character_ability = []
-
-                    character_ = await Character(client).generate(
+                    character = await Character(client).generate(
                         char_id=data[0], name=data[1], type_value=data[2],
                         rarity_value=data[3], card=data[4], thumbnail=data[4], 
                         health=data[5], ki=data[6], physical=data[7],
                         ki_power=data[8], armor_fixed=data[9], armor_floating=data[10],
-                        spirit_fixed=data[11], spirit_floating=data[12]
+                        spirit_fixed=data[11], spirit_floating=data[12],
+                        ability=ability_set
                     )
 
-                    # Get the instance of each ability
-                    super_ability = Ability(client)
-                    for ability in ability_set:
-                        await asyncio.sleep(0)
-
-                        ability = int(ability)
-
-                        current = await super_ability.get_ability_data(ability)
-
-                        if current is not None:
-                            # Init the ability
-                            character_ability.append(current)
-                    
-                    # Set the character ability
-                    character_.ability = character_ability
-
-                    self.__cache.append(character_)
+                    self.__cache.append(character)
 
                 # Cache has been filled
                 self.__cache_ok = True
@@ -559,11 +550,12 @@ class CharacterGetter:
 
         return
 
-    async def get_reference_character(self, reference):
+    async def get_reference_character(self, reference, client):
         """
         Get a base character
 
         :param reference: (`int`)
+        @param object discord.ext.commands.Bot client
 
         --
 
@@ -572,7 +564,11 @@ class CharacterGetter:
 
         # Get the character from the cache
         if reference > 0 and reference - 1 < len(self.__cache):
-            return self.__cache[reference - 1]
+            char = self.__cache[reference - 1]
+
+            copy = await Character(client).generate(
+                char_id=char.id,
+            )
 
         else:
             print(f"Character {reference} not found.")
@@ -600,7 +596,7 @@ class CharacterGetter:
 
         if character_row is not None:
             # Get the character object according to the character's reference
-            character = await self.get_reference_character(character_row[1])
+            character = await self.get_reference_character(character_row[1], client)
 
             # Create a copy of the character
             copy = await character.generate(
