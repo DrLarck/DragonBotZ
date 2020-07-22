@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 08/04/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import asyncio
@@ -90,7 +90,7 @@ class ToolBox:
                 for reference in self.__data:
                     await asyncio.sleep(0)
 
-                    character = await self.__getter.get_reference_character(reference[0])
+                    character = await self.__getter.get_reference_character(reference[0], self.client)
 
                     new_data.append(character)
 
@@ -244,7 +244,7 @@ class ToolBox:
                                              description=f"Page {page}/{self.__total_page}",
                                              thumbnail_url=player.avatar)
 
-        reference = await self.__getter.get_reference_character(reference)
+        reference = await self.__getter.get_reference_character(reference, self.client)
 
         # Display the characters
         # Get the first character to display

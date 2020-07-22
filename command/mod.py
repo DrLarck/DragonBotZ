@@ -5,9 +5,10 @@ Moderation commands
 
 Author : DrLarck
 
-Last update : 14/04/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
+import discord
 import asyncio
 
 from discord.ext import commands
@@ -82,14 +83,49 @@ class CommandModeration(commands.Cog):
             await context.send(character.name)
 
     @commands.command()
-    async def combat(self, context):
-        player = Player(context, self.client, context.message.author)
+    @commands.check(CommandChecker.not_fighting)
+    async def combat(self, context, target: discord.Member=None):
+        player_a = Player(context, self.client, context.message.author)
+
+        if target is not None:
+            player_b = Player(context, self.client, target)
 
         from utility.entity.combat import Combat
 
-        combat = Combat(self.client, context, player, player)
+        if target is not None:
+            combat = Combat(self.client, context, player_a, player_b)
+        
+        else:
+            combat = Combat(self.client, context, player_a, player_a)
 
-        await combat.run()
+        winner = await combat.run()
+
+        if winner is not None:
+            await context.send(f"{winner.name} has won the fight !")
+        
+        else:
+            await context.send("DRAW !!")
+    
+    @commands.command()
+    @commands.check(CommandChecker.not_fighting)
+    async def pve(self, context):
+        from utility.entity.CPU import CPU
+        from utility.entity.character import CharacterGetter
+
+        player_a = Player(context, self.client, context.message.author)
+        player_b = CPU(context, self.client, context.message.author)
+
+        # Set the cpu
+        player_b.name = "Saibaimen raiders"
+        print(player_b.name)
+        char_get = CharacterGetter()
+
+        team = await  char_get.get_reference_character(1, self.client)
+        await player_b.set_team([team], [10, 150])
+
+        from utility.entity.combat import Combat
+        combat = Combat(self.client, context, player_a, player_b)
+        winner = await combat.run()
 
     @commands.command()
     async def ping(self, context):

@@ -5,13 +5,14 @@ Command checker
 
 Author : DrLarck
 
-Last update : 20/03/20 by DrLarck
+Last update : 18/07/20 by DrLarck
 """
 
 from discord.channel import DMChannel
 
 # util
 from utility.entity.player import Player
+from utility.entity.combat import CombatGetter
 
 
 class CommandChecker:
@@ -117,4 +118,27 @@ class CommandChecker:
         else:  # The player is not registered
             await context.send(":x: You are not registered, to do so, use the `d!start` command.")
 
+            return False
+
+    @staticmethod
+    async def not_fighting(context):
+        """Check if the player is fighting or not
+
+        @param context discord.ext.commands.Context
+
+        --
+
+        @return bool"""
+
+        client        = context.bot
+        combat_getter = CombatGetter()
+        player        = Player(context, client, context.message.author)
+
+        is_fighting = await combat_getter.player_is_fighting(player)
+
+        if not is_fighting:
+            return True
+        
+        else:
+            await context.send(f":x: {player.name} You're already in a fight")
             return False

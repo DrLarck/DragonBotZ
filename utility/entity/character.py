@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 10/07/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import asyncio
@@ -88,43 +88,65 @@ class Character:
         :return: `Character`
         """
 
+        # New character instance
+        new_char = Character(self.client)
+
         # Init all the attributes
-        self.name = name
-        self.id = char_id
-        self.level = level
+        new_char.name = name
+        new_char.id = char_id
+        new_char.level = level
+        # Set bonus per lvl
+        level_bonus = pow(1.05, new_char.level-1)  # Default +5 % stat per level
 
-        self.image.card = card
-        self.image.thumbnail = thumbnail
+        new_char.image.card = card
+        new_char.image.thumbnail = thumbnail
 
-        self.type.value = type_value
-        self.rarity.value = rarity_value
+        new_char.type.value = type_value
+        new_char.rarity.value = rarity_value
 
-        self.health.maximum = health
+        new_char.health.maximum = int(health * level_bonus)
 
-        self.ki.maximum = ki
+        new_char.ki.maximum = ki
 
-        self.damage.physical = physical
-        self.damage.ki = ki_power
+        new_char.damage.physical = int(physical * level_bonus)
+        new_char.damage.ki = int(ki_power * level_bonus)
 
-        self.critical.chance = crit_chance
-        self.critical.bonus = crit_bonus
+        new_char.critical.chance = crit_chance
+        new_char.critical.bonus = crit_bonus
 
-        self.armor.fixed = armor_fixed
-        self.armor.floating = armor_floating
+        new_char.armor.fixed = int(armor_fixed * level_bonus)
+        new_char.armor.floating = armor_floating
 
-        self.spirit.fixed = spirit_fixed
-        self.spirit.floating = spirit_floating
+        new_char.spirit.fixed = int(spirit_fixed * level_bonus)
+        new_char.spirit.floating = spirit_floating
 
-        self.ability = ability
+        # Get the character's abilities 
+        ability_ref = Ability(self.client)
+        for ability_id in ability:
+            await asyncio.sleep(0)
 
-        # Init sub-attributes
+            # If the ability id is not an actual ability
+            if not isinstance(ability_id, Ability):
+                # Get the id as int
+                ability_id = int(ability_id)
+
+                # Get the ability instance
+                ability = await ability_ref.get_ability_data(ability_id)
+
+                # If the ability has been found, add it to the character
+                if ability is not None:
+                    new_char.ability.append(ability)
+        
+        # If the char has no abilities, add passed abilities as parameter
+        if len(new_char.ability) == 0:
+            new_char.ability = ability
 
         # Get the icons
-        self.rarity.icon = await GameIcon().get_rarity_icon(self.rarity.value)
-        self.type.icon = await GameIcon().get_type_icon(self.type.value)
+        new_char.rarity.icon = await GameIcon().get_rarity_icon(new_char.rarity.value)
+        new_char.type.icon = await GameIcon().get_type_icon(new_char.type.value)
 
         # Return the character
-        return self
+        return new_char
 
     async def get_display_card(self, client):
         """
@@ -233,6 +255,12 @@ __Spirit__ : **{self.spirit.fixed:,}** | **{self.spirit.floating:,} %** 🏵️
 
         # Init health
         await self.health.init()
+
+        # Init abilities
+        for ability in self.ability:
+            await asyncio.sleep(0)
+
+            await ability.init(self)
 
         return
 
@@ -505,34 +533,19 @@ class CharacterGetter:
                     await asyncio.sleep(0)
 
                     # Get the set of character's abilities
-
                     ability_set = data[15]
                     ability_set = ability_set.split()
 
-                    # Add an instance of the ability in the character's
-                    # ability list
-                    character_ability = []
-
-                    # Get the instance of each ability
-                    super_ability = Ability(client)
-                    for ability in ability_set:
-                        await asyncio.sleep(0)
-
-                        ability = int(ability)
-                        current = await super_ability.get_ability_data(ability)
-
-                        if current is not None:
-                            character_ability.append(current)
-
-                    character_ = await Character(client).generate(
+                    character = await Character(client).generate(
                         char_id=data[0], name=data[1], type_value=data[2],
                         rarity_value=data[3], card=data[4], thumbnail=data[4], 
                         health=data[5], ki=data[6], physical=data[7],
                         ki_power=data[8], armor_fixed=data[9], armor_floating=data[10],
-                        spirit_fixed=data[11], spirit_floating=data[12], ability=character_ability
+                        spirit_fixed=data[11], spirit_floating=data[12],
+                        ability=ability_set
                     )
 
-                    self.__cache.append(character_)
+                    self.__cache.append(character)
 
                 # Cache has been filled
                 self.__cache_ok = True
@@ -543,11 +556,12 @@ class CharacterGetter:
 
         return
 
-    async def get_reference_character(self, reference):
+    async def get_reference_character(self, reference, client):
         """
         Get a base character
 
         :param reference: (`int`)
+        @param object discord.ext.commands.Bot client
 
         --
 
@@ -556,15 +570,31 @@ class CharacterGetter:
 
         # Get the character from the cache
         if reference > 0 and reference - 1 < len(self.__cache):
-            return self.__cache[reference - 1]
+            char = self.__cache[reference - 1]
+
+            copy = await Character(client).generate(
+                char_id=char.id, name=char.name, card=char.image.card,
+                thumbnail=char.image.thumbnail, type_value=char.type.value,
+                rarity_value=char.rarity.value, health=char.health.maximum,
+                ki=char.ki.maximum, physical=char.damage.physical, ki_power=char.damage.ki,
+                armor_fixed=char.armor.fixed, armor_floating=char.armor.floating,
+                spirit_fixed=char.spirit.fixed, spirit_floating=char.spirit.floating,
+                ability=char.ability
+            )
+
+            await copy.init()
+
+            return copy
 
         else:
             print(f"Character {reference} not found.")
             return None
 
-    async def get_from_unique(self, database, unique_id):
+    async def get_from_unique(self, client, database, unique_id):
         """
         Get a Character object from a unique id
+
+        :param client: discord.ext.commands.Bot
 
         :param database: (`Database`)
 
@@ -584,13 +614,24 @@ class CharacterGetter:
 
         if character_row is not None:
             # Get the character object according to the character's reference
-            character = await self.get_reference_character(character_row[1])
+            character = await self.get_reference_character(character_row[1], client)
 
-            # Setup the character object
-            character.level = 6
+            # Create a copy of the character
+            copy = await character.generate(
+                name=character.name, char_id=character.id,
+                level=character_row[6], card=character.image.card,
+                thumbnail=character.image.thumbnail,
+                type_value=character.type.value,
+                rarity_value=character.rarity.value,
+                health=character.health.maximum, ki=character.ki.maximum,
+                physical=character.damage.physical, ki_power=character.damage.ki,
+                armor_fixed=character.armor.fixed, armor_floating=character.armor.floating,
+                spirit_fixed=character.spirit.fixed, spirit_floating=character.spirit.floating,
+                ability=character.ability
+            )
 
-            await character.init()
+            await copy.init()
 
-            return character
+            return copy
 
         return

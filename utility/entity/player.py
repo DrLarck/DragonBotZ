@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 27/04/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import asyncio
@@ -27,6 +27,9 @@ class Player:
         self.name = user.name
         self.avatar = user.avatar_url
         self.id = user.id
+
+        self.color  = 0xffffff
+        self.circle = ""
 
         self.resource = PlayerResource(self)
         self.item = PlayerItem(self)
@@ -570,6 +573,7 @@ class PlayerCombat:
 
         # Public
         self.player = player
+        self.team   = []
 
         # Private
         self.__database = self.player.client.database
@@ -601,9 +605,11 @@ class PlayerCombat:
             for unique_id in player_team:
                 await asyncio.sleep(0)
 
-                character = await char_getter.get_from_unique(self.__database, unique_id)
+                character = await char_getter.get_from_unique(self.player.client, self.__database, unique_id)
 
                 # Add the character to the team list
                 team.append(character)
+
+        self.team = team
 
         return team

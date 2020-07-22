@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 10/07/20 by DrLarck
+Last update : 18/07/20 by DrLarck
 """
 
 import asyncio
@@ -21,14 +21,14 @@ class Database:
     def __init__(self):
         # Private
         # Database information
-        self.__host = os.environ["dev_dbz_db_host"]
+        self.__host     = os.environ["dev_dbz_db_host"]
         self.__database = os.environ["dev_dbz_db_name"]
-        self.__user = os.environ["dev_dbz_db_user"]
+        self.__user     = os.environ["dev_dbz_db_user"]
         self.__password = os.environ["dev_dbz_db_password"]
-        self.__port = "5432"
+        self.__port     = "5432"
 
         # Connection
-        self.__pool = None
+        self.__pool       = None
         self.__connection = None
 
     # Private method
