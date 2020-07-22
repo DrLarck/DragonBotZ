@@ -5,7 +5,7 @@ Represents the combat object
 
 Author : DrLarck
 
-Last update : 18/07/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import random
@@ -111,13 +111,13 @@ class Combat:
 
                     # Get the winner
                     winner = await self.__combat_tool.get_player_by_index_reverse(player)
+                    
+                    # Delete the combat instance
+                    await self.__combat_cache.remove_combat_instance(self.player_a)
 
                     # Return the player who won 
                     return winner
 
-                    # Delete the combat instance
-                    await self.__combat_cache.remove_combat_instance(self.player_a)
-                    
                 # Check if one of the team is defeated
                 winner_id = await self.__combat_tool.check_alive_team()
 
@@ -167,7 +167,7 @@ class Combat:
                                           thumbnail_url=player.avatar, color=player.color)
 
         await self.context.send(embed=embed)
-
+        
         # Run the turn of each character
         for character in player_team:
             await asyncio.sleep(0)
@@ -177,13 +177,19 @@ class Combat:
             if playable:
                 # Get the move object
                 move = await self.__combat_tool.get_move_by_index(player_index)
+                    
+                if character.npc:
+                    # Special for CPU
+                    move = await player.set_move(character, move)
 
-                # Get character card display
-                card = await character.get_combat_card(self.client, player_index)
-                await self.context.send(embed=card)
+                # The character is not an npc
+                else:
+                    # Get character card display
+                    card = await character.get_combat_card(self.client, player_index)
+                    await self.context.send(embed=card)
 
-                # Get the player's move
-                await move.get_move(character)
+                    # Get the player's move
+                    await move.get_move(character)
 
                 # Check if the player decided to flee the combat
                 if move.index is None:
@@ -192,8 +198,8 @@ class Combat:
                 # Otherwise, use the ability
                 else:
                     ability = character.ability[move.index]
-                    await move.use_ability(character, ability, player_team, enemy_team)
-
+                    await move.use_ability(player, character, ability, player_team, enemy_team)
+        
         return move.index
 
 
@@ -632,7 +638,7 @@ class Move:
 
         return
 
-    async def use_ability(self, caster, ability, ally_team, enemy_team):
+    async def use_ability(self, player, caster, ability, ally_team, enemy_team):
         """Use the ability
 
         --
@@ -655,8 +661,12 @@ class Move:
 
                 targets += enemies
 
-            await self.get_target(targets)
-        
+            if not caster.npc:
+                await self.get_target(targets)
+            
+            else:
+                self.target = await player.choose_target(targets)
+
         # If no target required, self target
         else:
             self.target = caster
