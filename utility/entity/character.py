@@ -582,6 +582,8 @@ class CharacterGetter:
                 ability=char.ability
             )
 
+            await copy.init()
+
             return copy
 
         else:
