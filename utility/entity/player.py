@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 18/07/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import asyncio
@@ -573,6 +573,7 @@ class PlayerCombat:
 
         # Public
         self.player = player
+        self.team   = []
 
         # Private
         self.__database = self.player.client.database
@@ -604,9 +605,11 @@ class PlayerCombat:
             for unique_id in player_team:
                 await asyncio.sleep(0)
 
-                character = await char_getter.get_from_unique(self.__database, unique_id)
+                character = await char_getter.get_from_unique(self.player.client, self.__database, unique_id)
 
                 # Add the character to the team list
                 team.append(character)
+
+        self.team = team
 
         return team
