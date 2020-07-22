@@ -5,7 +5,7 @@ Moderation commands
 
 Author : DrLarck
 
-Last update : 16/07/20 by DrLarck
+Last update : 22/07/20 by DrLarck
 """
 
 import discord
@@ -105,6 +105,27 @@ class CommandModeration(commands.Cog):
         
         else:
             await context.send("DRAW !!")
+    
+    @commands.command()
+    @commands.check(CommandChecker.not_fighting)
+    async def pve(self, context):
+        from utility.entity.CPU import CPU
+        from utility.entity.character import CharacterGetter
+
+        player_a = Player(context, self.client, context.message.author)
+        player_b = CPU(context, self.client, context.message.author)
+
+        # Set the cpu
+        player_b.name = "Saibaimen raiders"
+        print(player_b.name)
+        char_get = CharacterGetter()
+
+        team = await  char_get.get_reference_character(1, self.client)
+        await player_b.set_team([team], [10, 150])
+
+        from utility.entity.combat import Combat
+        combat = Combat(self.client, context, player_a, player_b)
+        winner = await combat.run()
 
     @commands.command()
     async def ping(self, context):
