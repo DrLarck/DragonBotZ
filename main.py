@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 22/07/20 by DrLarck
+Last update : 24/07/20 by DrLarck
 """
 
 import logging
@@ -27,8 +27,8 @@ from utility.entity.banner import BannerGetter
 class Main:
 
     def __init__(self):
-        self.__TOKEN = os.environ["dev-dbz-token"]
-        self.__version = "2.1.0.150"
+        self.__TOKEN = os.environ["dev_dbz_token"]
+        self.__version = "2.1.0.151"
         self.__phase = ["ALPHA", "BETA", "RELEASE", "STABLE"]
 
         self.__prefix = ["d!", "D!", "db", "Db"]
