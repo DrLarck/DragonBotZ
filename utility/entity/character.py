@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 22/07/20 by DrLarck
+Last update : 26/07/20 by DrLarck
 """
 
 import asyncio
@@ -525,23 +525,21 @@ class CharacterGetter:
                                                  ORDER BY reference;
                                                  """)
 
-            data = data[0]
-
             if len(data) > 0:
                 # Storing each character in the cache as Character objects
                 for character in data:
                     await asyncio.sleep(0)
 
                     # Get the set of character's abilities
-                    ability_set = data[15]
+                    ability_set = character[15]
                     ability_set = ability_set.split()
 
                     character = await Character(client).generate(
-                        char_id=data[0], name=data[1], type_value=data[2],
-                        rarity_value=data[3], card=data[4], thumbnail=data[4], 
-                        health=data[5], ki=data[6], physical=data[7],
-                        ki_power=data[8], armor_fixed=data[9], armor_floating=data[10],
-                        spirit_fixed=data[11], spirit_floating=data[12],
+                        char_id=character[0], name=character[1], type_value=character[2],
+                        rarity_value=character[3], card=character[4], thumbnail=character[4], 
+                        health=character[5], ki=character[6], physical=character[7],
+                        ki_power=character[8], armor_fixed=character[9], armor_floating=character[10],
+                        spirit_fixed=character[11], spirit_floating=character[12],
                         ability=ability_set
                     )
 
