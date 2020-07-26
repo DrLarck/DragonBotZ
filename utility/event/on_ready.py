@@ -5,7 +5,7 @@ On client ready event handler
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 26/07/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -46,8 +46,7 @@ class EventOnReady(commands.Cog):
 ##                                    ##
 ###                                  ###
 ########################################
-########################################
-        """)
+########################################""")
 
         return
 
