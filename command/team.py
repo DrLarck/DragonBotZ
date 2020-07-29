@@ -74,6 +74,44 @@ class CommandTeam(commands.Cog):
             success, reason = await player.combat.add_character(unique_id)
 
             await context.send(reason)
+    
+    @commands.check(CommandChecker.game_ready)
+    @commands.check(CommandChecker.register)
+    @team.command()
+    async def remove(self, context, slot=None):
+        """Allow the player to remove a character from his team"""
+
+        player = Player(context, self.client, context.message.author)
+
+        if slot is None:
+            await context.send("You didn't provide any character **slot**, please specify the slot (A, B or C)")
+
+        else:
+            slot = slot.lower()
+
+            # Convert slot
+            if slot == "a":
+                slot = 0
+            
+            elif slot == "b":
+                slot = 1
+            
+            elif slot == "c":
+                slot = 2
+            
+            else:
+                await context.send(f"Slot `{slot}` not recognized")
+                return
+
+            # Check if the slot is occupied in the player's team
+            await player.combat.get_team()
+
+            if slot <= len(player.combat.team) - 1:
+                reason = await player.combat.remove_character(slot)
+                await context.send(reason)
+            
+            else:
+                await context.send("This slot is not occupied in your team")
 
 def setup(client):
     client.add_cog(CommandTeam(client))
