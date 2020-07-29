@@ -42,7 +42,7 @@ class CommandTeam(commands.Cog):
                 await asyncio.sleep(0)
 
                 # If the player has no more fighters
-                if i > len(team_):
+                if i >= len(team_):
                     team_display += f"{letters[i]} : **--**\n"
                 
                 else:
@@ -57,7 +57,23 @@ class CommandTeam(commands.Cog):
         embed.add_field(name="Fighters", value=team_display, inline=False)
 
         await context.send(embed=embed)
+    
+    @commands.check(CommandChecker.game_ready)
+    @commands.check(CommandChecker.register)
+    @team.command()
+    async def add(self, context, unique_id=None):
+        """Allow the player to add a character to his team"""
         
+        player = Player(context, self.client, context.message.author)
+
+        # In case the player didn't provide any unique id to set
+        if unique_id is None:
+            await context.send(":x: You didn't pass any character")
+        
+        else:
+            success, reason = await player.combat.add_character(unique_id)
+
+            await context.send(reason)
 
 def setup(client):
     client.add_cog(CommandTeam(client))
