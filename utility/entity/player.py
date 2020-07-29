@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 22/07/20 by DrLarck
+Last update : 29/07/20 by DrLarck
 """
 
 import asyncio
@@ -572,8 +572,9 @@ class PlayerCombat:
         """
 
         # Public
-        self.player = player
-        self.team   = []
+        self.player         = player
+        self.team           = []
+        self.unique_id_team = []
 
         # Private
         self.__database = self.player.client.database
@@ -596,6 +597,7 @@ class PlayerCombat:
                                                         """, [self.player.id])
 
         player_team = player_team.split()
+        self.unique_id_team = player_team
 
         # Check if the player has a team set up
         if len(player_team) > 0:
@@ -613,3 +615,115 @@ class PlayerCombat:
         self.team = team
 
         return team
+    
+    async def add_character(self, unique_id):
+        """Add a character to the player's team
+
+        --
+
+        @return bool, in case of false, return a reason str too"""
+
+        reason = ""
+        success = False
+        getter = CharacterGetter()
+
+        await self.get_team()
+        new_character = await getter.get_from_unique(self.player.client, self.__database, unique_id)
+
+        # Check if there is a character with the same reference
+        # in the team
+        duplicate = False
+
+        for character in self.team:
+            await asyncio.sleep(0)
+
+            if character.id == new_character.id:
+                duplicate = True
+                break
+        
+        # If duplicate, return false and the reason
+        if duplicate:
+            success = False
+            reason = ":x: There is already a similar character in your team"
+
+            return success, reason
+
+        # If the team is full
+        elif len(self.team) >= 3:
+            success = False
+            reason = ":x: Your team is full"
+
+        # If everything is ok, add the character
+        else:
+            # Retrieve the player's team ids
+            team_id = ""
+            for unique in self.unique_id_team:
+                await asyncio.sleep(0)
+
+                team_id += f"{unique} "
+            
+            # Update the ids
+            team_id += f"{unique_id} "
+
+            # Update the database
+            await self.__database.execute("""
+                                          UPDATE player_combat
+                                          SET player_team = $1
+                                          WHERE player_id = $2;
+                                          """, [team_id, self.player.id])
+
+            success = True
+            reason = f"You've added **{new_character.name}**{new_character.type.icon} lv.**{new_character.level}** in your team !"
+
+            return success, reason
+    
+    async def remove_character(self, slot):
+        """Remove a character from the player's team
+
+        --
+
+        @return str"""
+
+        reason = ""
+        getter = CharacterGetter()
+
+        # Check if the character is in the player's team
+        await self.get_team()
+        
+        # Get the unique id of the character
+        unique_id = self.unique_id_team[slot]
+
+        is_in = False
+        for unique in self.unique_id_team:
+            await asyncio.sleep(0)
+
+            if unique == unique_id:
+                is_in = True
+                break
+        
+        if is_in:
+            # Get the character
+            character = await getter.get_from_unique(self.player.client, self.__database, unique_id)
+
+            # Remove the character from the team
+            # and get a new string to update the database
+            self.unique_id_team.remove(unique_id)
+            new_team = ""
+
+            for unique in self.unique_id_team:
+                await asyncio.sleep(0)
+
+                new_team += unique + ' '
+            
+            await self.__database.execute("""
+                                          UPDATE player_combat
+                                          SET player_team = $1
+                                          WHERE player_id = $2;
+                                          """, [new_team, self.player.id])
+            
+            reason = f"Successfully removed **{character.name}**{character.type.icon} from your team"
+
+        else:
+            reason = "This character is not in your team"
+
+        return reason
