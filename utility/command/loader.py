@@ -27,7 +27,7 @@ class CommandLoader:
             "command.team",
 
             # Event
-            "utility.event.on_ready", "utility.event.on_error"
+            "utility.event.on_ready"
         ]
 
     async def load_commands(self):
