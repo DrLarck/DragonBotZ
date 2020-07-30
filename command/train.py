@@ -27,11 +27,13 @@ class CommandTrain(commands.Cog):
     @commands.check(CommandChecker.register)
     @commands.check(CommandChecker.not_fighting)
     @commands.check(CommandChecker.has_team)
+    @commands.command()
     async def train(self, context):
         """Allow the player to train his characters"""
 
-        player = Player(context, self.client, context.message.author)
-        cpu    = CPU(context, self.client, context.message.author)
+        player   = Player(context, self.client, context.message.author)
+        cpu      = CPU(context, self.client, context.message.author)
+        cpu.name = "Trainer"
 
         # Set the CPU's team
         opponent_team, level_range = await self.tool.generate_opponent_team(player)
@@ -42,7 +44,7 @@ class CommandTrain(commands.Cog):
 
         # Run the combat
         winner = await combat.run()
-        
+
 
 def setup(client):
     client.add_cog(CommandTrain(client))
