@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 26/07/20 by DrLarck
+Last update : 30/07/20 by DrLarck
 """
 
 import asyncio
@@ -506,6 +506,15 @@ class CharacterGetter:
     __cache_ok = False  # Indicates if the cache has already been filled
 
     # Public
+    async def get_cache_size(self):
+        """Return the cache size
+
+        --
+
+        @return int"""
+
+        return len(self.__cache)
+
     async def set_cache(self, client):
         """
         Set the character cache
