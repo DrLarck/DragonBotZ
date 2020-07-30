@@ -24,10 +24,10 @@ class CommandLoader:
             "command.mod", "command.start", "command.summon",
             "command.profile", "command.inventory", "command.box",
             "command.hourly", "command.daily", "command.status",
-            "command.train"
+            "command.team", "command.train",
 
             # Event
-            "utility.event.on_ready", "utility.event.on_error"
+            "utility.event.on_ready"
         ]
 
     async def load_commands(self):
