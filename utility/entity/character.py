@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 30/07/20 by DrLarck
+Last update : 01/08/20 by DrLarck
 """
 
 import asyncio
@@ -276,19 +276,17 @@ __Spirit__ : **{self.spirit.fixed:,}** | **{self.spirit.floating:,} %** 🏵️
         # Init
         playable = True
 
-        # If the character is not a non playable character
-        if not self.npc:
-            # If the character is stunned
-            if self.posture == 3:
-                playable = False
+        # If the character is stunned
+        if self.posture == 3:
+            playable = False
 
-            # If the character is dead
-            elif self.health.current <= 0:
-                playable = False
+        # If the character is dead
+        elif self.health.current <= 0:
+            playable = False
 
-            # If the character has posture a normal posture
-            else:
-                playable = True
+        # If the character has posture a normal posture
+        else:
+            playable = True
 
         return playable
 

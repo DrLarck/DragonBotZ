@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 30/07/20 by DrLarck"""
+@update 01/08/20 by DrLarck"""
 
 import asyncio
 import random
@@ -52,14 +52,23 @@ class ToolTrain:
         # Generate the opponent team
         # every 50 levels, add a new character in the team
         opponent_number     = int(average_level / 50)
+
+        if opponent_number <= 0:
+            opponent_number = 1
+        
+        elif opponent_number > 3:
+            opponent_number = 3
+            
         existing_characters = await character_getter.get_cache_size()
         existing_characters -= 1
 
         for i in range(opponent_number):
             await asyncio.sleep(0)
 
-            character_id = random.randint(0, existing_characters)
-            character    = await character_getter.get_reference_character(character_id, self.client)
+            character_id  = random.randint(0, existing_characters)
+            character     = await character_getter.get_reference_character(character_id, self.client)
+            character.npc = True
+            await character.init()
 
             opponent_team.append(character)
 
