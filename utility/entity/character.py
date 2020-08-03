@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 01/08/20 by DrLarck
+Last update : 03/08/20 by DrLarck
 """
 
 import asyncio
@@ -640,3 +640,99 @@ class CharacterGetter:
             return copy
 
         return
+
+
+class CharacterExperience:
+
+    def __init__(self, client):
+        self.client     = client
+        self.__database = self.client.database
+    
+    async def add_experience(self, unique_id, amount):
+        """Add experience points to the character
+
+        @param str unique_id
+
+        @param int amount
+
+        --
+
+        @return int or None as new character level"""
+
+        # Get the character's experience
+        get_exp = """SELECT character_experience 
+        FROM character_unique 
+        WHERE charactere_unique_id = $1;"""
+
+        character_exp = await self.__database.fetch_value(get_exp, [unique_id])
+        
+        # Add the amount of exp to the character experience
+        character_exp += amount
+
+        # Check if the character levels up
+        # returns the updated amount of exp
+        # and the nex character level if it has changed
+        character_exp, new_level = await self.level_up(unique_id, character_exp)
+
+        # Update character xp
+        update_exp = """UPDATE character_unique
+        SET character_experience = $1
+        WHERE character_unique_id = $2;"""
+
+        await self.__database.execute(update_exp, [character_exp, unique_id])
+
+        return new_level
+    
+    async def level_up(self, unique_id, experience):
+        """Update the character level according to its current level
+        and the amount of exp that it has
+
+        @param str unique_id
+
+        @param int experience
+
+        --
+
+        @return int new amount of experience"""
+
+        # Level up formula
+        # level 1 character has to collect 100 exp points
+        # to level up to the level 2
+        # the amount of exp needed is increased by 10 % per level
+        # formula is :
+        # next_level : level -> 100 * (1.1) ^ level
+        
+        # Get the character's informations
+        character_level = """SELECT character_level
+        FROM character_unique
+        WHERE character_unique_id = $1;"""
+
+        level = await self.__database.fetch_row(character_level, [unique_id])
+        old_level = level
+
+        # Get the required amount of exp to reach the next level
+        next_level = int(100 * (1.1) ^ level)
+
+        # Check if the character has enough exp to reach the next level
+        # repeat it until the character experience is inferior to the 
+        # next level
+        while experience >= next_level:
+            await asyncio.sleep(0)
+
+            level += 1
+            experience -= next_level
+
+        # Update the character level
+        update_level = """UPDATE character_unique
+        SET character_level = $1
+        WHERE character_unique_id = $2;"""
+
+        await self.__database.execute(update_level, level, unique_id)
+
+        # Check if the character has leveled up
+        new_level = None
+
+        if level != old_level:
+            new_level = level
+
+        return experience, new_level
