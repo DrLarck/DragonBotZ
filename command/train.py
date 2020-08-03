@@ -78,10 +78,10 @@ class CommandTrain(commands.Cog):
                                         
                 # If the character had leveled up
                 if new_level is not None:
-                    exp_message += f":star: **{character_data.name}**{character_data.type.icon} has won **{exp_amount}**xp :star: and reached the level **{new_level:,}**\n"
+                    exp_message += f":star: **{character_data.name}**{character_data.type.icon} has won **{exp_amount:,}**xp and reached the level **{new_level:,}**\n"
                 
                 else:
-                    exp_message += f":star: **{character_data.name}**{character_data.type.icon} has won **{exp_amount}**xp :star:\n"
+                    exp_message += f":star: **{character_data.name}**{character_data.type.icon} has won **{exp_amount:,}**xp\n"
         
             await context.send(exp_message)
 
