@@ -711,7 +711,7 @@ class CharacterExperience:
         old_level = level
 
         # Get the required amount of exp to reach the next level
-        next_level = int(100 * (1.1) ^ level)
+        next_level = int(100 * pow(1.1, level))
 
         # Check if the character has enough exp to reach the next level
         # repeat it until the character experience is inferior to the 
