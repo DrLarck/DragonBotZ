@@ -4,12 +4,13 @@
 
 @author DrLarck
 
-@update 22/07/20 by DrLarck"""
+@update 03/08/20 by DrLarck"""
 
 import random
 import asyncio
 
 from utility.entity.player import Player
+from utility.entity.character import CharacterGetter
 
 
 class CPU(Player):
@@ -36,14 +37,18 @@ class CPU(Player):
 
         @return None"""
 
+        getter = CharacterGetter()
+
         for character in team:
             await asyncio.sleep(0)
 
             # Randomly set the character's level
             character_level = random.randint(level_range[0], level_range[1])
-            character.level = character_level
 
-            # Set the character as npc
+            character = await getter.get_reference_character(character.id, self.client, character_level)
+
+            await character.init()
+
             character.npc = True
 
             # Add the character to the CPU's team
