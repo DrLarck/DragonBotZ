@@ -662,7 +662,7 @@ class CharacterExperience:
         # Get the character's experience
         get_exp = """SELECT character_experience 
         FROM character_unique 
-        WHERE charactere_unique_id = $1;"""
+        WHERE character_unique_id = $1;"""
 
         character_exp = await self.__database.fetch_value(get_exp, [unique_id])
         
