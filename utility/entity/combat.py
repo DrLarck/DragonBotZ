@@ -168,42 +168,52 @@ class Combat:
                                           thumbnail_url=player.avatar, color=player.color)
 
         await self.context.send(embed=embed)
+        await asyncio.sleep(1)
         
         # Run the turn of each character
         for character in player_team:
             await asyncio.sleep(0)
 
-            playable = await character.is_playable()
+            winner_id = await self.__combat_tool.check_alive_team()
 
-            if playable:
-                # Get the move object
-                move = await self.__combat_tool.get_move_by_index(player_index)
-                    
-                if character.npc:
-                    # Special for CPU
-                    move = await player.set_move(character, move)
+            # If both teams are alive
+            if winner_id is None:
+                
+                playable = await character.is_playable()
 
-                # The character is not an npc
-                else:
-                    # Get character card display
-                    card = await character.get_combat_card(self.client, player_index)
-                    await self.context.send(embed=card)
-                    await asyncio.sleep(1)
+                if playable:
+                    # Get the move object
+                    move = await self.__combat_tool.get_move_by_index(player_index)
+                        
+                    if character.npc:
+                        # Special for CPU
+                        move = await player.set_move(character, move)
 
-                    # Get the player's move
-                    await move.get_move(character)
-                    await asyncio.sleep(1)
+                    # The character is not an npc
+                    else:
+                        # Get character card display
+                        card = await character.get_combat_card(self.client, player_index)
+                        await self.context.send(embed=card)
+                        await asyncio.sleep(1)
 
-                # Check if the player decided to flee the combat
-                if move.index is None:
-                    return None
+                        # Get the player's move
+                        await move.get_move(character)
+                        await asyncio.sleep(1)
 
-                # Otherwise, use the ability
-                else:
-                    ability = character.ability[move.index]
-                    await move.use_ability(player, character, ability, player_team, enemy_team)
-                    await asyncio.sleep(1)
-        
+                    # Check if the player decided to flee the combat
+                    if move.index is None:
+                        return None
+
+                    # Otherwise, use the ability
+                    else:
+                        ability = character.ability[move.index]
+                        await move.use_ability(player, character, ability, player_team, enemy_team)
+                        await asyncio.sleep(1)
+            
+            # If one team has been defeated
+            else:
+                pass
+
         return move.index
 
 
