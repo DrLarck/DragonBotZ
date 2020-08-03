@@ -5,7 +5,7 @@ Represents the combat object
 
 Author : DrLarck
 
-Last update : 22/07/20 by DrLarck
+Last update : 03/08/20 by DrLarck
 """
 
 import random
@@ -83,6 +83,7 @@ class Combat:
 
             # Send the turn id
             await self.context.send(f"📣 ROUND {turn} !")
+            await asyncio.sleep(1)
 
             # Run the turn of each player
             players = [0, 1]  # Player index
@@ -187,9 +188,11 @@ class Combat:
                     # Get character card display
                     card = await character.get_combat_card(self.client, player_index)
                     await self.context.send(embed=card)
+                    await asyncio.sleep(1)
 
                     # Get the player's move
                     await move.get_move(character)
+                    await asyncio.sleep(1)
 
                 # Check if the player decided to flee the combat
                 if move.index is None:
@@ -199,6 +202,7 @@ class Combat:
                 else:
                     ability = character.ability[move.index]
                     await move.use_ability(player, character, ability, player_team, enemy_team)
+                    await asyncio.sleep(1)
         
         return move.index
 
