@@ -716,7 +716,7 @@ class CharacterExperience:
         # Check if the character has enough exp to reach the next level
         # repeat it until the character experience is inferior to the 
         # next level
-        while experience >= next_level:
+        while experience >= next_level and level < 150:
             await asyncio.sleep(0)
 
             level += 1
@@ -727,7 +727,7 @@ class CharacterExperience:
         SET character_level = $1
         WHERE character_unique_id = $2;"""
 
-        await self.__database.execute(update_level, level, unique_id)
+        await self.__database.execute(update_level, [level, unique_id])
 
         # Check if the character has leveled up
         new_level = None
