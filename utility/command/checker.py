@@ -5,7 +5,7 @@ Command checker
 
 Author : DrLarck
 
-Last update : 18/07/20 by DrLarck
+Last update : 30/07/20 by DrLarck
 """
 
 from discord.channel import DMChannel
@@ -141,4 +141,26 @@ class CommandChecker:
         
         else:
             await context.send(f":x: {player.name} You're already in a fight")
+            return False
+    
+    @staticmethod
+    async def has_team(context):
+        """Check if the player has set up a team
+
+        @param context discord.ext.commands.Context
+
+        --
+
+        @return bool"""
+
+        client = context.bot
+        player = Player(context, client, context.message.author)
+
+        team = await player.combat.get_team()
+
+        # Check if the player has set a team
+        if len(team) > 0:
+            return True
+        
+        else:
             return False
