@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 01/08/20 by DrLarck"""
+@update 03/08/20 by DrLarck"""
 
 import asyncio
 import random
@@ -73,3 +73,22 @@ class ToolTrain:
             opponent_team.append(character)
 
         return opponent_team, level_range
+
+    async def generate_exp_reward(self, base_reward, character_level):
+        """Generate a fair exp reward for the character
+
+        @param int base_reward 
+
+        @param int character_level
+
+        --
+
+        @return int"""
+
+        exp_reward = base_reward
+        
+        if character_level > 1:
+            exp_reward *= pow(1.08, character_level)
+            exp_reward = int(exp_reward)
+
+        return exp_reward
