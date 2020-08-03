@@ -707,7 +707,7 @@ class CharacterExperience:
         FROM character_unique
         WHERE character_unique_id = $1;"""
 
-        level = await self.__database.fetch_row(character_level, [unique_id])
+        level = await self.__database.fetch_value(character_level, [unique_id])
         old_level = level
 
         # Get the required amount of exp to reach the next level
