@@ -561,11 +561,14 @@ class CharacterGetter:
 
         return
 
-    async def get_reference_character(self, reference, client):
+    async def get_reference_character(self, reference, client, level=1):
         """
         Get a base character
 
         :param reference: (`int`)
+
+        @param int level
+
         @param object discord.ext.commands.Bot client
 
         --
@@ -578,7 +581,7 @@ class CharacterGetter:
             char = self.__cache[reference - 1]
 
             copy = await Character(client).generate(
-                char_id=char.id, name=char.name, card=char.image.card,
+                char_id=char.id, level=level, name=char.name, card=char.image.card,
                 thumbnail=char.image.thumbnail, type_value=char.type.value,
                 rarity_value=char.rarity.value, health=char.health.maximum,
                 ki=char.ki.maximum, physical=char.damage.physical, ki_power=char.damage.ki,
