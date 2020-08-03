@@ -55,6 +55,8 @@ class CommandTrain(commands.Cog):
         # Display the winner name
         message = f"🏆 **{winner.name}** has won the fight ! "
 
+        await context.send(message)
+
         # If the winner is a player, grant xp to his team
         if winner is player:
             exp_message   = ""
@@ -81,7 +83,7 @@ class CommandTrain(commands.Cog):
                 else:
                     exp_message += f":star: **{character_data.name}**{character_data.type.icon} has won **{exp_amount}**xp :star:\n"
         
-        await context.send(exp_message)
+            await context.send(exp_message)
 
 
 def setup(client):
