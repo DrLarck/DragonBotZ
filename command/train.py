@@ -67,14 +67,15 @@ class CommandTrain(commands.Cog):
             for character in unique_ids:
                 await asyncio.sleep(0)
 
+                # Get the character's data
+                character_data = await charar_getter.get_from_unique(self.client, self.client.database, character)
+
                 # Generate an exp amount
                 exp_amount = random.randint(int(self.reward_experience * 0.75), self.reward_experience)
+                exp_amount = await self.tool.generate_exp_reward(exp_amount, character_data.level)
                 
                 # Add exp to the character and check if it leveled up
                 new_level = await exp_manager.add_experience(character, exp_amount)
-
-                # Get the character's data
-                character_data = await charar_getter.get_from_unique(self.client, self.client.database, character)
                                         
                 # If the character had leveled up
                 if new_level is not None:
