@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 18/07/20 by DrLarck
+Last update : 04/08/20 by DrLarck
 """
 
 import asyncio
@@ -376,6 +376,25 @@ class Database:
                 ki_regen INTEGER DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS ability_reference ON character_ability(reference);
+            """,
+
+            """
+            CREATE SEQUENCE IF NOT EXISTS mission_reference_seq;
+            CREATE TABLE IF NOT EXISTS mission(
+                reference BIGINT PRIMARY KEY DEFAULT nextval('mission_reference_seq') NOT NULL,
+                name TEXT NOT NULL,
+                description TEXT,
+
+                difficulty INTEGER DEFAULT 1,
+
+                opponent_reference TEXT NOT NULL,
+                opponent_level BIGINT DEFAULT 1,
+
+                reward_exp BIGINT,
+                reward_zenis BIGINT,
+                reward_dragonstone BIGINT,
+                reward_capsule_reference BIGINT
+            );
             """
         ]
 
