@@ -8,12 +8,17 @@
 
 import asyncio
 
-from utility.entity.character import CharacterGetter
+# util
+from utility.entity.character import CharacterGetter, CharacterExperience
+from utility.entity.capsule import Capsule
+from utility.graphic.icon import GameIcon
 
 
 class Mission:
 
-    def __init__(self):
+    def __init__(self, client):
+        self.client = client
+
         self.reference    = 0
         self.name         = ""
         self.description  = ""
@@ -26,6 +31,73 @@ class Mission:
         self.zenis       = None
         self.dragonstone = None
         self.capsule     = None
+    
+    async def send_rewards(self, context, player):
+        """Send the mission rewards to the player
+
+        @param discord.ext.commands.Context context
+
+        @param Player player
+
+        --
+
+        @return str"""
+
+        rewards = ""
+        character_exp = CharacterExperience(self.client)
+        icon = GameIcon()
+
+        # Reducing the reward according to the player's team level
+        average_level    = await player.combat.get_average_team_level()
+        reward_reduction = 1  # If it reaches 0, the player doesn't get anything
+
+        # Every 5 level gap, reduce the rewards by 25 % (reward_reduction - 0.25)
+        gap = average_level - self.opponent_lvl
+
+        if gap > 0:
+            # Reduce the rewards by 25 % every 5 lvl gap
+            reward_reduction -= 0.25 * int(gap / 5)
+
+            if reward_reduction < 0:
+                reward_reduction = 0
+        
+        # Update rewards
+        self.experience  = int(self.experience * reward_reduction)
+        self.zenis       = int(self.zenis * reward_reduction)
+        self.dragonstone = int(self.dragonstone * reward_reduction)
+
+        if reward_reduction == 0:
+            self.capsule = None
+        
+        # Add xp to the player's characters
+        if self.experience is not None:
+            rewards += f"**{self.experience:,}**xp | "
+
+            player_team = player.combat.unique_id_team
+            for character in player_team:
+                await asyncio.sleep(0)
+
+                await character_exp.add_experience(character, self.experience)
+        
+        if self.dragonstone is not None:
+            rewards += f"**{self.dragonstone:,}** {icon.dragonstone} | "
+
+            await player.resource.add_dragonstone(self.dragonstone)
+
+        if self.zenis is not None:
+            rewards += f"**{self.zenis:,}** {icon.zeni} | "
+
+            await player.resource.add_zeni(self.zenis)
+
+        if self.capsule is not None:
+            capsule = Capsule(context, self.client, player)
+            capsule = await capsule.get_capsule_by_reference(self.capsule)
+
+            rewards += f"**{capsule.name}** {capsule.icon}"
+
+            await player.item.add_capsule(self.capsule)
+
+        return rewards
 
 
 class MissionGetter:
@@ -68,7 +140,7 @@ class MissionGetter:
         for mission in missions:
             await asyncio.sleep(0)
 
-            mission_obj = Mission()
+            mission_obj = Mission(client)
 
             mission_obj.reference   = mission[0]
             mission_obj.name        = mission[1]
@@ -115,7 +187,7 @@ class MissionGetter:
         @return object Mission or None if not found"""
 
         mission = None
-
+        reference = int(reference)
         reference -= 1
 
         if reference < 0:
