@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 22/07/20 by DrLarck
+Last update : 07/08/20 by DrLarck
 """
 
 import asyncio
@@ -161,7 +161,7 @@ class ToolBox:
 
         # If the player doesn't have any character
         else:
-            await self.context("You do not have any character")
+            await self.context.send("You do not have any character")
 
         return
 
