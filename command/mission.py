@@ -11,6 +11,7 @@ from discord.ext import commands
 # util
 from utility.command.checker import CommandChecker
 from utility.command.tool.tool_mission import ToolMission
+from utility.entity.player import Player
 
 
 class CommandMission(commands.Cog):
@@ -24,9 +25,10 @@ class CommandMission(commands.Cog):
     async def mission(self, context):
         """Allow the player to display a list of available missions"""
 
-        tool = ToolMission(self.client, context)
+        tool   = ToolMission(self.client, context)
+        player = Player(context, self.client, context.message.author)
 
-        await tool.mission_manager()
+        await tool.mission_manager(player)
         
 
 def setup(client):
