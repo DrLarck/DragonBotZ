@@ -5,7 +5,7 @@ Command loader
 
 Author : DrLarck
 
-Last update : 30/07/20 by DrLarck
+Last update : 07/08/20 by DrLarck
 """
 
 import asyncio
@@ -24,7 +24,7 @@ class CommandLoader:
             "command.mod", "command.start", "command.summon",
             "command.profile", "command.inventory", "command.box",
             "command.hourly", "command.daily", "command.status",
-            "command.team", "command.train",
+            "command.team", "command.train", "command.mission",
 
             # Event
             "utility.event.on_ready"
