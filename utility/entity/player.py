@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 29/07/20 by DrLarck
+Last update : 07/08/20 by DrLarck
 """
 
 import asyncio
@@ -430,7 +430,7 @@ class PlayerItem:
 
     async def add_capsule(self, rarity):
         """
-        Add a capsule into the player's inventory
+        Add a capsule into the plaFyer's inventory
 
         :param rarity: (`int`)
 
@@ -727,3 +727,23 @@ class PlayerCombat:
             reason = "This character is not in your team"
 
         return reason
+    
+    async def get_average_team_level(self):
+        """Returns the average player's team level
+
+        --
+
+        @return int"""
+
+        average_level = 0
+        
+        for character in self.team:
+            await asyncio.sleep(0)
+
+            average_level += character.level
+        
+        average_level = int(
+            average_level / len(self.team)
+        )
+
+        return average_level
