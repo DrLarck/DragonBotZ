@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 03/08/20 by DrLarck
+Last update : 04/08/20 by DrLarck
 """
 
 import asyncio
@@ -724,6 +724,9 @@ class CharacterExperience:
 
             level += 1
             experience -= next_level
+
+            # Get the required amount of exp to reach the next level
+            next_level = int(100 * pow(1.1, level))
 
         # Update the character level
         update_level = """UPDATE character_unique
