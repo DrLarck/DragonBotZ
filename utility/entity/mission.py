@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 04/08/20 by DrLarck"""
+@update 07/08/20 by DrLarck"""
 
 import asyncio
 
@@ -127,3 +127,12 @@ class MissionGetter:
         mission = self.__cache[reference]
 
         return mission
+    
+    async def get_all_missions(self):
+        """Return the mission cache
+
+        --
+
+        @return Mission list"""
+
+        return self.__cache
