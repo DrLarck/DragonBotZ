@@ -85,6 +85,7 @@ class MissionGetter:
             for enemy in opponents:
                 await asyncio.sleep(0)
 
+                enemy = int(enemy)
                 new_opponent = await char_getter.get_reference_character(
                     enemy, client, level=opponent_lvl
                 )

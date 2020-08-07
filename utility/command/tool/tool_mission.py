@@ -48,7 +48,7 @@ class ToolMission:
 
             while not stop:
                 # Get the page
-                page = await self.get_mission_page(1)
+                page = await self.get_mission_page(page_id)
 
                 # Display the page
                 current_display = await self.context.send(embed=page)
