@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 07/08/20 by DrLarck
+Last update : 12/08/20 by DrLarck
 """
 
 import asyncio
@@ -109,6 +109,8 @@ class ToolBox:
             page_id = 1
 
             while not stop:
+                await asyncio.sleep(0)
+
                 # Display the box page from the page 1
                 # Normal box
                 if not unique:
