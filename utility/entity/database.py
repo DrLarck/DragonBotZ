@@ -400,6 +400,7 @@ class Database:
             # Shop table
             """
             CREATE TABLE IF NOT EXISTS shop_character(
+                character_reference BIGINT NOT NULL,
                 character_unique_id TEXT NOT NULL,
                 character_owner_id BIGINT NOT NULL,
 
