@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 08/08/20 by DrLarck"""
+@update 12/08/20 by DrLarck"""
 
 import asyncio
 
@@ -50,6 +50,8 @@ class ToolMission:
             page_id = 1
 
             while not stop:
+                await asyncio.sleep(0)
+
                 # Get the page
                 page = await self.get_mission_page(page_id)
 
