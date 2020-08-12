@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 04/08/20 by DrLarck
+Last update : 12/08/20 by DrLarck
 """
 
 import asyncio
@@ -395,6 +395,20 @@ class Database:
                 reward_dragonstone BIGINT,
                 reward_capsule_reference BIGINT
             );
+            """,
+
+            # Shop table
+            """
+            CREATE TABLE IF NOT EXISTS shop_character(
+                character_unique_id TEXT NOT NULL,
+                character_owner_id BIGINT NOT NULL,
+
+                character_price BIGINT DEFAULT 1,
+
+                character_on_sale_at BIGINT NOT NULL
+            );
+
+            CREATE UNIQUE INDEX IF NOT EXISTS character_unique_id ON shop_character(character_unique_id);
             """
         ]
 
