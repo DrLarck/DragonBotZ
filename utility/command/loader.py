@@ -21,6 +21,7 @@ class CommandLoader:
         # List of commands to load
         self.__command = [
             # Command
+            "command.help",
             "command.mod", "command.start", "command.summon",
             "command.profile", "command.inventory", "command.box",
             "command.hourly", "command.daily", "command.status",

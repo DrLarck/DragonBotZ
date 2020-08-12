@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 07/08/20 by DrLarck"""
+@update 08/08/20 by DrLarck"""
 
 import asyncio
 
@@ -91,7 +91,7 @@ class ToolMission:
                     break
             
             else:
-                await self.context.send("None mission available")
+                await self.context.send(":x: None mission available")
 
         return
     
