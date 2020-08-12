@@ -122,6 +122,29 @@ class HelpProfile(Help):
         self.description = "Displays your profile, which contains informations about you"
 
 
+# HELP SHOP
+class HelpShop(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop"
+        self.invoke = "shop"
+        self.description = "Displays shop help"
+
+        self.subcommand = [SubShopCharacter()]
+
+
+class SubShopCharacter(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop character"
+        self.invoke = "shop character <reference>"
+        self.description = "Displays the on sale characters according to the passed reference"
+
+
 # HELP START
 class HelpStart(Help):
 
@@ -217,8 +240,9 @@ class ToolHelp:
     
     __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
-                          HelpProfile(), HelpStart(), HelpStatus(),
-                          HelpSummon(), HelpTeam(), HelpTrain()]
+                          HelpProfile(),HelpShop(), HelpStart(), 
+                          HelpStatus(), HelpSummon(), HelpTeam(), 
+                          HelpTrain()]
     __total_page       = 0
     __display_per_page = 5
     
@@ -254,6 +278,8 @@ class ToolHelp:
             stop    = False
             page_id = 1
             while not stop:
+                await asyncio.sleep(0)
+                
                 page = await self.get_help_page(page_id, data)
 
                 current_page = await self.context.send(embed=page)
