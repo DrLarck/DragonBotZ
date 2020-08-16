@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 12/08/20 by DrLarck"""
+@update 16/08/20 by DrLarck"""
 
 import asyncio
 
@@ -132,7 +132,7 @@ class HelpShop(Help):
         self.invoke = "shop"
         self.description = "Displays shop help"
 
-        self.subcommand = [SubShopCharacter()]
+        self.subcommand = [SubShopCharacter(), SubShopSell()]
 
 
 class SubShopCharacter(Help):
@@ -144,6 +144,26 @@ class SubShopCharacter(Help):
         self.invoke = "shop character <reference>"
         self.description = "Displays the on sale characters according to the passed reference"
 
+
+class SubShopSell(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop sell"
+        self.invoke = "shop sell <character/item> <unique id> <price>"
+        self.description = "Allows you to sell an object to other players through the shop"
+
+
+class SubShopBuy(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop buy"
+        self.invoke = "shop buy <character/item> <unique id>"
+        self.description = "Allows you to buy an object from the shop"
+    
 
 # HELP START
 class HelpStart(Help):
@@ -240,7 +260,7 @@ class ToolHelp:
     
     __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
-                          HelpProfile(),HelpShop(), HelpStart(), 
+                          HelpProfile(), HelpShop(), HelpStart(), 
                           HelpStatus(), HelpSummon(), HelpTeam(), 
                           HelpTrain()]
     __total_page       = 0
