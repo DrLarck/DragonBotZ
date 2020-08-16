@@ -5,9 +5,10 @@ Player object
 
 Author : DrLarck
 
-Last update : 07/08/20 by DrLarck
+Last update : 16/08/20 by DrLarck
 """
 
+import discord
 import asyncio
 
 # util
@@ -37,6 +38,53 @@ class Player:
         self.time = PlayerTime(self)
 
         self.combat = PlayerCombat(self)
+    
+    async def send_dm(self, message):
+        """Send a DM to the user
+
+        @param str message
+
+        --
+
+        @return None"""
+
+        user = self.client.get_user(self.id)
+
+        if user is not None:
+            try:
+                await user.send(message)
+            
+            except discord.Forbidden:
+                print(f"Failed to DM {self.name} : Forbiddent")
+                pass
+
+            except discord.HTTPException:
+                print(f"Failed to DM {self.name} : Fail")
+                pass
+                
+            else:
+                pass
+
+        return
+
+    async def get_player_from_id(self, player_id):
+        """Set the Player object according to the passed player_id
+
+        @param int player_id
+
+        --
+
+        @return Player or None if not found"""
+
+        # Retrieve the discord user
+        user = self.client.get_user(player_id)
+
+        if user is not None:
+            new_player = Player(self.context, self.client, user)
+            return new_player
+        
+        else:
+            return None
 
 
 class PlayerResource:
@@ -563,6 +611,28 @@ class PlayerItem:
 
         return
 
+    async def has_character(self, unique_id):
+        """Return true if the player has the passed character
+
+        @param str unique_id
+
+        --
+
+        @return bool"""
+
+        has_it = False
+
+        character = await self.__database.fetch_value("""
+                                                      SELECT character_unique_id 
+                                                      FROM character_unique 
+                                                      WHERE character_owner_id = $1;
+                                                      """, [self.player.id])
+
+        if character is not None:
+            has_it = True                                            
+
+        return has_it
+
 
 class PlayerCombat:
 
@@ -616,8 +686,12 @@ class PlayerCombat:
 
         return team
     
-    async def add_character(self, unique_id):
+    async def add_character(self, unique_id, tool_shop):
         """Add a character to the player's team
+
+        @param str unique_id 
+
+        @param ToolShop tool_shop
 
         --
 
@@ -629,6 +703,10 @@ class PlayerCombat:
 
         await self.get_team()
         new_character = await getter.get_from_unique(self.player.client, self.__database, unique_id)
+
+        # Check if the character is on sale
+        shop_tool = tool_shop
+        on_sale = await shop_tool.find_character(unique_id)
 
         # Check if there is a character with the same reference
         # in the team
@@ -652,6 +730,10 @@ class PlayerCombat:
         elif len(self.team) >= 3:
             success = False
             reason = ":x: Your team is full"
+        
+        elif on_sale:
+            success = False
+            reason = ":x: This character is currently on sale"
 
         # If everything is ok, add the character
         else:
@@ -677,6 +759,38 @@ class PlayerCombat:
 
             return success, reason
     
+    async def get_fighter_slot_by_id(self, unique_id):
+        """Return the character's slot index according to the unique_id
+
+        @param str unique_id
+
+        --
+
+        @return int or None"""
+
+        await self.get_team()
+
+        slot = None
+
+        # Check if the character is in the player's team
+        is_in = False
+        if unique_id in self.unique_id_team:
+            is_in = True
+        
+        # Get the character's slot index
+        if is_in:
+            index = 0
+            for character in self.unique_id_team:
+                await asyncio.sleep(0)
+
+                if character == unique_id:
+                    slot = index
+                    break
+
+                index += 1
+
+        return slot
+
     async def remove_character(self, slot):
         """Remove a character from the player's team
 
