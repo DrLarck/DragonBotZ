@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 12/08/20 by DrLarck"""
+@update 16/08/20 by DrLarck"""
 
 import asyncio
 
@@ -122,6 +122,49 @@ class HelpProfile(Help):
         self.description = "Displays your profile, which contains informations about you"
 
 
+# HELP SHOP
+class HelpShop(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop"
+        self.invoke = "shop"
+        self.description = "Displays shop help"
+
+        self.subcommand = [SubShopCharacter(), SubShopBuy(), SubShopSell()]
+
+
+class SubShopCharacter(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop character"
+        self.invoke = "shop character <reference>"
+        self.description = "Displays the on sale characters according to the passed reference"
+
+
+class SubShopSell(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop sell"
+        self.invoke = "shop sell <character/item> <unique id> <price>"
+        self.description = "Allows you to sell an object to other players through the shop"
+
+
+class SubShopBuy(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Shop buy"
+        self.invoke = "shop buy <character/item> <unique id>"
+        self.description = "Allows you to buy an object from the shop"
+    
+
 # HELP START
 class HelpStart(Help):
 
@@ -217,8 +260,9 @@ class ToolHelp:
     
     __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
-                          HelpProfile(), HelpStart(), HelpStatus(),
-                          HelpSummon(), HelpTeam(), HelpTrain()]
+                          HelpProfile(), HelpShop(), HelpStart(), 
+                          HelpStatus(), HelpSummon(), HelpTeam(), 
+                          HelpTrain()]
     __total_page       = 0
     __display_per_page = 5
     
@@ -254,6 +298,8 @@ class ToolHelp:
             stop    = False
             page_id = 1
             while not stop:
+                await asyncio.sleep(0)
+                
                 page = await self.get_help_page(page_id, data)
 
                 current_page = await self.context.send(embed=page)
