@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 15/08/20 by DrLarck"""
+@update 16/08/20 by DrLarck"""
 
 from discord.ext import commands
 
@@ -43,6 +43,21 @@ class CommandShop(commands.Cog):
 
         await tool.shop_manager(player, character_id=character_id)
     
+    @commands.check(CommandChecker.game_ready)
+    @commands.check(CommandChecker.register)
+    @shop.command()
+    async def sell(self, context, type_, unique_id, price: int):
+        """Allows the player to sell an item"""
+
+        player = Player(context, self.client, context.message.author)
+        tool   = ToolShop(self.client, context)
+
+        if type_.lower() == "character":
+            await tool.add_character(player, unique_id, price)
+
+        else:
+            await context.send(":x: Unrecognized item type")
+
     # Shop interaction
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
@@ -52,12 +67,12 @@ class CommandShop(commands.Cog):
         
         Available type_ : 'character'"""
 
-        tool = ToolShop(self.client, context)
+        tool  = ToolShop(self.client, context)
+        buyer = Player(context, self.client, context.message.author)
 
         # If the player didn't pass any type, display the help
         if type_ is None:
-            player = Player(context, self.client, context.message.author)
-            help = ToolHelp(self.client, context, player)
+            help = ToolHelp(self.client, context, buyer)
 
             await context.send(embed=await help.get_detailed_help_for(1, "shop"))
             return
@@ -68,8 +83,7 @@ class CommandShop(commands.Cog):
 
         # Player asked to buy a character
         if type_.lower() == "character":
-            char = await tool.find_character(object_id)
-            print(char)
+            await tool.buy_character(buyer, object_id)
 
         # Type not found
         else:
