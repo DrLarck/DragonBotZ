@@ -132,7 +132,7 @@ class HelpShop(Help):
         self.invoke = "shop"
         self.description = "Displays shop help"
 
-        self.subcommand = [SubShopCharacter(), SubShopSell()]
+        self.subcommand = [SubShopCharacter(), SubShopBuy(), SubShopSell()]
 
 
 class SubShopCharacter(Help):
