@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 29/07/20 by DrLarck"""
+@update 16/08/20 by DrLarck"""
 
 import asyncio
 
@@ -12,6 +12,7 @@ from discord.ext import commands
 from utility.command.checker import CommandChecker
 from utility.entity.player import Player
 from utility.graphic.embed import CustomEmbed
+from utility.command.tool.tool_shop import ToolShop
 
 
 class CommandTeam(commands.Cog):
@@ -65,13 +66,14 @@ class CommandTeam(commands.Cog):
         """Allow the player to add a character to his team"""
         
         player = Player(context, self.client, context.message.author)
+        shop_tool = ToolShop(self.client, context)
 
         # In case the player didn't provide any unique id to set
         if unique_id is None:
             await context.send(":x: You didn't pass any character")
         
         else:
-            success, reason = await player.combat.add_character(unique_id)
+            success, reason = await player.combat.add_character(unique_id, shop_tool)
 
             await context.send(reason)
     
