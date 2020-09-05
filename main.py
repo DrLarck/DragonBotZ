@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 04/09/20 by DrLarck
+Last update : 05/09/20 by DrLarck
 """
 
 import logging
@@ -58,7 +58,9 @@ class Main:
         # Set the patreon attribute for client
         client.patreon = Patreon()
         client.loop.run_until_complete(client.patreon.init(os.environ["dbz_patreon_access_token"]))
-        client.loop.run_until_complete(client.patreon.get_all_patrons())
+        
+        print("Fetching patrons ...")
+        patrons = client.loop.run_until_complete(client.patreon.get_all_patrons())
 
         # Create the logger attribute for the client
         client.logger = CommandLogger(client)
