@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 03/08/20 by DrLarck"""
+@update 06/09/20 by DrLarck"""
 
 import asyncio
 import random
@@ -19,13 +19,15 @@ from utility.entity.player import Player
 from utility.entity.CPU import CPU
 from utility.entity.combat import Combat
 from utility.entity.character import CharacterGetter, CharacterExperience
+from utility.global_tool import GlobalTool
 
 
 class CommandTrain(commands.Cog):
 
     def __init__(self, client):
-        self.client = client
-        self.tool   = ToolTrain(self.client)
+        self.client      = client
+        self.tool        = ToolTrain(self.client)
+        self.global_tool = GlobalTool()
 
         # Rewards
         self.reward_experience = 45
@@ -39,6 +41,7 @@ class CommandTrain(commands.Cog):
         """Allow the player to train his characters"""
 
         player   = Player(context, self.client, context.message.author)
+        premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         cpu      = CPU(context, self.client, context.message.author)
         cpu.name = "Trainer"
 
@@ -72,7 +75,7 @@ class CommandTrain(commands.Cog):
 
                 # Generate an exp amount
                 exp_amount = random.randint(int(self.reward_experience * 0.75), self.reward_experience)
-                exp_amount = await self.tool.generate_exp_reward(exp_amount, character_data.level)
+                exp_amount = int(await self.tool.generate_exp_reward(exp_amount, character_data.level) * premium_bonus)
                 
                 # Add exp to the character and check if it leveled up
                 new_level = await exp_manager.add_experience(character, exp_amount)
