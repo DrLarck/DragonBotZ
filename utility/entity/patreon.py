@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 04/09/20 by DrLarck"""
+@update 05/09/20 by DrLarck"""
 
 import patreon
 import os
@@ -82,8 +82,10 @@ class Patreon:
         for pledger in all_pledgers:
             await asyncio.sleep(0)
 
-            reward_tier = 0
-            total_paid  = 0
+            payment      = 0
+            total_paid   = 0
+            is_declined  = False
+            pledger_tier = 0
 
             # Get the date of declined pledge
             # False if the pledge has not been declined
@@ -95,8 +97,42 @@ class Patreon:
 
             # Get the reward tier of the player
             if pledger.relationships()["reward"]["data"]:
-                reward_tier = int(pledger.relationship("reward").attribute("amount_cents") / 100)
+                payment = int(pledger.relationship("reward").attribute("amount_cents") / 100)
+            
+            # Find the tier index
+            if payment <= 2.5:
+                pledger_tier = 1
+            
+            elif payment > 2.5 and payment <= 4:
+                pledger_tier = 2
+            
+            elif payment > 4 and payment <= 6:
+                pledger_tier = 3
+            
+            elif payment > 6 and payment <= 10:
+                pledger_tier = 4
+            
+            elif payment > 10 and payment <= 20:
+                pledger_tier = 5
+            
+            elif payment > 20 and payment <= 50:
+                pledger_tier = 6
+            
+            elif payment > 50:
+                pledger_tier = 7
 
-            print(pledger.relationship("patron").attribute("first_name"), reward_tier, declined_since, total_paid)
+            # Check if the patron has declined his pledge
+            if declined_since is not None:
+                is_declined = True
+
+            # Add patron data to the patrons list
+            patrons.append(
+                {
+                    "name": pledger.relationship("patron").attribute("first_name"),
+                    "tier": pledger_tier,
+                    "declined": is_declined,
+                    "total": total_paid
+                }
+            )
 
         return patrons
