@@ -93,7 +93,7 @@ class Patreon:
             total_paid     = pledger.attribute("total_historical_amount_cents") / 100
 
             # Get the pledger's discord ID
-            pledger_id = pledger.relationship("patron").attribute("social_connections")["discord"]["user_id"]
+            discord_id = pledger.relationship("patron").attribute("social_connections")["discord"]["user_id"]
 
             # Get the reward tier of the player
             if pledger.relationships()["reward"]["data"]:
@@ -130,8 +130,10 @@ class Patreon:
                 {
                     "name": pledger.relationship("patron").attribute("first_name"),
                     "tier": pledger_tier,
+                    "payment": payment,
                     "declined": is_declined,
-                    "total": total_paid
+                    "total": total_paid,
+                    "discord_id": discord_id
                 }
             )
 
