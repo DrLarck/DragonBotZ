@@ -5,11 +5,12 @@ Player object
 
 Author : DrLarck
 
-Last update : 16/08/20 by DrLarck
+Last update : 05/09/20 by DrLarck
 """
 
 import discord
 import asyncio
+import time
 
 # util
 from utility.entity.character import CharacterGetter
@@ -85,6 +86,43 @@ class Player:
         
         else:
             return None
+    
+    async def get_premium_data(self):
+        """Returns the player's premium info
+
+        --
+
+        @return dict : keys
+        {'premium': bool, 'tier': int, 'total_month': int}"""
+        
+        # Init
+        premium = False
+        tier    = 0
+        total   = 0
+
+        data = await self.client.database.fetch_row("""
+                                                    SELECT player_premium_until, player_premium_tier, player_premium_total_month
+                                                    FROM player_info
+                                                    WHERE player_id = $1;
+                                                    """, [self.id])
+
+        now = time.time()
+
+        # If the player is premium
+        if data[0] > now:
+            premium = True
+
+        tier  = data[1]
+        total = data[2] 
+
+        # Make dict
+        premium_data = {
+            "premium": premium,
+            "tier": tier,
+            "total_month": total
+        }
+
+        return premium_data
 
 
 class PlayerResource:
