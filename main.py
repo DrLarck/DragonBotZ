@@ -56,11 +56,9 @@ class Main:
         client.database = Database()
 
         # Set the patreon attribute for client
-        client.patreon = Patreon()
+        client.patreon = Patreon(client.database)
         client.loop.run_until_complete(client.patreon.init(os.environ["dbz_patreon_access_token"]))
-        
-        print("Fetching patrons ...")
-        patrons = client.loop.run_until_complete(client.patreon.get_all_patrons())
+        client.loop.run_until_complete(client.patreon.set_premium())
 
         # Create the logger attribute for the client
         client.logger = CommandLogger(client)
