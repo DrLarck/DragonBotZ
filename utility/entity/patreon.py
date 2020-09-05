@@ -172,6 +172,21 @@ class Patreon:
                                     WHERE player_id = $4;
                                     """, [new, new_pledge_tier, 
                                           total_month, patron["discord_id"]])
+        
+        # Check if the premium since is filled
+        # if not, fill it with the current time
+        premium_since = await self.database.fetch_value("""
+                                                        SELECT player_premium_since
+                                                        FROM player_info
+                                                        WHERE player_id = $1;
+                                                        """, [patron["discord_id"]])                                                   
+        
+        if premium_since is None or premium_since == 0:
+            await self.database.execute("""
+                                        UPDATE player_info
+                                        SET player_premium_since = $1
+                                        WHERE player_id = $2;                                                
+                                        """, [now, patron["discord_id"]])
 
         return
     
