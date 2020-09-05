@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 16/08/20 by DrLarck
+Last update : 05/09/20 by DrLarck
 """
 
 import logging
@@ -23,6 +23,7 @@ from utility.command.loader import CommandLoader
 from utility.entity.character import CharacterGetter
 from utility.entity.banner import BannerGetter
 from utility.entity.mission import MissionGetter
+from utility.entity.patreon import Patreon
 
 
 class Main:
@@ -53,6 +54,11 @@ class Main:
 
         # Create the database attribute for client
         client.database = Database()
+
+        # Set the patreon attribute for client
+        client.patreon = Patreon(client.database)
+        client.loop.run_until_complete(client.patreon.init(os.environ["dbz_patreon_access_token"]))
+        client.loop.run_until_complete(client.patreon.set_premium())
 
         # Create the logger attribute for the client
         client.logger = CommandLogger(client)

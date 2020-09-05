@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 07/08/20 by DrLarck"""
+@update 06/09/20 by DrLarck"""
 
 import asyncio
 
@@ -12,12 +12,14 @@ import asyncio
 from utility.entity.character import CharacterGetter, CharacterExperience
 from utility.entity.capsule import Capsule
 from utility.graphic.icon import GameIcon
+from utility.global_tool import GlobalTool
 
 
 class Mission:
 
     def __init__(self, client):
-        self.client = client
+        self.client      = client
+        self.global_tool = GlobalTool()
 
         self.reference    = 0
         self.name         = ""
@@ -44,6 +46,7 @@ class Mission:
         @return str"""
 
         rewards = ""
+        premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         character_exp = CharacterExperience(self.client)
         icon = GameIcon()
 
@@ -62,9 +65,9 @@ class Mission:
                 reward_reduction = 0
         
         # Update rewards
-        self.experience  = int(self.experience * reward_reduction)
-        self.zenis       = int(self.zenis * reward_reduction)
-        self.dragonstone = int(self.dragonstone * reward_reduction)
+        self.experience  = int((self.experience * reward_reduction) * premium_bonus)
+        self.zenis       = int((self.zenis * reward_reduction) * premium_bonus)
+        self.dragonstone = int((self.dragonstone * reward_reduction) * premium_bonus)
 
         if reward_reduction == 0:
             self.capsule = None

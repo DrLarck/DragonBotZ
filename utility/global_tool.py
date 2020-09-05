@@ -5,7 +5,7 @@ Global tools
 
 Author : DrLarck
 
-Last update : 07/04/20 by DrLarck
+Last update : 05/09/20 by DrLarck
 """
 
 from string import ascii_letters
@@ -90,3 +90,50 @@ class GlobalTool:
         id_ = f"{letters[fourth_letter]}{letters[third_letter]}{letters[second_letter]}{letters[first_letter]}{number}"
 
         return id_
+    
+    @staticmethod
+    async def get_player_premium_resource_bonus(player):
+        """Generate a value which represent the % bonus to resource gain for premium
+        players
+
+
+        @param Player player
+
+        --
+
+        @return float"""
+
+        bonus = 1
+
+        # Retrieve player's premium data
+        premium = await player.get_premium_data()
+
+        # If the player is premium
+        if premium["premium"]:
+            tier = premium["tier"]
+            
+            # +15 % per tier
+            # 100 % lv6
+            # 130 % lv7
+            if tier == 1:
+                bonus = 1.15
+            
+            elif tier == 2:
+                bonus = 1.3
+            
+            elif tier == 3:
+                bonus = 1.45
+            
+            elif tier == 4:
+                bonus = 1.6
+            
+            elif tier == 5:
+                bonus = 1.75
+            
+            elif tier == 6:
+                bonus = 2
+            
+            elif tier >= 7:
+                bonus = 2.3
+
+        return bonus

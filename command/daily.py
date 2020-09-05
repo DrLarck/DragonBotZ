@@ -5,7 +5,7 @@ Daily command
 
 Author : DrLarck
 
-Last update : 08/04/20 by DrLarck
+Last update : 06/09/20 by DrLarck
 """
 
 import time
@@ -17,12 +17,14 @@ from utility.command.checker import CommandChecker
 from utility.entity.player import Player
 from utility.graphic.icon import GameIcon
 from utility.command.tool.tool_time import ToolTime
+from utility.global_tool import GlobalTool
 
 
 class CommandDaily(commands.Cog):
 
     def __init__(self, client):
-        self.client = client
+        self.client      = client
+        self.global_tool = GlobalTool()
 
         # Private
         self.__dragonstone = 25
@@ -43,6 +45,7 @@ class CommandDaily(commands.Cog):
 
         # Init
         player = Player(context, self.client, context.message.author)
+        premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         current_time = time.time()
         icon = GameIcon()
 
@@ -67,9 +70,9 @@ class CommandDaily(commands.Cog):
                 combo += 1
 
             # Get the rewards value
-            reward_ds = int(self.__dragonstone * pow(self.__combo_rate, combo))
-            reward_zeni = int(self.__zeni * pow(self.__combo_rate, combo))
-            reward_xp = int(self.__experience * pow(self.__combo_rate, combo))
+            reward_ds = int(self.__dragonstone * pow(self.__combo_rate, combo) * premium_bonus)
+            reward_zeni = int(self.__zeni * pow(self.__combo_rate, combo) * premium_bonus)
+            reward_xp = int(self.__experience * pow(self.__combo_rate, combo) * premium_bonus)
 
             # Update the player_time table
             await player.time.update_daily_time(current_time)
