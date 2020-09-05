@@ -9,12 +9,14 @@
 import patreon
 import os
 import asyncio
+import time
 
 
 class Patreon:
 
-    def __init__(self):
+    def __init__(self, database):
         self.client = None
+        self.database = database
     
     async def init(self, access_token):
         """Init the Patreon api
@@ -129,12 +131,98 @@ class Patreon:
             patrons.append(
                 {
                     "name": pledger.relationship("patron").attribute("first_name"),
-                    "tier": pledger_tier,
-                    "payment": payment,
+                    "tier": int(pledger_tier),
+                    "payment": int(payment),
                     "declined": is_declined,
-                    "total": total_paid,
-                    "discord_id": discord_id
+                    "total": int(total_paid),
+                    "discord_id": int(discord_id)
                 }
             )
 
         return patrons
+    
+    async def add_month(self, patron):
+        """Add a premium month to a player
+
+        @param dict patron
+
+        --
+
+        @returun None"""
+
+        now = time.time()
+        new = now + 2592000
+        total_month = await self.database.fetch_value("""
+                                                      SELECT player_premium_total_month
+                                                      FROM player_info
+                                                      WHERE player_id = $1;
+                                                      """, [patron["discord_id"]]) 
+
+        if total_month is not None:
+            total_month += 1
+
+        new_pledge_tier = patron["tier"]
+
+        # Update player's premium data
+        await self.database.execute("""
+                                    UPDATE player_info
+                                    SET player_premium_until = $1,
+                                    player_premium_tier = $2,
+                                    player_premium_total_month = $3
+                                    WHERE player_id = $4;
+                                    """, [new, new_pledge_tier, 
+                                          total_month, patron["discord_id"]])
+
+        return
+    
+    async def set_premium(self):
+        """Set premium status for players
+
+        --
+
+        @return None"""
+
+        # Retrieve all the patrons
+        patrons  = await self.get_all_patrons()
+        time_now = time.time()
+
+        for patron in patrons:
+            await asyncio.sleep(0)
+            
+            # Check if the player is premium
+            is_premium = False
+            premium_until = await self.database.fetch_value("""
+                                                            SELECT player_premium_until
+                                                            FROM player_info
+                                                            WHERE player_id = $1;
+                                                            """, [patron["discord_id"]])
+            
+            # If we have recorded data
+            if premium_until is not None:
+                if premium_until > time_now:
+                    is_premium = True
+            
+            # If the player is already premium
+            if is_premium:
+                # Check if the pledge is not declined
+                if not patron["declined"]:
+                    # Check the date
+                    limit_date = await self.database.fetch_value("""
+                                                                 SELECT player_premium_until
+                                                                 FROM player_info
+                                                                 WHERE player_id = $1;
+                                                                 """, [patron["discord_id"]])
+
+                    # If the date is anterior, add a month
+                    if limit_date < time_now:
+                        await self.add_month(patron)
+
+            # If the player is not premium
+            else:
+                # Check if declined
+                if not patron["declined"]:
+                    await self.add_month(patron)
+
+        print("Premium : DONE")
+
+        return
