@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 05/09/20 by DrLarck
+Last update : 06/09/20 by DrLarck
 """
 
 import discord
@@ -93,7 +93,7 @@ class Player:
         --
 
         @return dict : keys
-        {'premium': bool, 'tier': int, 'total_month': int}"""
+        {'premium': bool, 'tier': int, 'total_month': int, 'until': int}"""
         
         # Init
         premium = False
@@ -108,18 +108,22 @@ class Player:
 
         now = time.time()
 
+        data = data[0]
+
         # If the player is premium
         if data[0] > now:
             premium = True
 
-        tier  = data[1]
-        total = data[2] 
+        remaining = int(data[0] - time.time())
+        tier      = data[1]
+        total     = data[2] 
 
         # Make dict
         premium_data = {
             "premium": premium,
             "tier": tier,
-            "total_month": total
+            "total_month": total,
+            "remaining": remaining
         }
 
         return premium_data
@@ -317,7 +321,66 @@ class PlayerExperience:
                                                          """, [self.player.id])
 
         return player_level
+    
+    async def get_player_power(self):
+        """Get the player's power points
 
+        --
+
+        @return int"""
+
+        power = await self.__database.fetch_value("""
+                                                  SELECT player_power
+                                                  FROM player_info
+                                                  WHERE player_id = $1;
+                                                  """, [self.player.id])
+
+        return power
+    
+    async def add_power(self, amount):
+        """Add power points to the player's power
+
+        @param int amount
+
+        --
+
+        @return None"""
+
+        player_power = await self.get_player_power()
+
+        if amount > 0:
+            player_power += amount
+
+            await self.__database.execute("""
+                                          UPDATE player_info
+                                          SET player_power = $1
+                                          WHERE player_id = $2;
+                                          """, [player_power, self.player.id])
+
+        return
+    
+    async def remove_power(self, amount):
+        """Remove power points to the player's power
+
+        @param int amount
+
+        --
+
+        @return None"""
+
+        player_power = await self.get_player_power()
+
+        if amount > 0:
+            player_power -= amount
+
+            await self.__database.execute("""
+                                          UPDATE player_info
+                                          SET player_power = $1
+                                          WHERE player_id = $2;
+                                          """, [player_power, self.player.id])
+        
+        return
+        
 
 class PlayerTime:
 

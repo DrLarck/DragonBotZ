@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 05/08/20 by DrLarck
+Last update : 06/09/20 by DrLarck
 """
 
 import asyncio
@@ -203,7 +203,8 @@ class Database:
                 player_premium_since BIGINT DEFAULT 0,
                 player_premium_until BIGINT DEFAULT 0,
                 player_premium_total_month BIGINT DEFAULT 0,
-                player_premium_tier BIGINT DEFAULT 0
+                player_premium_tier BIGINT DEFAULT 0,
+                player_power BIGINT DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_reference_index ON player_info(reference);
             CREATE UNIQUE INDEX IF NOT EXISTS player_info_id_index ON player_info(player_id);

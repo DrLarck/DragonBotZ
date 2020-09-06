@@ -77,6 +77,8 @@ class CommandSummon(commands.Cog):
             # Display the card
             await context.send(embed=character_display)
 
+            await player.experience.add_power(2)
+
         # If the banner has not been found
         elif banner is None:
             await context.send(f"Banner **{banner_reference:,}** not found")
