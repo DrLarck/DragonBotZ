@@ -45,6 +45,10 @@ class CommandDaily(commands.Cog):
 
         # Init
         player = Player(context, self.client, context.message.author)
+
+        # Add power points
+        await player.experience.add_power(15)
+        
         premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         current_time = time.time()
         icon = GameIcon()

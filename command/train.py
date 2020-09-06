@@ -42,7 +42,7 @@ class CommandTrain(commands.Cog):
 
         # Log
         await self.client.logger.log(context)
-        
+
         player   = Player(context, self.client, context.message.author)
         premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         cpu      = CPU(context, self.client, context.message.author)
@@ -69,6 +69,7 @@ class CommandTrain(commands.Cog):
             unique_ids    = player.combat.unique_id_team
             exp_manager   = CharacterExperience(self.client)
             charar_getter = CharacterGetter()
+            await player.experience.add_power(5)
 
             for character in unique_ids:
                 await asyncio.sleep(0)
