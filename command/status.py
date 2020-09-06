@@ -35,12 +35,19 @@ class CommandStatus(commands.Cog):
         server = context.message.guild
 
         # Get the current shard id
-        current_shard = server.shard_id
+        current_shard = None
+
+        if server is not None:
+            current_shard = server.shard_id
 
         # Get the list of shards latencies
         shards_info = self.client.latencies
 
-        display = f"Server shard : `#{current_shard}`\n\n__Shards status__ :\n"
+        if current_shard is not None:
+            display = f"Server shard : `#{current_shard}`\n\nAll shards :\n"
+        
+        else:
+            display = f"Server shard : Not found\n\nAll shards :\n"
 
         # Get the display
         for shard in shards_info:
