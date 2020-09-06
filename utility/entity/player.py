@@ -108,20 +108,22 @@ class Player:
 
         now = time.time()
 
+        data = data[0]
+
         # If the player is premium
         if data[0] > now:
             premium = True
 
-        until = data[0]
-        tier  = data[1]
-        total = data[2] 
+        remaining = int(data[0] - time.time())
+        tier      = data[1]
+        total     = data[2] 
 
         # Make dict
         premium_data = {
             "premium": premium,
             "tier": tier,
             "total_month": total,
-            "until": until
+            "remaining": remaining
         }
 
         return premium_data
