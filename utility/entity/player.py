@@ -93,7 +93,7 @@ class Player:
         --
 
         @return dict : keys
-        {'premium': bool, 'tier': int, 'total_month': int}"""
+        {'premium': bool, 'tier': int, 'total_month': int, 'until': int}"""
         
         # Init
         premium = False
@@ -112,6 +112,7 @@ class Player:
         if data[0] > now:
             premium = True
 
+        until = data[0]
         tier  = data[1]
         total = data[2] 
 
@@ -119,7 +120,8 @@ class Player:
         premium_data = {
             "premium": premium,
             "tier": tier,
-            "total_month": total
+            "total_month": total,
+            "until": until
         }
 
         return premium_data
