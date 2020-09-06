@@ -45,6 +45,7 @@ class CommandDaily(commands.Cog):
 
         # Init
         player = Player(context, self.client, context.message.author)
+        
         premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         current_time = time.time()
         icon = GameIcon()
@@ -86,6 +87,9 @@ class CommandDaily(commands.Cog):
             message = f"""
 Daily : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, **+{reward_xp:,}**:star: 
 *(Combo **x{combo}**)*"""
+
+            # Add power points
+            await player.experience.add_power(15)
 
             await context.send(message)
 

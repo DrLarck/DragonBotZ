@@ -5,7 +5,7 @@ Profile command
 
 Author : DrLarck
 
-Last update : 07/04/20 by DrLarck
+Last update : 06/09/20 by DrLarck
 """
 
 import discord
@@ -20,6 +20,7 @@ from utility.interactive.button import Button
 
 # tool
 from utility.command.tool.tool_inventory import ToolInventory
+from utility.command.tool.tool_time import ToolTime
 
 
 class CommandProfile(commands.Cog):
@@ -38,6 +39,7 @@ class CommandProfile(commands.Cog):
         # Init
         # Get the command caller
         caller = Player(context, self.client, context.message.author)
+        timer  = ToolTime()
 
         # If no target is provided
         # The player is the message author
@@ -52,12 +54,59 @@ class CommandProfile(commands.Cog):
         embed = CustomEmbed()
 
         # Initialize embed's information
-        level = await player.experience.get_player_level()
+        power        = await player.experience.get_player_power()
+        hr_combo     = await player.time.get_hourly_combo()
+        day_combo    = await player.time.get_daily_combo()
+        premium_data = await player.get_premium_data()
+
+        # Check if the player is premium
+        # and calculate info
+        is_premium = premium_data["premium"]
+
+        premium_time   = 0
+        premium_tier   = 0
+        premium_remain = 0
 
         # Setup the embed
         embed = await embed.setup(self.client, title=f"{player.name}'s profile", thumbnail_url=player.avatar)
+        
+        # Power
+        embed.add_field(
+            name=":star: Power", 
+            value=power, 
+            inline=True
+        )
 
-        embed.add_field(name=":star:Level", value=level, inline=True)
+        # Hr combo
+        embed.add_field(
+            name="⌛ Hourly combo",
+            value=hr_combo,
+            inline=True
+        )
+
+        # Daily combo
+        embed.add_field(
+            name="☀️ Daily combo",
+            value=day_combo,
+            inline=True
+        )
+
+        # Manage premium field
+        if is_premium:
+            premium_time   = premium_data["total_month"]
+            premium_tier   = premium_data["tier"]
+            premium_remain = await timer.convert_time(premium_data["remaining"])
+
+            embed.add_field(
+                name="👑 Premium",
+                value=f"Tier **{premium_tier:,}** for **{premium_time:,}** months, **{premium_remain}** remaining"
+            )
+        
+        else:
+            embed.add_field(
+                name="👑 Premium",
+                value="Not premium"
+            )
 
         # Display the profile
         profile = await context.send(embed=embed)
@@ -76,7 +125,7 @@ class CommandProfile(commands.Cog):
             # Get the pressed button
             # Add the button to switch to the inventory panel
             button = Button(self.client, profile)
-            profile_button = ['🛍']
+            profile_button = ['📦']
 
             await button.add(profile_button)
             pressed = await button.get_pressed(profile_button, caller)

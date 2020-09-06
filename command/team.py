@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 16/08/20 by DrLarck"""
+@update 06/09/20 by DrLarck"""
 
 import asyncio
 
@@ -26,6 +26,9 @@ class CommandTeam(commands.Cog):
     async def team(self, context):
         """Allow the player to display his team"""
         
+        # Log
+        await self.client.logger.log(context)
+
         player = Player(context, self.client, context.message.author)
         team_ = await player.combat.get_team()
 
@@ -65,6 +68,9 @@ class CommandTeam(commands.Cog):
     async def add(self, context, unique_id=None):
         """Allow the player to add a character to his team"""
         
+        # Log
+        await self.client.logger.log(context)
+
         player = Player(context, self.client, context.message.author)
         shop_tool = ToolShop(self.client, context)
 
@@ -82,6 +88,9 @@ class CommandTeam(commands.Cog):
     @team.command()
     async def remove(self, context, slot=None):
         """Allow the player to remove a character from his team"""
+
+        # Log
+        await self.client.logger.log(context)
 
         player = Player(context, self.client, context.message.author)
 

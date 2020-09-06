@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 16/08/20 by DrLarck"""
+@update 06/09/20 by DrLarck"""
 
 from discord.ext import commands
 
@@ -27,6 +27,9 @@ class CommandShop(commands.Cog):
     async def shop(self, context):
         """Displays the shop help"""
 
+        # Log
+        await self.client.logger.log(context)
+
         player = Player(context, self.client, context.message.author)
         help = ToolHelp(self.client, context, player)
 
@@ -38,6 +41,9 @@ class CommandShop(commands.Cog):
     async def character(self, context, character_id:int=None):
         """Displays the character shop"""
 
+        # Log
+        await self.client.logger.log(context)
+
         player = Player(context, self.client, context.message.author)
         tool = ToolShop(self.client, context)
 
@@ -48,6 +54,9 @@ class CommandShop(commands.Cog):
     @shop.command()
     async def sell(self, context, type_, unique_id, price: int):
         """Allows the player to sell an item"""
+
+        # Log
+        await self.client.logger.log(context)
 
         player = Player(context, self.client, context.message.author)
         tool   = ToolShop(self.client, context)
@@ -66,6 +75,9 @@ class CommandShop(commands.Cog):
         """Alllows the player to buy an item from the shop
         
         Available type_ : 'character'"""
+
+        # Log
+        await self.client.logger.log(context)
 
         tool  = ToolShop(self.client, context)
         buyer = Player(context, self.client, context.message.author)

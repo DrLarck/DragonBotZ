@@ -68,6 +68,7 @@ class Mission:
         self.experience  = int((self.experience * reward_reduction) * premium_bonus)
         self.zenis       = int((self.zenis * reward_reduction) * premium_bonus)
         self.dragonstone = int((self.dragonstone * reward_reduction) * premium_bonus)
+        await player.experience.add_power(int(5 * reward_reduction))
 
         if reward_reduction == 0:
             self.capsule = None

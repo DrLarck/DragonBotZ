@@ -47,6 +47,7 @@ class CommandHourly(commands.Cog):
 
         # Init
         player = Player(context, self.client, context.message.author)
+        
         premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         current_time = time.time()
         icon = GameIcon()
@@ -93,6 +94,9 @@ class CommandHourly(commands.Cog):
             message = f"""
 Hourly : **+{reward_ds:,}**{icon.dragonstone}, **+{reward_zeni:,}**{icon.zeni}, **+{reward_xp:,}**:star: 
 *(Combo **x{combo}**)*"""
+
+            # Add power points
+            await player.experience.add_power(3)
 
             await context.send(message)
 
