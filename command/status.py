@@ -5,7 +5,7 @@ Status command
 
 Author : DrLarck
 
-Last update : 28/04/20 by DrLarck
+Last update : 06/09/20 by DrLarck
 """
 
 import asyncio
@@ -24,6 +24,10 @@ class CommandStatus(commands.Cog):
     @commands.check(CommandChecker.game_ready)
     @commands.command()
     async def status(self, context):
+
+        # Log
+        await self.client.logger.log(context)
+
         # Init
         embed = await CustomEmbed().setup(self.client,
                                           title="Game status", description="Display the status of each shard")

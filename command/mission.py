@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 07/08/20 by DrLarck"""
+@update 06/09/20 by DrLarck"""
 
 from discord.ext import commands
 
@@ -29,6 +29,9 @@ class CommandMission(commands.Cog):
     async def mission(self, context):
         """Allow the player to display a list of available missions"""
 
+        # Log
+        await self.client.logger.log(context)
+
         tool   = ToolMission(self.client, context)
         player = Player(context, self.client, context.message.author)
 
@@ -41,6 +44,9 @@ class CommandMission(commands.Cog):
     @mission.command()
     async def start(self, context, index):
         """Allows the player to start a mission"""
+
+        # Log
+        await self.client.logger.log(context)
 
         mission = await self.getter.get_mission(index)
 

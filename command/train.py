@@ -40,6 +40,9 @@ class CommandTrain(commands.Cog):
     async def train(self, context):
         """Allow the player to train his characters"""
 
+        # Log
+        await self.client.logger.log(context)
+        
         player   = Player(context, self.client, context.message.author)
         premium_bonus = await self.global_tool.get_player_premium_resource_bonus(player)
         cpu      = CPU(context, self.client, context.message.author)
