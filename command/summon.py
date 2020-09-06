@@ -5,7 +5,7 @@ Summon command
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 06/09/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -15,6 +15,7 @@ from utility.command.checker import CommandChecker
 from utility.entity.banner import BannerGetter
 from utility.entity.player import Player
 from utility.graphic.icon import GameIcon
+from utility.graphic.color import GameColor
 
 
 class CommandSummon(commands.Cog):
@@ -81,6 +82,32 @@ class CommandSummon(commands.Cog):
             await context.send(f"Banner **{banner_reference:,}** not found")
 
         # If the player doesn't have enough resources
+        else:
+            await context.send(f"You do not have enough **Dragon stones**{icon.dragonstone} to summon")
+    
+    @commands.check(CommandChecker.game_ready)
+    @commands.check(CommandChecker.register)
+    @commands.command()
+    async def multisummon(self, context):
+        """Allows the player to do a multisummon"""
+
+        # Log
+        await self.client.logger.log(context)
+
+        # Init
+        player = Player(context, self.client, context.message.author)
+        icon = GameIcon()
+        color = GameColor()
+
+        # Check if the player has enough resource to proceed
+        # a multisummon
+        player_ds = await player.resource.get_dragonstone()
+        banner = await self.__getter.get_current_banner()
+
+        if player_ds >= self.__cost * 10:
+            summoned = await banner.multi_summon()
+            print(summoned)
+        
         else:
             await context.send(f"You do not have enough **Dragon stones**{icon.dragonstone} to summon")
 
