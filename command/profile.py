@@ -95,7 +95,7 @@ class CommandProfile(commands.Cog):
         if is_premium:
             premium_time   = premium_data["total_month"]
             premium_tier   = premium_data["tier"]
-            premium_remain = await timer.convert_time(premium_data["until"])
+            premium_remain = await timer.convert_time(premium_data["remaining"])
 
             embed.add_field(
                 name="👑 Premium",
