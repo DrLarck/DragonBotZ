@@ -5,7 +5,7 @@ Daily command
 
 Author : DrLarck
 
-Last update : 06/09/20 by DrLarck
+Last update : 07/09/20 by DrLarck
 """
 
 import time
@@ -38,7 +38,8 @@ class CommandDaily(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @commands.command()
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.command(aliases=["day"])
     async def daily(self, context):
         # Log
         await self.client.logger.log(context)

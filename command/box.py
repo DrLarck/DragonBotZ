@@ -5,7 +5,7 @@ Box command
 
 Author : Drlarck
 
-Last update : 08/04/20 by DrLarck
+Last update : 07/09/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -27,6 +27,7 @@ class CommandBox(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.group(invoke_without_command=True)
     async def box(self, context, rarity: str = None):
         # Log
@@ -53,6 +54,7 @@ class CommandBox(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @box.command()
     async def unique(self, context, reference: int):
         # Log
