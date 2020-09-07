@@ -211,6 +211,17 @@ class SubSummonBanner(Help):
         self.description = "Allows you to summon a character from a banner according to passed the index "
 
 
+# MULTI SUMMON
+class HelpMultiSummon(Help):
+    
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Multi Summon"
+        self.invoke = "multisummon | ms"
+        self.description = "Allows you to summon 10 characters from a banner and adds them to your collection"
+
+
 # HELP TEAM
 class HelpTeam(Help):
 
@@ -260,9 +271,9 @@ class ToolHelp:
     
     __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
-                          HelpProfile(), HelpShop(), HelpStart(), 
-                          HelpStatus(), HelpSummon(), HelpTeam(), 
-                          HelpTrain()]
+                          HelpMultiSummon(), HelpProfile(), HelpShop(), 
+                          HelpStart(), HelpStatus(), HelpSummon(), 
+                          HelpTeam(), HelpTrain()]
     __total_page       = 0
     __display_per_page = 5
     
