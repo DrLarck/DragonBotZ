@@ -91,6 +91,7 @@ class CommandSummon(commands.Cog):
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
+    @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.command(aliases=["ms"])
     async def multisummon(self, context):
         """Allows the player to do a multisummon"""
