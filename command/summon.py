@@ -5,7 +5,7 @@ Summon command
 
 Author : DrLarck
 
-Last update : 06/09/20 by DrLarck
+Last update : 07/09/20 by DrLarck
 """
 import asyncio
 
@@ -31,7 +31,7 @@ class CommandSummon(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @commands.command()
+    @commands.command(aliases=["sum"])
     async def summon(self, context, banner_reference: int = None):
 
         # Log
