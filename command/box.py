@@ -54,6 +54,7 @@ class CommandBox(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @box.command()
     async def unique(self, context, reference: int):
         # Log
