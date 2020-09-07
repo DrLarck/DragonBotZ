@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 16/08/20 by DrLarck"""
+@update 07/09/20 by DrLarck"""
 
 import asyncio
 
@@ -50,7 +50,7 @@ class HelpDaily(Help):
         Help.__init__(self)
 
         self.name = "Daily"
-        self.invoke = "daily"
+        self.invoke = "daily | day"
         self.description = "Allows you to receive daily rewards.\nCome back many days in a row to earn more rewards"
 
 
@@ -72,7 +72,7 @@ class HelpHourly(Help):
         Help.__init__(self)
 
         self.name = "Hourly"
-        self.invoke = "hourly"
+        self.invoke = "hourly | hr"
         self.description = "Allows you to receive hourly rewards.\nThe more you play, the more you get."
 
 
@@ -83,7 +83,7 @@ class HelpInventory(Help):
         Help.__init__(self)
 
         self.name = "Inventory"
-        self.invoke = "inventory"
+        self.invoke = "inventory | inv"
         self.description = "Displays your inventory which contains your resources, items, etc."
 
 
@@ -118,7 +118,7 @@ class HelpProfile(Help):
         Help.__init__(self)
 
         self.name = "Profile"
-        self.invoke = "profile"
+        self.invoke = "profile | p"
         self.description = "Displays your profile, which contains informations about you"
 
 
@@ -194,7 +194,7 @@ class HelpSummon(Help):
         Help.__init__(self)
 
         self.name = "Summon"
-        self.invoke = "summon"
+        self.invoke = "summon | sum"
         self.description = "Allows you to summon a character from a banner and adds it to your collection"
 
         self.subcommand = [SubSummonBanner()]
