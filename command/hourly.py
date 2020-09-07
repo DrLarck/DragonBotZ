@@ -40,6 +40,7 @@ class CommandHourly(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.command(aliases=["hr"])
     async def hourly(self, context):
         # Log
