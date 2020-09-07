@@ -5,7 +5,7 @@ Banner object
 
 Author : DrLarck
 
-Last update : 22/07/20 by DrLarck
+Last update : 07/09/20 by DrLarck
 """
 
 import asyncio
@@ -14,6 +14,7 @@ import random
 
 # util
 from utility.entity.character import CharacterGetter
+from utility.entity.config_parser import ConfigParser
 
 # tool
 from utility.global_tool import GlobalTool
@@ -277,6 +278,7 @@ class BannerGetter:
                     self.__cache.append(banner_)
 
                 self.__cache_ok = True
+
                 print("Banner Cache : DONE")
 
         else:
@@ -312,4 +314,5 @@ class BannerGetter:
         :return: `Banner`
         """
 
+        self.__current_banner = await ConfigParser().get_config_for("banner current")
         return self.__cache[self.__current_banner - 1]
