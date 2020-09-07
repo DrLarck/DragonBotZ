@@ -5,7 +5,7 @@ Hourly command
 
 Author : DrLarck
 
-Last update : 06/09/20 by DrLarck
+Last update : 07/09/20 by DrLarck
 """
 
 import time
@@ -40,7 +40,7 @@ class CommandHourly(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @commands.command()
+    @commands.command(aliases=["hr"])
     async def hourly(self, context):
         # Log
         await self.client.logger.log(context)
