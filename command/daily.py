@@ -38,6 +38,7 @@ class CommandDaily(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.command(aliases=["day"])
     async def daily(self, context):
         # Log
