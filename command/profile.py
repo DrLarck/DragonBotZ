@@ -5,7 +5,7 @@ Profile command
 
 Author : DrLarck
 
-Last update : 06/09/20 by DrLarck
+Last update : 07/09/20 by DrLarck
 """
 
 import discord
@@ -30,7 +30,7 @@ class CommandProfile(commands.Cog):
 
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @commands.command()
+    @commands.command(aliases=["p"])
     async def profile(self, context, target: discord.Member = None):
 
         # Log
