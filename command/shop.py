@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 06/09/20 by DrLarck"""
+@update 08/09/20 by DrLarck"""
 
 from discord.ext import commands
 
@@ -57,6 +57,11 @@ class CommandShop(commands.Cog):
 
         # Log
         await self.client.logger.log(context)
+
+        # Check price sign
+        if price <1:
+            await context.send(":x: Please set a price greater or equal to **1**")
+            return
 
         player = Player(context, self.client, context.message.author)
         tool   = ToolShop(self.client, context)
