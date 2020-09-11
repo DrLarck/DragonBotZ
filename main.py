@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 08/09/20 by DrLarck
+Last update : 11/09/20 by DrLarck
 """
 
 import logging
@@ -46,7 +46,7 @@ class Main:
 
         # Init
         activity = discord.Game(name=f"d!help | v{self.__version} - {self.__phase[0]}")
-        
+
         client = commands.AutoShardedBot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
 
@@ -55,16 +55,16 @@ class Main:
         # Create the database attribute for client
         client.database = Database()
 
-        # Set the patreon attribute for client
-        client.patreon = Patreon(client.database)
-        client.loop.run_until_complete(client.patreon.init(os.environ["dbz_patreon_access_token"]))
-        client.loop.run_until_complete(client.patreon.set_premium())
-
         # Create the logger attribute for the client
         client.logger = CommandLogger(client)
 
         # Create the needed tables
         client.loop.run_until_complete(client.database.create_game_tables())
+
+        # Set the patreon attribute for client
+        client.patreon = Patreon(client.database)
+        client.loop.run_until_complete(client.patreon.init(os.environ["dbz_patreon_access_token"]))
+        client.loop.run_until_complete(client.patreon.set_premium())
 
         # Filling up the cache
         client.loop.run_until_complete(CharacterGetter().set_cache(client))
