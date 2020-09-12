@@ -750,7 +750,7 @@ class PlayerItem:
                                                       SELECT character_unique_id
                                                       FROM character_unique
                                                       WHERE character_owner_id = $1 AND character_unique_id = $2;
-                                                      """, [self.player.id], unique_id)
+                                                      """, [self.player.id, unique_id])
 
         if character is not None:
             has_it = True
