@@ -128,6 +128,29 @@ class Player:
 
         return premium_data
 
+    async def is_registered(self):
+        """Checks if the player is registered
+
+        --
+
+        @return bool"""
+
+        registered = False
+
+        # Check if the player is in the database
+        data = await self.client.database.fetch_value(
+            """
+            SELECT player_name
+            FROM player_info
+            WHERE player_id = $1;
+            """, [self.id]
+        )
+
+        if data is not None:
+            registered = True
+
+        return registered
+
 
 class PlayerResource:
 
