@@ -66,7 +66,7 @@ class ToolTrade:
                 await context.send(
                     f"""<@{player.id}> Enter your proposition of type : `<objectType> <objectValue>`\n
 Each proposition must be separated from the others by a **whitespace**
-*Example :* `character aaa0 zenis 52 character baaa0 zenis 1`"
+*Example :* `character aaa0 zenis 52 character baaa0 zenis 1`"""
                 )
                 proposition = await self.get_player_proposition(context, player)
 
