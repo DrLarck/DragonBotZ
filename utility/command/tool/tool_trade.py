@@ -14,12 +14,17 @@ from utility.interactive.message import MessageInput
 from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
 
+# tool
+from utility.command.tool_shop import ToolShop
 
 class ToolTrade:
 
     def __init__(self, client):
-        self.client   = client
-        self.database = self.client.database
+        self.client    = client
+        self.database  = self.client.database
+
+        self.short_character = ["character", "char"]
+        self.short_zenis     = ["zenis", "zeni", 'z']
 
     async def trade(self, context, player_a, player_b):
         """Launches a trade between the player_a and the player_b
@@ -61,7 +66,7 @@ class ToolTrade:
 
                 # If the proposition is not empty
                 if proposition is not None and len(proposition) > 0:
-                    # Store the proposition 
+                    # Store the proposition
                     players_propositions.append(proposition)
 
                 else:
@@ -70,6 +75,12 @@ class ToolTrade:
                     )
 
                 return
+
+            # Proceed to the trade
+            # if both players have proposed
+            if len(proposition) == 2:
+                # Ask for validation
+
 
         else:
             await context.send(
@@ -167,7 +178,7 @@ class ToolTrade:
                 }
 
                 # Check the characters
-                if current["object"].lower() in ["character", "char"]:
+                if current["object"].lower() in self.short_character:
                     # Check if the player owns the character
                     owns = await player.item.has_character(
                         current["value"]
@@ -183,7 +194,7 @@ class ToolTrade:
                         error += f"- You do not own the character `{char}`\n"
 
                 # Check if it's zenis
-                elif current["object"].lower() in ["zenis", 'z']:
+            elif current["object"].lower() in self.short_zenis:
                     # Convert the current value to int
                     value = int(current["value"])
 
@@ -211,3 +222,75 @@ class ToolTrade:
             )
 
         return proposition
+
+    async def proceed_trade(self, context, propositions, player_a, player_b):
+        """Proceed to the trade, the items in proposition[0] go to
+        player_b and the ones in proposition[1] go to player_a
+
+        @param discord.ext.commands.Context
+
+        @param list of dict propositions
+
+        @param Player player_a
+
+        @param player_b
+
+        --
+
+        @return bool"""
+
+        success = False
+        players = [player_a, player_b]
+        shop    = ToolShop(self.client, context)
+
+        for i in range(len(propositions)):
+            await asyncio.sleep(0)
+
+            # Define trader and payee
+            trader              = player[i]
+            current_proposition = propositions[i]
+
+            if i == 0:
+                payee = player[1]
+
+            else:
+                payee = player[0]
+
+            # Start proposition
+            for element in current_proposition:
+                await asyncio.sleep(0)
+
+                # If the element is a character
+                if element["object"].lower() in self.short_character:
+                    character_id = element["value"]
+
+                    # Remove the character from the shop
+                    await shop.remove_character(character_id)
+
+                    # Remove the character from the player's team
+                    slot = await trader.combat.get_fighter_slot_by_id(
+                        character_id
+                    )
+
+                    await trader.combat.remove_character(slot)
+
+                    # Update character's owner id
+                    await self.database.execute(
+                        """
+                        UPDATE character_unique
+                        SET character_owner_id = $1, character_owner_name = $2
+                        WHERE character_unique_id = $3;
+                        """, [trader.id, trader.name, character_id]
+                    )
+
+                # If the element is zenis
+                elif element["object"].lower() in self.short_zenis:
+                    zenis = int(element["value"])
+                    trader_zenis = await trader.resource.get_zeni()
+
+                    # Send the zenis to the payee
+                    if trader_zenis > 0:
+                        await trader.resource.remove_zeni(zenis)
+                        await payee.resource.add_zeni(zenis)
+
+        return success
