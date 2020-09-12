@@ -5,7 +5,7 @@ Profile command
 
 Author : DrLarck
 
-Last update : 07/09/20 by DrLarck
+Last update : 12/09/20 by DrLarck
 """
 
 import discord
@@ -51,6 +51,11 @@ class CommandProfile(commands.Cog):
         else:
             player = Player(context, self.client, target)
 
+            if not await player.is_registered():
+                await context.send(
+                    "It seems that this person is not registered"
+                )
+
         embed = CustomEmbed()
 
         # Initialize embed's information
@@ -69,11 +74,11 @@ class CommandProfile(commands.Cog):
 
         # Setup the embed
         embed = await embed.setup(self.client, title=f"{player.name}'s profile", thumbnail_url=player.avatar)
-        
+
         # Power
         embed.add_field(
-            name=":star: Power", 
-            value=power, 
+            name=":star: Power",
+            value=power,
             inline=True
         )
 
@@ -101,7 +106,7 @@ class CommandProfile(commands.Cog):
                 name="👑 Premium",
                 value=f"Tier **{premium_tier:,}** for **{premium_time:,}** months, **{premium_remain}** remaining"
             )
-        
+
         else:
             embed.add_field(
                 name="👑 Premium",
