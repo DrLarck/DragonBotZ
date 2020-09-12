@@ -79,7 +79,7 @@ class ToolTrade:
 
             # Proceed to the trade
             # if both players have proposed
-            if len(players_propositions) == 2
+            if len(players_propositions) == 2:
                 # Ask for validation
                 validation_set = ["✅", "❌"]
 
@@ -272,7 +272,7 @@ class ToolTrade:
                         error += f"- You do not own the character `{char}`\n"
 
                 # Check if it's zenis
-            elif current["object"].lower() in self.short_zenis:
+                elif current["object"].lower() in self.short_zenis:
                     # Convert the current value to int
                     value = int(current["value"])
 
