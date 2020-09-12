@@ -63,7 +63,7 @@ class ToolTrade:
                 await asyncio.sleep(0)
 
                 # Get the player proposition
-                proposition = await self.get_player_proposition(player)
+                proposition = await self.get_player_proposition(context, player)
 
                 # If the proposition is not empty
                 if proposition is not None and len(proposition) > 0:
