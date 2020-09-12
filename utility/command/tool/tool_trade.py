@@ -280,8 +280,8 @@ class ToolTrade:
                     player_zenis = await player.resource.get_zeni()
 
                     # If the player has enough zenis
-                    if player_zenis >= value
-                    and player_zenis > total_zenis:
+                    if(player_zenis >= value
+                    and player_zenis > total_zenis):
                         # Update the value
                         total_zenis_proposed += value
                         proposition.append(current)
