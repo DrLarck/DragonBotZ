@@ -623,6 +623,10 @@ class CharacterGetter:
         if len(character_row) > 0:
             character_row = character_row[0]
 
+        # If the character doesn't exist
+        else:
+            return
+
         if character_row is not None:
             # Get the character object according to the character's reference
             character = await self.get_reference_character(character_row[1], client)
