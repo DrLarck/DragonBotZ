@@ -295,7 +295,7 @@ Each proposition must be separated from the others by a **whitespace**
                         proposition.append(current)
 
                     else:
-                        error += f"- You do not have {z} **{total_zenis:,}**\n"
+                        error += f"- You do not have {z} **{value:,}**\n"
 
         # No input provided
         else:
