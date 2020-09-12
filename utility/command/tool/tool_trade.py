@@ -373,7 +373,7 @@ Each proposition must be separated from the others by a **whitespace**
             await asyncio.sleep(0)
 
             # Define trader and payee
-            trader              = player[i]
+            trader              = players[i]
             current_proposition = propositions[i]
 
             if i == 0:
