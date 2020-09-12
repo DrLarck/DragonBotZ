@@ -422,7 +422,7 @@ Each proposition must be separated from the others by a **whitespace**
                         UPDATE character_unique
                         SET character_owner_id = $1, character_owner_name = $2
                         WHERE character_unique_id = $3;
-                        """, [trader.id, trader.name, character_id]
+                        """, [payee.id, payee.name, character_id]
                     )
 
                 # If the element is zenis
