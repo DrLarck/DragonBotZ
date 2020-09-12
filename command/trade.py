@@ -32,7 +32,7 @@ class CommandTrade(commands.Cog):
         player_b = Player(context, self.client, target)
 
         await self.tool.trade(context, player_a, player_b)
-        
+
 
 def setup(client):
     client.add_cog(CommandTrade(client))
