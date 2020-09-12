@@ -13,6 +13,7 @@ from utility.interactive.button import Button
 from utility.interactive.message import MessageInput
 from utility.graphic.embed import CustomEmbed
 from utility.graphic.icon import GameIcon
+from utilit.entity.character import CharacterGetter
 
 # tool
 from utility.command.tool_shop import ToolShop
@@ -222,6 +223,39 @@ class ToolTrade:
             )
 
         return proposition
+
+    async def get_proposition_display(self, proposition):
+        """Manage the proposition display
+
+        @param list of dict proposition
+
+        --
+
+        @return str"""
+
+        display = ""
+        icon    = GameIcon()
+
+        for element in proposition:
+            await asyncio.sleep(0)
+
+            # If the element is a character, display the character name
+            # level, and rarity
+            if element["object"].lower() in self.short_character:
+                getter       = CharacterGetter()
+                character_id = element["value"]
+
+                char = await getter.get_from_unique(character_id)
+
+                if character is not None:
+                    display += f"{char.rarity.icon} **{char.name}** {char.type.icon} - lv.{char.level:,}\n"
+
+            # If the element is zenis
+            elif element["object"].lower() in self.short_zenis:
+                amount = int(element["value"])
+                display += f"{icon.zeni} **{amount:,}**"
+
+        return display
 
     async def proceed_trade(self, context, propositions, player_a, player_b):
         """Proceed to the trade, the items in proposition[0] go to
