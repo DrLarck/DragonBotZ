@@ -412,7 +412,9 @@ Each proposition must be separated from the others by a **whitespace**
                         character_id
                     )
 
-                    await trader.combat.remove_character(slot)
+                    # If the player has the character in his team
+                    if slot is not None:
+                        await trader.combat.remove_character(slot)
 
                     # Update character's owner id
                     await self.database.execute(
