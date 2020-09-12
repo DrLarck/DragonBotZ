@@ -391,10 +391,10 @@ Each proposition must be separated from the others by a **whitespace**
             current_proposition = propositions[i]
 
             if i == 0:
-                payee = player[1]
+                payee = players[1]
 
             else:
-                payee = player[0]
+                payee = players[0]
 
             # Start proposition
             for element in current_proposition:
