@@ -73,7 +73,7 @@ Each proposition must be separated from the others by a **whitespace**
                 # If the proposition is not empty
                 if proposition is not None and len(proposition) > 0:
                     # Store the proposition
-                    print(player_a_proposition)
+                    print(proposition)
                     players_propositions.append(proposition)
 
                 else:
@@ -267,16 +267,21 @@ Each proposition must be separated from the others by a **whitespace**
 
                 # Get the object data
                 object = player_input[i]
+                value  = None
 
                 # Avoid out of range error
                 if i+1 <= len(player_input)-1:
                     value  = player_input[i+1]
 
-                # Generate current dict
-                current = {
-                    "object":object,
-                    "value":value
-                }
+                if value is not None:
+                    # Generate current dict
+                    current = {
+                        "object":object,
+                        "value":value
+                    }
+
+                else:
+                    return None
 
                 # Check the characters
                 if current["object"].lower() in self.short_character:
