@@ -115,7 +115,7 @@ Each proposition must be separated from the others by a **whitespace**
 
                 # Check if the player a validates
                 player_a_validation = await context.send(
-                    f"<@{player_a.name}> Please confirm or decline the trade"
+                    f"<@{player_a.id}> Please confirm or decline the trade"
                 )
 
                 # Check the button input
@@ -127,7 +127,7 @@ Each proposition must be separated from the others by a **whitespace**
                 if player_a_validated:
                     # Check if the player b validates
                     player_b_validation = await context.send(
-                        f"<@{player_b.name}> Please confirm or decline the trade"
+                        f"<@{player_b.id}> Please confirm or decline the trade"
                     )
 
                     # Check the button input
@@ -301,7 +301,7 @@ Each proposition must be separated from the others by a **whitespace**
                     # Negative value
                     else:
                         error += "- You provided a negative value"
-                        
+
         # No input provided
         else:
             return
