@@ -73,6 +73,7 @@ Each proposition must be separated from the others by a **whitespace**
                 # If the proposition is not empty
                 if proposition is not None and len(proposition) > 0:
                     # Store the proposition
+                    print(player_a_proposition)
                     players_propositions.append(proposition)
 
                 else:
@@ -151,12 +152,12 @@ Each proposition must be separated from the others by a **whitespace**
 
                         if success:
                             await context.send(
-                                f"{validation_set[0]} <@{player_a.name}> <@{player_b.name}> Success !"
+                                f"{validation_set[0]} <@{player_a.id}> <@{player_b.id}> Success !"
                             )
 
                         else:
                             await context.send(
-                                f"{validation_set[1]} <@{player_a.name}> <@{player_b.name}> Failure !"
+                                f"{validation_set[1]} <@{player_a.id}> <@{player_b.id}> Failure !"
                             )
 
                     # Player b has declined
