@@ -6,6 +6,7 @@
 
 @update 12/09/20 by DrLarck"""
 
+import discord
 from discord.ext import commands
 
 # tool
