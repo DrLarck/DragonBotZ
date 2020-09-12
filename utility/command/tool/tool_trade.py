@@ -80,7 +80,7 @@ Each proposition must be separated from the others by a **whitespace**
                         f"<@{player.id}> Your proposition is empty, aborting"
                     )
 
-                return
+                    return
 
             # Proceed to the trade
             # if both players have proposed
