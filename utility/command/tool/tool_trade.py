@@ -287,16 +287,21 @@ Each proposition must be separated from the others by a **whitespace**
                     # Check if the player has enough funds
                     player_zenis = await player.resource.get_zeni()
 
-                    # If the player has enough zenis
-                    if(player_zenis >= value
-                    and player_zenis >= total_zenis):
-                        # Update the value
-                        total_zenis += value
-                        proposition.append(current)
+                    # If the value is not negative
+                    if value > 0:
+                        # If the player has enough zenis
+                        if(player_zenis >= value
+                        and player_zenis >= total_zenis):
+                            # Update the value
+                            total_zenis += value
+                            proposition.append(current)
 
+                        else:
+                            error += f"- You do not have {z} **{value:,}**\n"
+                    # Negative value
                     else:
-                        error += f"- You do not have {z} **{value:,}**\n"
-
+                        error += "- You provided a negative value"
+                        
         # No input provided
         else:
             return
@@ -334,7 +339,7 @@ Each proposition must be separated from the others by a **whitespace**
                     self.client, self.client.database, character_id
                 )
 
-                if character is not None:
+                if char is not None:
                     display += f"{char.rarity.icon} **{char.name}** {char.type.icon} - lv.{char.level:,}\n"
 
             # If the element is zenis
