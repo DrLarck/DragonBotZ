@@ -330,7 +330,9 @@ Each proposition must be separated from the others by a **whitespace**
                 getter       = CharacterGetter()
                 character_id = element["value"]
 
-                char = await getter.get_from_unique(character_id)
+                char = await getter.get_from_unique(
+                    self.client, self.client.database, character_id
+                )
 
                 if character is not None:
                     display += f"{char.rarity.icon} **{char.name}** {char.type.icon} - lv.{char.level:,}\n"
