@@ -51,10 +51,25 @@ class ToolTrade:
 
         # If the player b has accepted, start the trade
         if validated:
+            # Store the propositions
+            players_propositions = []
             for player in players:
                 await asyncio.sleep(0)
 
+                # Get the player proposition
+                proposition = await self.get_player_proposition(player)
 
+                # If the proposition is not empty
+                if proposition is not None and len(proposition) > 0:
+                    # Store the proposition 
+                    players_propositions.append(proposition)
+
+                else:
+                    await context.send(
+                        f"<@{player.id}> Your proposition is empty, aborting"
+                    )
+
+                return
 
         else:
             await context.send(
@@ -93,16 +108,16 @@ class ToolTrade:
             if pressed == validation[0]:
                 validated = True
 
-                # Start the trade
-
         # None button has been pressed
         else:
             return None
 
         return validated
 
-    async def get_player_proposition(self, player):
+    async def get_player_proposition(self, context, player):
         """Get the player's get_proposition
+
+        @param discord.ext.commands.Context
 
         @param Player player
 
@@ -165,7 +180,7 @@ class ToolTrade:
 
                     else:
                         char   = current["value"]
-                        error += f"You do not own the character `{char}`\n"
+                        error += f"- You do not own the character `{char}`\n"
 
                 # Check if it's zenis
                 elif current["object"].lower() in ["zenis", 'z']:
@@ -183,10 +198,16 @@ class ToolTrade:
                         proposition.append(current)
 
                     else:
-                        error += f"You do not have {z} {total_zenis:,}\n"
+                        error += f"- You do not have {z} {total_zenis:,}\n"
 
         # No input provided
         else:
             return
+
+        # Send error message
+        if error != "":
+            await context.send(
+                f"<@{player.id}> Your proposition contains errors :\n{error}"
+            )
 
         return proposition
