@@ -289,13 +289,13 @@ Each proposition must be separated from the others by a **whitespace**
 
                     # If the player has enough zenis
                     if(player_zenis >= value
-                    and player_zenis > total_zenis):
+                    and player_zenis >= total_zenis):
                         # Update the value
                         total_zenis += value
                         proposition.append(current)
 
                     else:
-                        error += f"- You do not have {z} {total_zenis:,}\n"
+                        error += f"- You do not have {z} **{total_zenis:,}**\n"
 
         # No input provided
         else:
