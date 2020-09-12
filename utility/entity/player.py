@@ -749,7 +749,7 @@ class PlayerItem:
         character = await self.__database.fetch_value("""
                                                       SELECT character_unique_id
                                                       FROM character_unique
-                                                      WHERE character_owner_id = $1;
+                                                      WHERE character_owner_id = $1 AND character_unique_id = $2;
                                                       """, [self.player.id])
 
         if character is not None:
