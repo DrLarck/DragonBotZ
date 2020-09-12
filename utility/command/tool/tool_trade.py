@@ -73,7 +73,6 @@ Each proposition must be separated from the others by a **whitespace**
                 # If the proposition is not empty
                 if proposition is not None and len(proposition) > 0:
                     # Store the proposition
-                    print(proposition)
                     players_propositions.append(proposition)
 
                 else:
