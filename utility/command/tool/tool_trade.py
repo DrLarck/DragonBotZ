@@ -10,7 +10,9 @@ import asyncio
 
 # utility
 from utility.interactive.button import Button
+from utility.interactive.message import MessageInput
 from utility.graphic.embed import CustomEmbed
+from utility.graphic.icon import GameIcon
 
 
 class ToolTrade:
@@ -91,14 +93,16 @@ class ToolTrade:
             if pressed == validation[0]:
                 validated = True
 
+                # Start the trade
+
         # None button has been pressed
         else:
             return None
 
         return validated
 
-    async def get_proposition(self, player):
-        """Get the player porposition
+    async def get_player_proposition(self, player):
+        """Get the player's get_proposition
 
         @param Player player
 
@@ -108,12 +112,81 @@ class ToolTrade:
 
         # Stores the proposed items by the player
         proposition = []
+        input       = MessageInput(self.client)
+        icon        = GameIcon()
 
-        # Check if the player has stoped the proposition
-        stop = False
-        while not stop:
-            await asyncio.sleep(0)
+        z  = icon.zeni
 
-            pass
+        # Stores error
+        error = ""
+
+        # Checkers
+        total_zenis = 0
+
+        player_input = await input.get_input(player)
+
+        if player_input is not None:
+            # Get a list of string
+            player_input = player_input.split()
+            max_length   = 10
+            length       = len(player_input)
+
+            if length > max_length:
+                length = max_length
+
+            # Retrieve the input data
+            # step : 2
+            for i in range(0, length, 2):
+                await asyncio.sleep(0)
+
+                # Get the object data
+                object = player_input[i]
+                # Avoid out of range error
+                if i+1 <= len(player_input)-1:
+                    value  = player_input[i+1]
+
+                # Generate current dict
+                current = {
+                    "object":object,
+                    "value":value
+                }
+
+                # Check the characters
+                if current["object"].lower() in ["character", "char"]:
+                    # Check if the player owns the character
+                    owns = await player.item.has_character(
+                        current["value"]
+                    )
+
+                    # If the player owns the character, add it to the
+                    # proposition
+                    if owns:
+                        porposition.append(current)
+
+                    else:
+                        char   = current["value"]
+                        error += f"You do not own the character `{char}`\n"
+
+                # Check if it's zenis
+                elif current["object"].lower() in ["zenis", 'z']:
+                    # Convert the current value to int
+                    value = int(current["value"])
+
+                    # Check if the player has enough funds
+                    player_zenis = await player.resource.get_zeni()
+
+                    # If the player has enough zenis
+                    if player_zenis >= value
+                    and player_zenis > total_zenis:
+                        # Update the value
+                        total_zenis_proposed += value
+                        proposition.append(current)
+
+                    else:
+                        error += f"You do not have {z} {total_zenis:,}\n"
+
+        # No input provided
+        else:
+            return
 
         return proposition
