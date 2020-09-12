@@ -29,7 +29,7 @@ class CommandTrade(commands.Cog):
     async def trade(self, context, target: discord.Member):
         """Allows player to trade items"""
 
-        player_a = Player(context, self.client, ctx.message.author)
+        player_a = Player(context, self.client, context.message.author)
         player_b = Player(context, self.client, target)
 
         await self.tool.trade(context, player_a, player_b)
