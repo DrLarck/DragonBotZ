@@ -32,6 +32,9 @@ class CommandTrade(commands.Cog):
         player_a = Player(context, self.client, context.message.author)
         player_b = Player(context, self.client, target)
 
+        if player_a.id == player_b.id:
+            await context.send(":x: You can't trade with yourself")
+
         await self.tool.trade(context, player_a, player_b)
 
 
