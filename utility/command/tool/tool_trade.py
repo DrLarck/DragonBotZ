@@ -79,13 +79,90 @@ class ToolTrade:
 
             # Proceed to the trade
             # if both players have proposed
-            if len(proposition) == 2:
+            if len(players_propositions) == 2
                 # Ask for validation
+                validation_set = ["✅", "❌"]
 
+                # Get the propositions display
+                player_a_proposition = await self.get_proposition_display(
+                    players_propositions[0]
+                )
+
+                player_b_proposition = await self.get_proposition_display(
+                    players_propositions[1]
+                )
+
+                # Setup the embed
+                embed.add_field(
+                    name=f"{player_a.name}'s proposition",
+                    value=player_a_proposition,
+                    inline=False
+                )
+
+                embed.add_field(
+                    name=f"{player_b.name}'s proposition",
+                    value=player_b_proposition,
+                    inline=False
+                )
+
+                # Display the proposition
+                proposition_display = await context.send(embed=embed)
+
+                # Check if the player a validates
+                player_a_validation = await context.send(
+                    f"<@{player_a.name}> Please confirm or decline the trade"
+                )
+
+                # Check the button input
+                player_a_validated = await self.validation_check(
+                    player_a, player_a_validation
+                )
+
+                # If the player a has validated, proceed for player b
+                if player_a_validated:
+                    # Check if the player b validates
+                    player_b_validation = await context.send(
+                        f"<@{player_b.name}> Please confirm or decline the trade"
+                    )
+
+                    # Check the button input
+                    player_b_validated = await self.validation_check(
+                        player_b, player_b_validation
+                    )
+
+                    # If the player b has validated, proceed the trade
+                    if player_b_validated:
+                        success = await self.proceed_trade(
+                            context, players_propositions, player_a, player_b
+                        )
+
+                        if success:
+                            await context.send(
+                                f"{validation_set[0]} <@{player_a.name}> <@{player_b.name}> Success !"
+                            )
+
+                        else:
+                            await context.send(
+                                f"{validation_set[1]} <@{player_a.name}> <@{player_b.name}> Failure !"
+                            )
+
+                    # Player b has declined
+                    else:
+                        await context.send(
+                            f":x: {player_b.name} has declined the trade"
+                        )
+
+                # Player a has declined
+                else:
+                    await context.send(
+                        f":x: {player_a.name} has declined the trade"
+                    )
+
+                    return
 
         else:
             await context.send(
-                f"Trade between {player_a.name} and {player_b.name} declined"
+                f":x: Trade between {player_a.name} and {player_b.name} declined"
             )
 
         return
@@ -273,7 +350,7 @@ class ToolTrade:
 
         @return bool"""
 
-        success = False
+        success = True
         players = [player_a, player_b]
         shop    = ToolShop(self.client, context)
 
