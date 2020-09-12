@@ -235,6 +235,8 @@ Each proposition must be separated from the others by a **whitespace**
         player_input = await input.get_input(player)
 
         if player_input is not None:
+            player_input = player_input.content
+
             # Get a list of string
             player_input = player_input.split()
             max_length   = 10
@@ -250,6 +252,7 @@ Each proposition must be separated from the others by a **whitespace**
 
                 # Get the object data
                 object = player_input[i]
+
                 # Avoid out of range error
                 if i+1 <= len(player_input)-1:
                     value  = player_input[i+1]
@@ -270,7 +273,7 @@ Each proposition must be separated from the others by a **whitespace**
                     # If the player owns the character, add it to the
                     # proposition
                     if owns:
-                        porposition.append(current)
+                        proposition.append(current)
 
                     else:
                         char   = current["value"]
@@ -288,7 +291,7 @@ Each proposition must be separated from the others by a **whitespace**
                     if(player_zenis >= value
                     and player_zenis > total_zenis):
                         # Update the value
-                        total_zenis_proposed += value
+                        total_zenis += value
                         proposition.append(current)
 
                     else:
