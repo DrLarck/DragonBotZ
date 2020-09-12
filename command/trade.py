@@ -34,6 +34,7 @@ class CommandTrade(commands.Cog):
 
         if player_a.id == player_b.id:
             await context.send(":x: You can't trade with yourself")
+            return
 
         await self.tool.trade(context, player_a, player_b)
 
