@@ -5,7 +5,7 @@ Summon command
 
 Author : DrLarck
 
-Last update : 07/09/20 by DrLarck
+Last update : 12/09/20 by DrLarck
 """
 import asyncio
 
@@ -69,13 +69,13 @@ class CommandSummon(commands.Cog):
             await self.client.database.execute("""
                                                INSERT INTO character_unique(
                                                character_reference, character_owner_id, character_owner_name,
-                                               character_rarity) 
+                                               character_rarity)
                                                VALUES($1, $2, $3, $4);
                                                """, [summoned.id, player.id, player.name, summoned.rarity.value])
 
             # Generate an unique id
             await banner.set_unique_id(self.client)
-            
+
             # Display the card
             await context.send(embed=character_display)
 
@@ -88,7 +88,7 @@ class CommandSummon(commands.Cog):
         # If the player doesn't have enough resources
         else:
             await context.send(f"You do not have enough **Dragon stones**{icon.dragonstone} to summon")
-    
+
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -119,18 +119,18 @@ class CommandSummon(commands.Cog):
 
                 if character.rarity.value > high_rarity:
                     high_rarity = character.rarity.value
-                
+
                 summon_content += f"`#{character.id}`- {character.rarity.icon} **{character.name}**\n"
 
                 await self.client.database.execute("""
                                                    INSERT INTO character_unique(
                                                    character_reference, character_owner_id, character_owner_name,
-                                                   character_rarity) 
+                                                   character_rarity)
                                                    VALUES($1, $2, $3, $4);
                                                    """, [character.id, player.id, player.name, character.rarity.value])
 
             summon_color = await color.get_rarity_color(high_rarity)
-        
+
             embed = await CustomEmbed().setup(
                 self.client, title=f"{player.name}'s multi summon",
                 color=summon_color, thumbnail_url=player.avatar
@@ -146,8 +146,12 @@ class CommandSummon(commands.Cog):
 
             # Remove resource
             await player.resource.remove_dragonstone(self.__cost * 10)
+
+            # Generate an unique id
+            await banner.set_unique_id(self.client)
+
             await player.experience.add_power(20)
-        
+
         else:
             await context.send(f"You do not have enough **Dragon stones**{icon.dragonstone} to summon")
 
