@@ -125,6 +125,11 @@ Each proposition must be separated from the others by a **whitespace**
 
                 # If the player a has validated, proceed for player b
                 if player_a_validated:
+                    # Re send the trade display
+                    await proposition_display.delete()
+
+                    re_proposition_display = await context.send(embed=embed)
+
                     # Check if the player b validates
                     player_b_validation = await context.send(
                         f"<@{player_b.id}> Please confirm or decline the trade"
@@ -141,6 +146,9 @@ Each proposition must be separated from the others by a **whitespace**
                             context, players_propositions, player_a, player_b
                         )
 
+                        # Delete proposition
+                        await re_proposition_display.delete()
+
                         if success:
                             await context.send(
                                 f"{validation_set[0]} <@{player_a.name}> <@{player_b.name}> Success !"
@@ -153,12 +161,18 @@ Each proposition must be separated from the others by a **whitespace**
 
                     # Player b has declined
                     else:
+                        # Delete proposition
+                        await re_proposition_display.delete()
+
                         await context.send(
                             f":x: {player_b.name} has declined the trade"
                         )
 
                 # Player a has declined
                 else:
+                    # Delete proposition
+                    await re_proposition_display.delete()
+
                     await context.send(
                         f":x: {player_a.name} has declined the trade"
                     )
