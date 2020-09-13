@@ -441,3 +441,54 @@ Each proposition must be separated from the others by a **whitespace**
                         await payee.resource.add_zeni(zenis)
 
         return success
+
+
+class TradeGetter:
+
+    __cache = []
+
+    async def add_to_cache(self, player_a, player_b):
+        """Add a trade instance to the cache, the instance is represented by
+        a dict of the 2 discord ids
+
+        @param Player player_a, player_b
+
+        --
+
+        @return None"""
+
+        trade = {
+            "player_a": player_a.id,
+            "player_b": player_b.id
+        }
+
+        self.__cache.append(trade)
+
+        return
+
+    async def remove_trade(self, discord_id):
+        """Remove the trade dict which contains the discord id
+
+        @param int discord_id
+
+        --
+
+        @return bool"""
+
+        success = False
+
+        for trade in self.__cache:
+            await asyncio.sleep(0)
+
+            # Convert the trade data into a list of id
+            data = [trade["player_a"], trade["player_b"]]
+
+            # Check if the discord id is in
+            # if the id is in the data while
+            # remove the trade dict
+            if discord_id in data:
+                self.__cache.remove(trade)
+                success = True
+                break
+
+        return success
