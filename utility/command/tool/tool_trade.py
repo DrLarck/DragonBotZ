@@ -21,8 +21,9 @@ from utility.command.tool.tool_shop import ToolShop
 class ToolTrade:
 
     def __init__(self, client):
-        self.client    = client
-        self.database  = self.client.database
+        self.client   = client
+        self.database = self.client.database
+        self.cache    = TradeGetter()
 
         self.short_character = ["character", "char"]
         self.short_zenis     = ["zenis", "zeni", 'z']
@@ -57,6 +58,9 @@ class ToolTrade:
 
         # If the player b has accepted, start the trade
         if validated:
+            # Add the trade to the cache
+            await self.trade.add_to_cache(player_a, player_b)
+
             # Store the propositions
             players_propositions = []
             for player in players:
