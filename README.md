@@ -21,3 +21,4 @@ You want to contribute to the project ? Perfect ! Read this [Quick guide](CONTRI
 ## Belenias
 
 The game and its source code are distributed by the **Belenias** team.
+![belenias-logo](https://i.imgur.com/9AeIsxu.png)
