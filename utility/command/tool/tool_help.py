@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 07/09/20 by DrLarck"""
+@update 13/09/20 by DrLarck"""
 
 import asyncio
 
@@ -89,7 +89,7 @@ class HelpInventory(Help):
 
 # HELP MISSION
 class HelpMission(Help):
-    
+
     def __init__(self):
         Help.__init__(self)
 
@@ -163,7 +163,7 @@ class SubShopBuy(Help):
         self.name = "Shop buy"
         self.invoke = "shop buy <character/item> <unique id>"
         self.description = "Allows you to buy an object from the shop"
-    
+
 
 # HELP START
 class HelpStart(Help):
@@ -213,7 +213,7 @@ class SubSummonBanner(Help):
 
 # MULTI SUMMON
 class HelpMultiSummon(Help):
-    
+
     def __init__(self):
         Help.__init__(self)
 
@@ -267,21 +267,54 @@ class HelpTrain(Help):
         self.description = "Starts a combat against a random enemy to let you gain experience points to level up the characters within your team"
 
 
+# Help trade
+class HelpTrade(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Trade"
+        self.invoke = "trade <@player>"
+        self.description = "Allows you to start a trade with the `@player` you passed as argument."
+
+        self.subcommand = [SubTradeCharacter(), SubTradeZenis()]
+
+
+class SubTradeCharacter(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character proposition"
+        self.invoke = "character | char <unique id>"
+        self.description = "Add a character to your proposition"
+
+
+class SubTradeZenis(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Zenis proposition"
+        self.invoke = "zenis | z <amount>"
+        self.description = "Add an amount of zenis to your proposition"
+
+
 class ToolHelp:
-    
+
     __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
-                          HelpMultiSummon(), HelpProfile(), HelpShop(), 
-                          HelpStart(), HelpStatus(), HelpSummon(), 
-                          HelpTeam(), HelpTrain()]
+                          HelpMultiSummon(), HelpProfile(), HelpShop(),
+                          HelpStart(), HelpStatus(), HelpSummon(),
+                          HelpTeam(), HelpTrain(), HelpTrade()]
     __total_page       = 0
     __display_per_page = 5
-    
+
     def __init__(self, client, context, player):
         self.client  = client
         self.context = context
         self.player  = player
-    
+
 
     async def help_manager(self, data=None):
         """Manages the help displaying
@@ -294,7 +327,7 @@ class ToolHelp:
 
         if data is None:
             data = self.__commands
-        
+
         else:
             # Display the command panel
             help_panel = await self.get_detailed_help_for(1, data)
@@ -304,13 +337,13 @@ class ToolHelp:
             self.__total_page = int(
                 ((len(data) - 1) / self.__display_per_page) + 1
             )
-        
+
             # Display and manage the help pannel
             stop    = False
             page_id = 1
             while not stop:
                 await asyncio.sleep(0)
-                
+
                 page = await self.get_help_page(page_id, data)
 
                 current_page = await self.context.send(embed=page)
@@ -326,7 +359,7 @@ class ToolHelp:
                     if pressed == '❌':
                         await current_page.delete()
                         break
-                
+
                     # Go back to the first page
                     elif pressed == '⏮':
                         page_id = 1
@@ -342,18 +375,18 @@ class ToolHelp:
                     # Go to the last page
                     elif pressed == '⏭':
                         page_id = self.__total_page
-                    
+
                     # Delete to open a new one
                     await current_page.delete()
-                
+
                 else:
                     break
-            
+
             else:
                 await self.context.send(":x: Help panel is not available")
 
         return
-    
+
     async def get_help_page(self, page, data):
         """Return the embed help page
 
@@ -366,7 +399,7 @@ class ToolHelp:
         @return discord.Embed"""
 
         help_page = await CustomEmbed().setup(
-            self.client, title="Help panel", 
+            self.client, title="Help panel",
             description=f"Page {page}/{self.__total_page}\nUse `help <command>` to display detailed help"
         )
 
@@ -375,7 +408,7 @@ class ToolHelp:
 
         if end > len(data):
             end = len(data)
-        
+
         for i in range(start, end):
             await asyncio.sleep(0)
 
@@ -386,9 +419,9 @@ class ToolHelp:
                 value=current.description,
                 inline=False
             )
-        
+
         return help_page
-    
+
     async def get_buttons(self, page):
         """Returns a set of buttons according to the page number
 
@@ -403,13 +436,13 @@ class ToolHelp:
         if page > 1:
             button_set.append('⏮')
             button_set.append('◀')
-        
+
         if page < self.__total_page:
             button_set.append('▶')
             button_set.append('⏭')
 
         return button_set
-    
+
     async def get_detailed_help_for(self, page, command_name):
         """Returns the detailed help for the passed command
 
@@ -431,7 +464,7 @@ class ToolHelp:
                 exists = True
                 looked_command = command
                 break
-        
+
         if exists:
             command_page = await CustomEmbed().setup(
                 self.client, title=f"{looked_command.name} help panel"
@@ -453,8 +486,8 @@ class ToolHelp:
                     value=sub.description,
                     inline=False
                 )
-            
+
             return command_page
-        
+
         else:
             return None
