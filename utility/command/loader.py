@@ -5,7 +5,7 @@ Command loader
 
 Author : DrLarck
 
-Last update : 12/09/20 by DrLarck
+Last update : 13/09/20 by DrLarck
 """
 
 import asyncio
@@ -21,8 +21,7 @@ class CommandLoader:
         # List of commands to load
         self.__command = [
             # Command
-            "command.help",
-            "command.mod", "command.start", "command.summon",
+            "command.help", "command.start", "command.summon",
             "command.profile", "command.inventory", "command.box",
             "command.hourly", "command.daily", "command.status",
             "command.team", "command.train", "command.mission",
