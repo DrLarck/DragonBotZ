@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 12/09/20 by DrLarck"""
+@update 13/09/20 by DrLarck"""
 
 import discord
 from discord.ext import commands
@@ -28,6 +28,8 @@ class CommandTrade(commands.Cog):
     @commands.command()
     async def trade(self, context, target: discord.Member):
         """Allows player to trade items"""
+
+        await self.client.logger.log(context)
 
         player_a = Player(context, self.client, context.message.author)
         player_b = Player(context, self.client, target)
