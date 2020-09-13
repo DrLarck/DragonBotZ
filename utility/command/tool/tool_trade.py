@@ -451,6 +451,28 @@ class TradeGetter:
 
     __cache = []
 
+    async def is_trading(self, player):
+        """Checks if the player is trading or not
+
+        @param Player player
+
+        --
+
+        @return bool"""
+
+        is_trading = False
+
+        for trade in self.__cache:
+            await asyncio.sleep(0)
+
+            data = [trade["player_a"], trade["player_b"]]
+
+            if player.id in data:
+                is_trading = True
+                break
+
+        return is_trading
+
     async def add_to_cache(self, player_a, player_b):
         """Add a trade instance to the cache, the instance is represented by
         a dict of the 2 discord ids
