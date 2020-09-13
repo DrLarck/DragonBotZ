@@ -59,7 +59,7 @@ class ToolTrade:
         # If the player b has accepted, start the trade
         if validated:
             # Add the trade to the cache
-            await self.trade.add_to_cache(player_a, player_b)
+            await self.cache.add_to_cache(player_a, player_b)
 
             # Store the propositions
             players_propositions = []
