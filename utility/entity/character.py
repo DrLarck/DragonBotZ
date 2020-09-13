@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 04/08/20 by DrLarck
+Last update : 12/09/20 by DrLarck
 """
 
 import asyncio
@@ -120,7 +120,7 @@ class Character:
         new_char.spirit.fixed = int(spirit_fixed * level_bonus)
         new_char.spirit.floating = spirit_floating
 
-        # Get the character's abilities 
+        # Get the character's abilities
         ability_ref = Ability(self.client)
         for ability_id in ability:
             await asyncio.sleep(0)
@@ -136,7 +136,7 @@ class Character:
                 # If the ability has been found, add it to the character
                 if ability is not None:
                     new_char.ability.append(ability)
-        
+
         # If the char has no abilities, add passed abilities as parameter
         if len(new_char.ability) == 0:
             new_char.ability = ability
@@ -543,7 +543,7 @@ class CharacterGetter:
 
                     character = await Character(client).generate(
                         char_id=character[0], name=character[1], type_value=character[2],
-                        rarity_value=character[3], card=character[4], thumbnail=character[4], 
+                        rarity_value=character[3], card=character[4], thumbnail=character[4],
                         health=character[5], ki=character[6], physical=character[7],
                         ki_power=character[8], armor_fixed=character[9], armor_floating=character[10],
                         spirit_fixed=character[11], spirit_floating=character[12],
@@ -618,7 +618,14 @@ class CharacterGetter:
                                                  FROM character_unique
                                                  WHERE character_unique_id = $1;
                                                  """, [unique_id])
-        character_row = character_row[0]
+
+        # If the character exists
+        if len(character_row) > 0:
+            character_row = character_row[0]
+
+        # If the character doesn't exist
+        else:
+            return
 
         if character_row is not None:
             # Get the character object according to the character's reference
@@ -650,7 +657,7 @@ class CharacterExperience:
     def __init__(self, client):
         self.client     = client
         self.__database = self.client.database
-    
+
     async def add_experience(self, unique_id, amount):
         """Add experience points to the character
 
@@ -663,12 +670,12 @@ class CharacterExperience:
         @return int or None as new character level"""
 
         # Get the character's experience
-        get_exp = """SELECT character_experience 
-        FROM character_unique 
+        get_exp = """SELECT character_experience
+        FROM character_unique
         WHERE character_unique_id = $1;"""
 
         character_exp = await self.__database.fetch_value(get_exp, [unique_id])
-        
+
         # Add the amount of exp to the character experience
         character_exp += amount
 
@@ -685,7 +692,7 @@ class CharacterExperience:
         await self.__database.execute(update_exp, [character_exp, unique_id])
 
         return new_level
-    
+
     async def level_up(self, unique_id, experience):
         """Update the character level according to its current level
         and the amount of exp that it has
@@ -704,7 +711,7 @@ class CharacterExperience:
         # the amount of exp needed is increased by 10 % per level
         # formula is :
         # next_level : level -> 100 * (1.1) ^ level
-        
+
         # Get the character's informations
         character_level = """SELECT character_level
         FROM character_unique
@@ -717,7 +724,7 @@ class CharacterExperience:
         next_level = int(100 * pow(1.1, level))
 
         # Check if the character has enough exp to reach the next level
-        # repeat it until the character experience is inferior to the 
+        # repeat it until the character experience is inferior to the
         # next level
         while experience >= next_level and level < 150:
             await asyncio.sleep(0)

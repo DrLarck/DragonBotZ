@@ -5,7 +5,7 @@ Command checker
 
 Author : DrLarck
 
-Last update : 30/07/20 by DrLarck
+Last update : 13/09/20 by DrLarck
 """
 
 from discord.channel import DMChannel
@@ -13,6 +13,7 @@ from discord.channel import DMChannel
 # util
 from utility.entity.player import Player
 from utility.entity.combat import CombatGetter
+from utility.command.tool.tool_trade import TradeGetter
 
 
 class CommandChecker:
@@ -138,11 +139,11 @@ class CommandChecker:
 
         if not is_fighting:
             return True
-        
+
         else:
             await context.send(f":x: {player.name} You're already in a fight")
             return False
-    
+
     @staticmethod
     async def has_team(context):
         """Check if the player has set up a team
@@ -161,6 +162,26 @@ class CommandChecker:
         # Check if the player has set a team
         if len(team) > 0:
             return True
-        
+
         else:
             return False
+
+    @staticmethod
+    async def not_trading(context):
+        """Checks if the player is trading or not
+
+        @param Context context
+
+        --
+
+        @return bool"""
+
+        in_trade     = False
+        trade_getter = TradeGetter()
+
+        client = context.bot
+        player = Player(context, client, context.message.author)
+
+        in_trade = await trade_getter.is_trading(player)
+
+        return not in_trade

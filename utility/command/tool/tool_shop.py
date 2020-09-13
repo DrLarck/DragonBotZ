@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 16/08/20 by DrLarck"""
+@update 12/09/20 by DrLarck"""
 
 import asyncio
 import time
@@ -36,7 +36,7 @@ class ToolShop:
 
         @param int shop_type : Character shop
 
-        @param int character_id 
+        @param int character_id
 
         --
 
@@ -51,7 +51,7 @@ class ToolShop:
             else:
                 # Specific character id
                 await self.set_data_character(character_id=character_id)
-        
+
         # If there is still no data
         if self.__data is None:
             await self.context.send(":x: None on sale characters at this reference")
@@ -84,7 +84,7 @@ class ToolShop:
                     if pressed == '❌':
                         await current_page.delete()
                         break
-                
+
                     # Go back to the first page
                     elif pressed == '⏮':
                         page_id = 1
@@ -100,19 +100,19 @@ class ToolShop:
                     # Go to the last page
                     elif pressed == '⏭':
                         page_id = self.__total_page
-                    
+
                     # Delete to open a new one
                     await current_page.delete()
-                
+
                 else:
                     break
-                
+
         return
-    
+
     async def set_data_character(self, character_id=None):
         """Set the tool data with passed character id
         if character id is None, display all the characters
-        
+
         All ordered by price
 
         --
@@ -122,11 +122,11 @@ class ToolShop:
         # Retrieve data
         if character_id is not None:
             self.__data = await self.__database.fetch_row("""
-                                                          SELECT * 
+                                                          SELECT *
                                                           FROM shop_character
                                                           WHERE character_reference = $1
                                                           ORDER BY character_price;
-                                                          """, [character_id])  
+                                                          """, [character_id])
 
         else:
             self.__data = await self.__database.fetch_row("""
@@ -134,12 +134,12 @@ class ToolShop:
                                                           FROM shop_character
                                                           ORDER BY character_price;
                                                           """)
-        
+
         if self.__data == []:
             self.__data = None
 
         return
-    
+
     async def get_character_shop_page(self, page):
         """Get the character shop page
 
@@ -156,7 +156,7 @@ class ToolShop:
 
         if end > len(self.__data):
             end = len(self.__data)
-        
+
         # Shop display
         shop = ""
         # Manage the time
@@ -179,18 +179,18 @@ class ToolShop:
 
             current = self.__data[i]
             character = await getter.get_from_unique(self.client, self.__database, current[1])
-            
+
             # Remaining time calculation
             end_at         = current[4] + max_time
             time_remaining = await timer.convert_time(end_at - time_now)
-            
+
             if len(time_remaining) == 0:
                 time_remaining = ":x: Not available"
 
             shop += f"`{current[1]}`. **{character.name}** lv.**{character.level}** | {icon.zeni}**{current[3]:,}** | ⌛ {time_remaining}\n"
 
         shop_page = await CustomEmbed().setup(
-            self.client, title=f"Character shop", 
+            self.client, title=f"Character shop",
             description=f"Page {page}/{self.__total_page}"
         )
 
@@ -201,7 +201,7 @@ class ToolShop:
         )
 
         return shop_page
-    
+
     async def get_buttons(self, page):
         """Return a set of buttons to add
 
@@ -216,7 +216,7 @@ class ToolShop:
         if page > 1:
             button_set.append('⏮')
             button_set.append('◀')
-        
+
         if page < self.__total_page:
             button_set.append('▶')
             button_set.append('⏭')
@@ -242,10 +242,10 @@ class ToolShop:
                                                       """, [unique_id])
 
         if character is not None:
-            exists = True                                            
+            exists = True
 
         return exists
-    
+
     async def add_character(self, seller, unique_id, price):
         """Adds a character to the shop
 
@@ -282,13 +282,13 @@ class ToolShop:
                                                   character_on_sale_at
                                               )
                                               VALUES($1, $2, $3, $4, $5);
-                                              """, [character.id, unique_id, 
+                                              """, [character.id, unique_id,
                                                     seller.id, price, time_now])
-                
+
                 # Remove the character from the seller's team
                 character_slot = await seller.combat.get_fighter_slot_by_id(unique_id)
                 print(character_slot)
-                
+
                 if character_slot is not None:
                     await seller.combat.remove_character(character_slot)
 
@@ -296,7 +296,7 @@ class ToolShop:
 
             else:
                 await self.context.send(":x: This character is not yours")
-        
+
         else:
             await self.context.send(":x: This character doesn't exist")
 
@@ -338,7 +338,7 @@ class ToolShop:
             if seller is None:
                 await self.context.send(":x: Unable to retrieve the seller data")
                 return
-            
+
             else:
                 # Send the money to the seller
                 buyer_zenis = await buyer.resource.get_zeni()
@@ -360,7 +360,7 @@ class ToolShop:
                                                   DELETE FROM shop_character
                                                   WHERE character_unique_id = $1;
                                                   """, [character_id])
-                    
+
                     await self.context.send("✅ Purchase made")
 
                     # Send a dm to the seller
@@ -370,8 +370,28 @@ class ToolShop:
 
                     confirm_selling = f"You've sold **{character.name}** lv.**{character.level:,}** to **{buyer.name}** for {icon.zeni}**{price:,}**"
                     await seller.send_dm(confirm_selling)
-                
+
                 else:
                     await self.context.send(":x: You do not have enough funds to buy this character")
-            
+
         return
+
+    async def remove_character(self, unique_id):
+        """Remove a character from the shop
+
+        @param str unique_id
+
+        --
+
+        @return None"""
+
+        # Check if the character is in the shop
+        in_shop = await self.find_character(unique_id)
+
+        if in_shop:
+            await self.__database.execute(
+                """
+                DELETE FROM shop_character
+                WHERE character_unique_id = $1;
+                """, [unique_id]
+            )

@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 06/09/20 by DrLarck
+Last update : 12/09/20 by DrLarck
 """
 
 import discord
@@ -39,7 +39,7 @@ class Player:
         self.time = PlayerTime(self)
 
         self.combat = PlayerCombat(self)
-    
+
     async def send_dm(self, message):
         """Send a DM to the user
 
@@ -54,15 +54,15 @@ class Player:
         if user is not None:
             try:
                 await user.send(message)
-            
+
             except discord.Forbidden:
-                print(f"Failed to DM {self.name} : Forbiddent")
+                print(f"Failed to DM {self.name} : Forbidden")
                 pass
 
             except discord.HTTPException:
                 print(f"Failed to DM {self.name} : Fail")
                 pass
-                
+
             else:
                 pass
 
@@ -83,10 +83,10 @@ class Player:
         if user is not None:
             new_player = Player(self.context, self.client, user)
             return new_player
-        
+
         else:
             return None
-    
+
     async def get_premium_data(self):
         """Returns the player's premium info
 
@@ -94,7 +94,7 @@ class Player:
 
         @return dict : keys
         {'premium': bool, 'tier': int, 'total_month': int, 'until': int}"""
-        
+
         # Init
         premium = False
         tier    = 0
@@ -116,7 +116,7 @@ class Player:
 
         remaining = int(data[0] - time.time())
         tier      = data[1]
-        total     = data[2] 
+        total     = data[2]
 
         # Make dict
         premium_data = {
@@ -127,6 +127,29 @@ class Player:
         }
 
         return premium_data
+
+    async def is_registered(self):
+        """Checks if the player is registered
+
+        --
+
+        @return bool"""
+
+        registered = False
+
+        # Check if the player is in the database
+        data = await self.client.database.fetch_value(
+            """
+            SELECT player_name
+            FROM player_info
+            WHERE player_id = $1;
+            """, [self.id]
+        )
+
+        if data is not None:
+            registered = True
+
+        return registered
 
 
 class PlayerResource:
@@ -149,8 +172,8 @@ class PlayerResource:
         """
 
         resources = await self.__database.fetch_row("""
-                                                    SELECT player_dragonstone, player_zeni 
-                                                    FROM player_resource 
+                                                    SELECT player_dragonstone, player_zeni
+                                                    FROM player_resource
                                                     WHERE player_id = $1;
                                                     """, [self.player.id])
 
@@ -166,8 +189,8 @@ class PlayerResource:
         """
 
         dragonstone = await self.__database.fetch_value("""
-                                                        SELECT player_dragonstone 
-                                                        FROM player_resource 
+                                                        SELECT player_dragonstone
+                                                        FROM player_resource
                                                         WHERE player_id = $1;
                                                         """, [self.player.id])
 
@@ -183,8 +206,8 @@ class PlayerResource:
         """
 
         zeni = await self.__database.fetch_value("""
-                                                SELECT player_zeni 
-                                                FROM player_resource 
+                                                SELECT player_zeni
+                                                FROM player_resource
                                                 WHERE player_id = $1;
                                                 """, [self.player.id])
 
@@ -209,8 +232,8 @@ class PlayerResource:
 
         # Update the inventory
         await self.__database.execute("""
-                                      UPDATE player_resource 
-                                      SET player_dragonstone = $1 
+                                      UPDATE player_resource
+                                      SET player_dragonstone = $1
                                       WHERE player_id = $2;
                                       """, [dragonstone, self.player.id])
 
@@ -235,8 +258,8 @@ class PlayerResource:
 
         # Update the inventory
         await self.__database.execute("""
-                                      UPDATE player_resource 
-                                      SET player_zeni = $1 
+                                      UPDATE player_resource
+                                      SET player_zeni = $1
                                       WHERE player_id = $2;
                                       """, [zeni, self.player.id])
 
@@ -315,13 +338,13 @@ class PlayerExperience:
         """
 
         player_level = await self.__database.fetch_value("""
-                                                         SELECT player_level 
+                                                         SELECT player_level
                                                          FROM player_experience
-                                                         WHERE player_id = $1;   
+                                                         WHERE player_id = $1;
                                                          """, [self.player.id])
 
         return player_level
-    
+
     async def get_player_power(self):
         """Get the player's power points
 
@@ -336,7 +359,7 @@ class PlayerExperience:
                                                   """, [self.player.id])
 
         return power
-    
+
     async def add_power(self, amount):
         """Add power points to the player's power
 
@@ -358,7 +381,7 @@ class PlayerExperience:
                                           """, [player_power, self.player.id])
 
         return
-    
+
     async def remove_power(self, amount):
         """Remove power points to the player's power
 
@@ -378,9 +401,9 @@ class PlayerExperience:
                                           SET player_power = $1
                                           WHERE player_id = $2;
                                           """, [player_power, self.player.id])
-        
+
         return
-        
+
 
 class PlayerTime:
 
@@ -724,13 +747,13 @@ class PlayerItem:
         has_it = False
 
         character = await self.__database.fetch_value("""
-                                                      SELECT character_unique_id 
-                                                      FROM character_unique 
-                                                      WHERE character_owner_id = $1;
-                                                      """, [self.player.id])
+                                                      SELECT character_unique_id
+                                                      FROM character_unique
+                                                      WHERE character_owner_id = $1 AND character_unique_id = $2;
+                                                      """, [self.player.id, unique_id])
 
         if character is not None:
-            has_it = True                                            
+            has_it = True
 
         return has_it
 
@@ -786,11 +809,11 @@ class PlayerCombat:
         self.team = team
 
         return team
-    
+
     async def add_character(self, unique_id, tool_shop):
         """Add a character to the player's team
 
-        @param str unique_id 
+        @param str unique_id
 
         @param ToolShop tool_shop
 
@@ -819,7 +842,7 @@ class PlayerCombat:
             if character.id == new_character.id:
                 duplicate = True
                 break
-        
+
         # If duplicate, return false and the reason
         if duplicate:
             success = False
@@ -831,7 +854,7 @@ class PlayerCombat:
         elif len(self.team) >= 3:
             success = False
             reason = ":x: Your team is full"
-        
+
         elif on_sale:
             success = False
             reason = ":x: This character is currently on sale"
@@ -844,7 +867,7 @@ class PlayerCombat:
                 await asyncio.sleep(0)
 
                 team_id += f"{unique} "
-            
+
             # Update the ids
             team_id += f"{unique_id} "
 
@@ -859,7 +882,7 @@ class PlayerCombat:
             reason = f"You've added **{new_character.name}**{new_character.type.icon} lv.**{new_character.level}** in your team !"
 
             return success, reason
-    
+
     async def get_fighter_slot_by_id(self, unique_id):
         """Return the character's slot index according to the unique_id
 
@@ -877,7 +900,7 @@ class PlayerCombat:
         is_in = False
         if unique_id in self.unique_id_team:
             is_in = True
-        
+
         # Get the character's slot index
         if is_in:
             index = 0
@@ -904,7 +927,7 @@ class PlayerCombat:
 
         # Check if the character is in the player's team
         await self.get_team()
-        
+
         # Get the unique id of the character
         unique_id = self.unique_id_team[slot]
 
@@ -915,7 +938,7 @@ class PlayerCombat:
             if unique == unique_id:
                 is_in = True
                 break
-        
+
         if is_in:
             # Get the character
             character = await getter.get_from_unique(self.player.client, self.__database, unique_id)
@@ -929,20 +952,20 @@ class PlayerCombat:
                 await asyncio.sleep(0)
 
                 new_team += unique + ' '
-            
+
             await self.__database.execute("""
                                           UPDATE player_combat
                                           SET player_team = $1
                                           WHERE player_id = $2;
                                           """, [new_team, self.player.id])
-            
+
             reason = f"Successfully removed **{character.name}**{character.type.icon} from your team"
 
         else:
             reason = "This character is not in your team"
 
         return reason
-    
+
     async def get_average_team_level(self):
         """Returns the average player's team level
 
@@ -951,12 +974,12 @@ class PlayerCombat:
         @return int"""
 
         average_level = 0
-        
+
         for character in self.team:
             await asyncio.sleep(0)
 
             average_level += character.level
-        
+
         average_level = int(
             average_level / len(self.team)
         )
