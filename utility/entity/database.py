@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 06/09/20 by DrLarck
+Last update : 1/11/20 by DrLarck
 """
 
 import asyncio
@@ -303,7 +303,8 @@ class Database:
                 character_experience BIGINT DEFAULT 0,
                 character_dokkan_rate INTEGER DEFAULT 0,
                 character_star INTEGER DEFAULT 0,
-                character_training_item TEXT
+                character_training_item TEXT,
+                locked BOOLEAN DEFAULT FALSE
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """,
