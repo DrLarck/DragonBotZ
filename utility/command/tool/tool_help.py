@@ -396,6 +396,7 @@ class ToolHelp:
             # Display the command panel
             help_panel = await self.get_detailed_help_for(1, data)
             await self.context.send(embed=help_panel)
+            return
 
         if len(data) > 0:
             self.__total_page = int(
