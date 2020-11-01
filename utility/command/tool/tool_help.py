@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 13/09/20 by DrLarck"""
+@update 1/11/20 by DrLarck"""
 
 import asyncio
 
@@ -121,7 +121,28 @@ class HelpProfile(Help):
         self.invoke = "profile | p"
         self.description = "Displays your profile, which contains informations about you"
 
+class HelpRecycle(Help):
 
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Recycle"
+        self.invoke = "recycle"
+        self.description = "Allows you to recycle your characters into **Dragon stones**"
+
+        self.subcommand = [SubRecycleRarity()]
+
+
+class SubRecycleRarity(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Recycle rarity"
+        self.invoke = "recycle <rarity>"
+        self.description = "Allows you to recycle your characters matching the rarity into **Dragon stones**"
+
+        
 # HELP SHOP
 class HelpShop(Help):
 
@@ -304,9 +325,10 @@ class ToolHelp:
 
     __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
-                          HelpMultiSummon(), HelpProfile(), HelpShop(),
-                          HelpStart(), HelpStatus(), HelpSummon(),
-                          HelpTeam(), HelpTrain(), HelpTrade()]
+                          HelpMultiSummon(), HelpProfile(), HelpRecycle(),
+                          HelpShop(), HelpStart(), HelpStatus(), 
+                          HelpSummon(), HelpTeam(), HelpTrain(), 
+                          HelpTrade()]
     __total_page       = 0
     __display_per_page = 5
 
