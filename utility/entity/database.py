@@ -231,6 +231,7 @@ class Database:
                 player_id BIGINT,
                 player_name TEXT,
                 player_dragonstone BIGINT DEFAULT 0,
+                player_dragonstone_shard DOUBLE PRECISION DEFAULT 0,
                 player_zeni BIGINT DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_resource_reference_index ON player_resource(reference);
