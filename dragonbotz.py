@@ -30,7 +30,7 @@ class Main:
 
     def __init__(self):
         self.__TOKEN = os.environ["dev_dbz_token"]
-        self.__version = "2.1.0.249"
+        self.__version = "2.1.0.250"
         self.__phase = ["ALPHA", "BETA", "RELEASE", "STABLE"]
 
         self.__prefix = ["d!", "D!", "db", "Db"]
