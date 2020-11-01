@@ -13,6 +13,7 @@ from utility.command.checker import CommandChecker
 from utility.global_tool import GlobalTool
 from utility.entity.player import Player
 from utility.graphic.icon import GameIcon
+from utility.command.tool.tool_shop import ToolShop
 
 
 class CommandRecycle(commands.Cog):
@@ -63,7 +64,7 @@ class CommandRecycle(commands.Cog):
         else:
             characters = await self.client.database.fetch_row(
                 """
-                SELECT reference, character_rarity
+                SELECT reference, character_rarity, character_unique_id
                 FROM character_unique
                 WHERE character_owner_id = $1
                 AND locked = false;
@@ -72,39 +73,46 @@ class CommandRecycle(commands.Cog):
         
         # Generate and delete characters
         deleted_amount = len(characters)
+        shop = ToolShop(self.client, context)
         
         for character in characters:
             await asyncio.sleep(0)
 
             reference = character[0]
             rarity = character[1]
+            unique = character[2]
 
-            if rarity == 0:
-                generated_shards += self.__n
+            # If the character is not in the shop
+            if not await shop.find_character(unique):
+                if rarity == 0:
+                    generated_shards += self.__n
+                
+                elif rarity == 1:
+                    generated_shards += self.__r
+                
+                elif rarity == 2:
+                    generated_shards += self.__sr
+                
+                elif rarity == 3:
+                    generated_shards += self.__ssr
+                
+                elif rarity == 4:
+                    generated_shards += self.__ur
+                
+                elif rarity == 5:
+                    generated_shards += self.__lr
+                
+                # Remove the character from the character unique
+                await self.client.database.execute(
+                    """
+                    DELETE 
+                    FROM character_unique
+                    WHERE reference = $1;
+                    """, [reference]
+                )
             
-            elif rarity == 1:
-                generated_shards += self.__r
-            
-            elif rarity == 2:
-                generated_shards += self.__sr
-            
-            elif rarity == 3:
-                generated_shards += self.__ssr
-            
-            elif rarity == 4:
-                generated_shards += self.__ur
-            
-            elif rarity == 5:
-                generated_shards += self.__lr
-            
-            # Remove the character from the character unique
-            await self.client.database.execute(
-                """
-                DELETE 
-                FROM character_unique
-                WHERE reference = $1;
-                """, [reference]
-            )
+            else:
+                deleted_amount -= 1
 
         # Add the shards to the player's resources
         player_shard = await self.client.database.fetch_value(
@@ -126,7 +134,7 @@ class CommandRecycle(commands.Cog):
         )
 
         # Send message
-        await context.send(f"You have recycled **{deleted_amount:,}** characters and generated **{generated_shards:.2f}** {GameIcon().dragonstone}")
+        await context.send(f"♻️ You have recycled **{deleted_amount:,}** characters and generated **{generated_shards:.2f}** {GameIcon().dragonstone}")
 
         # Add the dragonstone to the player
         added_ds = int(await player.resource.get_dragonstone_shard())
