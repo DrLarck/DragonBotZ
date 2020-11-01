@@ -30,14 +30,27 @@ class CommandCharacter(commands.Cog):
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @character.group(invoke_without_command=True)
+    @character.command()
     async def lock(self, context, unique_id):
         """Allows the player to lock a character he owns"""
 
         player = Player(context, self.client, context.message.author)
 
+        # If the player wants to lock all the characters
+        if unique_id.lower() == "all":
+            await self.client.database.execute(
+            """
+            UPDATE character_unique
+            SET locked = true
+            WHERE character_owner_id = $1;
+            """, [player.id]
+            )
+
+            await context.send("✅ You have successfully locked your characters")
+            return
+
         # If the player owns the character
-        if await player.item.has_character(unique_id):
+        elif await player.item.has_character(unique_id):
             await self.client.database.execute(
                 """
                 UPDATE character_unique
@@ -53,32 +66,26 @@ class CommandCharacter(commands.Cog):
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @lock.command()
-    async def all(self, context):
-        """Allows the player to lock all his characters"""
-
-        player = Player(context, self.client, context.message.author)
-
-        await self.client.database.execute(
-            """
-            UPDATE character_unique
-            SET locked = true
-            WHERE character_owner_id = $1;
-            """, [player.id]
-        )
-
-        await context.send("✅ You have successfully locked your characters")
-    
-    @commands.check(CommandChecker.game_ready)
-    @commands.check(CommandChecker.register)
-    @character.group(invoke_without_command=True)
+    @character.command()
     async def unlock(self, context, unique_id):
         """Allows the player to unlock a character he owns"""
 
         player = Player(context, self.client, context.message.author)
 
+        if unique_id.lower() == "all":
+            await self.client.database.execute(
+            """
+            UPDATE character_unique
+            SET locked = false
+            WHERE character_owner_id = $1;
+            """, [player.id]
+            )
+
+            await context.send("✅ You have successfully unlocked your characters")
+            return
+
         # If the player owns the character
-        if await player.item.has_character(unique_id):
+        elif await player.item.has_character(unique_id):
             await self.client.database.execute(
                 """
                 UPDATE character_unique
@@ -91,24 +98,6 @@ class CommandCharacter(commands.Cog):
         
         else:
             await context.send(":x: You do not own this character")
-    
-    @commands.check(CommandChecker.game_ready)
-    @commands.check(CommandChecker.register)
-    @unlock.command()
-    async def all(self, context):
-        """Allows the player to lock all his characters"""
-
-        player = Player(context, self.client, context.message.author)
-
-        await self.client.database.execute(
-            """
-            UPDATE character_unique
-            SET locked = false
-            WHERE character_owner_id = $1;
-            """, [player.id]
-        )
-
-        await context.send("✅ You have successfully unlocked your characters")
 
 
 def setup(client):
