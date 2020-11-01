@@ -5,7 +5,7 @@ On error event handler
 
 Author : DrLarck
 
-Last update : 21/03/20 by DrLarck
+Last update : 1/11/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -38,6 +38,13 @@ class EventOnError(commands.Cog):
         # Command check failure
         if isinstance(error, commands.CheckFailure):
             # Ignore the exception
+            pass
+        
+        # Command cooldown
+        if isinstance(error, commands.CommandOnCooldown):
+            cd = int(error.retry_after)
+
+            await context.send(f"⌛ You are under cooldown for this command, retry after **{cd:,}s**")
             pass
 
         # Print unhandled error

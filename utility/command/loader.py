@@ -28,7 +28,7 @@ class CommandLoader:
             "command.recycle", "command.shop", "command.trade",
 
             # Event
-            "utility.event.on_ready"
+            "utility.event.on_ready", "utility.event.on_error"
         ]
 
     async def load_commands(self):
