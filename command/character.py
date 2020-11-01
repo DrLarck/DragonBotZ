@@ -10,6 +10,7 @@ from discord.ext import commands
 from utility.entity.player import Player
 from utility.command.checker import CommandChecker
 from utility.command.tool.tool_help import ToolHelp
+from utility.entity.character import CharacterGetter
 
 
 class CommandCharacter(commands.Cog):
@@ -27,6 +28,28 @@ class CommandCharacter(commands.Cog):
         help = ToolHelp(self.client, context, player)
 
         await context.send(embed=await help.get_detailed_help_for(1, "character"))
+    
+    @commands.check(CommandChecker.game_ready)
+    @commands.check(CommandChecker.register)
+    @character.command()
+    async def info(self, context, reference: int, level=1):
+        """Display the character's card"""
+
+        getter = CharacterGetter()
+
+        if level < 1:
+            level = 1
+
+        if level > 150:
+            level = 150
+
+        character = await getter.get_reference_character(
+            reference, self.client, level=level
+        )
+
+        card = await character.get_combat_card(self.client, 0)
+        
+        await context.send(embed=card)
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
