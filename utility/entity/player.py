@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 12/09/20 by DrLarck
+Last update : 1/11/20 by DrLarck
 """
 
 import discord
@@ -825,9 +825,6 @@ class PlayerCombat:
         success = False
         getter = CharacterGetter()
 
-        await self.get_team()
-        new_character = await getter.get_from_unique(self.player.client, self.__database, unique_id)
-
         # Check if the character is on sale
         shop_tool = tool_shop
         on_sale = await shop_tool.find_character(unique_id)
@@ -835,13 +832,23 @@ class PlayerCombat:
         # Check if there is a character with the same reference
         # in the team
         duplicate = False
+        exists = False
 
-        for character in self.team:
-            await asyncio.sleep(0)
+        await self.get_team()
+        new_character = await getter.get_from_unique(
+            self.player.client, self.__database, unique_id
+        )
 
-            if character.id == new_character.id:
-                duplicate = True
-                break
+        # If the character exists
+        if new_character is not None:
+            exists = True
+
+            for character in self.team:
+                await asyncio.sleep(0)
+
+                if character.id == new_character.id:
+                    duplicate = True
+                    break
 
         # If duplicate, return false and the reason
         if duplicate:
@@ -858,6 +865,10 @@ class PlayerCombat:
         elif on_sale:
             success = False
             reason = ":x: This character is currently on sale"
+
+        elif not exists:
+            success = False
+            reason = f":x: Unable to find any character with `{unique_id}` as unique id"
 
         # If everything is ok, add the character
         else:
@@ -881,7 +892,7 @@ class PlayerCombat:
             success = True
             reason = f"You've added **{new_character.name}**{new_character.type.icon} lv.**{new_character.level}** in your team !"
 
-            return success, reason
+        return success, reason
 
     async def get_fighter_slot_by_id(self, unique_id):
         """Return the character's slot index according to the unique_id
