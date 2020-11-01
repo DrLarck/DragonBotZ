@@ -287,7 +287,6 @@ class ToolShop:
 
                 # Remove the character from the seller's team
                 character_slot = await seller.combat.get_fighter_slot_by_id(unique_id)
-                print(character_slot)
 
                 if character_slot is not None:
                     await seller.combat.remove_character(character_slot)
