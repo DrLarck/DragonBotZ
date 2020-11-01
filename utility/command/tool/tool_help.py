@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 13/09/20 by DrLarck"""
+@update 1/11/20 by DrLarck"""
 
 import asyncio
 
@@ -41,6 +41,48 @@ class SubBoxUnique(Help):
         self.name = "Unique characters box"
         self.invoke = "box unique <reference>"
         self.description = "Displays the unique id of your characters according to the passed reference"
+
+
+class HelpCharacter(Help):
+    
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character"
+        self.invoke = "character"
+        self.description = "Displays the character command help"
+
+        self.subcommand = [SubCharacterInfo(), SubCharacterLock(), SubCharacterUnlock()]
+
+
+class SubCharacterInfo(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character info"
+        self.invoke = "character info <reference> <level>"
+        self.description = "Displays the informations about a character"
+
+
+class SubCharacterLock(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character lock"
+        self.invoke = "character lock <unique id/all>"
+        self.description = "Avoid a character to be recycled, you can pass `all` as argument to lock all of your characters"
+
+
+class SubCharacterUnlock(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character unlock"
+        self.invoke = "character unlock <unique id/all>"
+        self.description = "Allows a character to be recycled, you can pass `all` as argument to unlock all of your characters"
 
 
 # DAILY HELP
@@ -121,7 +163,28 @@ class HelpProfile(Help):
         self.invoke = "profile | p"
         self.description = "Displays your profile, which contains informations about you"
 
+class HelpRecycle(Help):
 
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Recycle"
+        self.invoke = "recycle"
+        self.description = "Allows you to recycle your characters into **Dragon stones**"
+
+        self.subcommand = [SubRecycleRarity()]
+
+
+class SubRecycleRarity(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Recycle rarity"
+        self.invoke = "recycle <rarity>"
+        self.description = "Allows you to recycle your characters matching the rarity into **Dragon stones**"
+
+        
 # HELP SHOP
 class HelpShop(Help):
 
@@ -302,11 +365,12 @@ class SubTradeZenis(Help):
 
 class ToolHelp:
 
-    __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
+    __commands         = [HelpBox(), HelpCharacter(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
-                          HelpMultiSummon(), HelpProfile(), HelpShop(),
-                          HelpStart(), HelpStatus(), HelpSummon(),
-                          HelpTeam(), HelpTrain(), HelpTrade()]
+                          HelpMultiSummon(), HelpProfile(), HelpRecycle(),
+                          HelpShop(), HelpStart(), HelpStatus(), 
+                          HelpSummon(), HelpTeam(), HelpTrain(), 
+                          HelpTrade()]
     __total_page       = 0
     __display_per_page = 5
 
@@ -332,6 +396,7 @@ class ToolHelp:
             # Display the command panel
             help_panel = await self.get_detailed_help_for(1, data)
             await self.context.send(embed=help_panel)
+            return
 
         if len(data) > 0:
             self.__total_page = int(

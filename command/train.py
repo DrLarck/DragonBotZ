@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 06/09/20 by DrLarck"""
+@update 1/11/20 by DrLarck"""
 
 import asyncio
 import random
@@ -18,6 +18,7 @@ from utility.command.tool.tool_train import ToolTrain
 from utility.entity.player import Player
 from utility.entity.CPU import CPU
 from utility.entity.combat import Combat
+from utility.entity.combat import CombatGetter
 from utility.entity.character import CharacterGetter, CharacterExperience
 from utility.global_tool import GlobalTool
 
@@ -57,6 +58,10 @@ class CommandTrain(commands.Cog):
 
         # Run the combat
         winner = await combat.run()
+
+        # Empty the combat cache
+        combat_cache = CombatGetter()
+        await combat_cache.remove_combat_instance(player)
         
         # Display the winner name
         message = f"🏆 **{winner.name}** has won the fight ! "

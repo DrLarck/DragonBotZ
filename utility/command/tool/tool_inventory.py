@@ -5,7 +5,7 @@ Inventory tool object
 
 Author : DrLarck
 
-Last update : 05/04/20 by DrLarck
+Last update : 1/11/20 by DrLarck
 """
 
 # util
@@ -46,6 +46,7 @@ class ToolInventory:
 
         collection = len(player_characters)
         dragonstone = await player.resource.get_dragonstone()
+        dragonstone_shard = await player.resource.get_dragonstone_shard()
         zeni = await player.resource.get_zeni()
 
         # Setup the embed
@@ -55,6 +56,10 @@ class ToolInventory:
         # Embed fields
         embed.add_field(name=f"{self.__icon.dragonstone}Dragon Stone",
                         value=f"{dragonstone:,}",
+                        inline=True)
+        
+        embed.add_field(name="♻️Dragon Stone shards",
+                        value=f"{dragonstone_shard:.2f}",
                         inline=True)
 
         embed.add_field(name=f"{self.__icon.zeni}Zeni",

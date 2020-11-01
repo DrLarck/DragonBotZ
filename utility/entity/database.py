@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 06/09/20 by DrLarck
+Last update : 1/11/20 by DrLarck
 """
 
 import asyncio
@@ -231,6 +231,7 @@ class Database:
                 player_id BIGINT,
                 player_name TEXT,
                 player_dragonstone BIGINT DEFAULT 0,
+                player_dragonstone_shard DOUBLE PRECISION DEFAULT 0,
                 player_zeni BIGINT DEFAULT 0
             );
             CREATE UNIQUE INDEX IF NOT EXISTS player_resource_reference_index ON player_resource(reference);
@@ -303,7 +304,8 @@ class Database:
                 character_experience BIGINT DEFAULT 0,
                 character_dokkan_rate INTEGER DEFAULT 0,
                 character_star INTEGER DEFAULT 0,
-                character_training_item TEXT
+                character_training_item TEXT,
+                locked BOOLEAN DEFAULT FALSE
             );
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_index ON character_unique(reference);
             """,

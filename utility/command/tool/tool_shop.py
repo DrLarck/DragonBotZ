@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 12/09/20 by DrLarck"""
+@update 1/11/20 by DrLarck"""
 
 import asyncio
 import time
@@ -287,10 +287,18 @@ class ToolShop:
 
                 # Remove the character from the seller's team
                 character_slot = await seller.combat.get_fighter_slot_by_id(unique_id)
-                print(character_slot)
 
                 if character_slot is not None:
                     await seller.combat.remove_character(character_slot)
+
+                # Lock the character to avoid it to be recycled
+                await self.__database.execute(
+                    """
+                    UPDATE character_unique
+                    SET locked = true
+                    WHERE character_unique_id = $1;
+                    """, [unique_id]
+                )
 
                 await self.context.send("✅ Character successfully added")
 

@@ -5,7 +5,7 @@ Character object
 
 Author : Drlarck
 
-Last update : 12/09/20 by DrLarck
+Last update : 1/11/20 by DrLarck
 """
 
 import asyncio
@@ -96,7 +96,7 @@ class Character:
         new_char.id = char_id
         new_char.level = level
         # Set bonus per lvl
-        level_bonus = pow(1.05, new_char.level-1)  # Default +5 % stat per level
+        level_bonus = pow(1.02, new_char.level-1)  # Default +5 % stat per level
 
         new_char.image.card = card
         new_char.image.thumbnail = thumbnail
