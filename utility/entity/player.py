@@ -849,6 +849,9 @@ class PlayerCombat:
                 if character.id == new_character.id:
                     duplicate = True
                     break
+        
+        # Check if the player owns the character
+        owns = await self.player.item.has_character(unique_id)
 
         # If duplicate, return false and the reason
         if duplicate:
@@ -869,6 +872,10 @@ class PlayerCombat:
         elif not exists:
             success = False
             reason = f":x: Unable to find any character with `{unique_id}` as unique id"
+
+        elif not owns:
+            success = False
+            reason = ":x: You do not own this character"
 
         # If everything is ok, add the character
         else:
