@@ -365,7 +365,7 @@ class SubTradeZenis(Help):
 
 class ToolHelp:
 
-    __commands         = [HelpBox(), HelpDaily(), HelpHelp(),
+    __commands         = [HelpBox(), HelpCharacter(), HelpDaily(), HelpHelp(),
                           HelpHourly(), HelpInventory(), HelpMission(),
                           HelpMultiSummon(), HelpProfile(), HelpRecycle(),
                           HelpShop(), HelpStart(), HelpStatus(), 
