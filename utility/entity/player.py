@@ -172,7 +172,7 @@ class PlayerResource:
         """
 
         resources = await self.__database.fetch_row("""
-                                                    SELECT player_dragonstone, player_zeni
+                                                    SELECT player_dragonstone, player_zeni, player_dragonstone_shard
                                                     FROM player_resource
                                                     WHERE player_id = $1;
                                                     """, [self.player.id])
@@ -195,6 +195,23 @@ class PlayerResource:
                                                         """, [self.player.id])
 
         return dragonstone
+    
+    async def get_dragonstone_shard(self):
+        """Get the player's dragon stone shards amount 
+
+        --
+
+        @return `int`"""
+
+        shards = await self.__database.fetch_value(
+            """
+            SELECT player_dragonstone_shard
+            FROM player_resource
+            WHERE player_id = $1
+            """, [self.player.id]
+        )
+
+        return shards
 
     async def get_zeni(self):
         """
@@ -236,6 +253,29 @@ class PlayerResource:
                                       SET player_dragonstone = $1
                                       WHERE player_id = $2;
                                       """, [dragonstone, self.player.id])
+
+        return
+    
+    async def add_dragonstone_shard(self, amount):
+        """Add an amount of dragon stone shards to the player's inventory
+
+        @param double amount
+
+        --
+
+        @return None"""
+
+        shards = await self.get_dragonstone_shard()
+
+        shards += amount
+
+        await self.__database.execute(
+            """
+            UPDATE player_resource
+            SET player_dragonstone_shard = $1
+            WHERE player_id = $2;
+            """, [shards, self.player.id]
+        )
 
         return
 
@@ -289,6 +329,29 @@ class PlayerResource:
                                       WHERE player_id = $2;
                                       """, [dragonstone, self.player.id])
 
+        return
+    
+    async def remove_dragonstone_shard(self, amount):
+        """Remove an amount of dragonstone shards to the player
+
+        @param int amount
+
+        --
+
+        @return None"""
+
+        shards = await self.get_dragonstone_shard()
+
+        shards -= amount
+
+        await self.__database.execute(
+            """
+            UPDATE player_resource
+            SET player_dragonstone_shard = $1
+            WHERE player_id = $2;
+            """, [shards, self.player.id]
+        )
+        
         return
 
     async def remove_zeni(self, amount):
