@@ -43,6 +43,48 @@ class SubBoxUnique(Help):
         self.description = "Displays the unique id of your characters according to the passed reference"
 
 
+class HelpCharacter(Help):
+    
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character"
+        self.invoke = "character"
+        self.description = "Displays the character command help"
+
+        self.subcommand = [SubCharacterInfo(), SubCharacterLock(), SubCharacterUnlock()]
+
+
+class SubCharacterInfo(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character info"
+        self.invoke = "character info <reference> <level>"
+        self.description = "Displays the informations about a character"
+
+
+class SubCharacterLock(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character lock"
+        self.invoke = "character lock <unique id/all>"
+        self.description = "Avoid a character to be recycled, you can pass `all` as argument to lock all of your characters"
+
+
+class SubCharacterUnlock(Help):
+
+    def __init__(self):
+        Help.__init__(self)
+
+        self.name = "Character unlock"
+        self.invoke = "character unlock <unique id/all>"
+        self.description = "Allows a character to be recycled, you can pass `all` as argument to unlock all of your characters"
+
+
 # DAILY HELP
 class HelpDaily(Help):
 
