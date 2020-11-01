@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 07/09/20 by DrLarck"""
+@update 1/11/20 by DrLarck"""
 
 from discord.ext import commands
 
@@ -14,6 +14,7 @@ from utility.command.tool.tool_mission import ToolMission
 from utility.entity.player import Player
 from utility.entity.mission import MissionGetter
 from utility.entity.combat import Combat
+from utility.entity.combat import CombatGetter
 from utility.entity.CPU import CPU
 
 
@@ -69,6 +70,10 @@ class CommandMission(commands.Cog):
 
             # Start the mission
             winner = await combat.run()
+
+            # Empty the cache
+            combat_cache = CombatGetter()
+            await combat_cache.remove_combat_instance(player_a)
 
             # Check who won it
             if winner == player_a:
