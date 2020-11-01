@@ -31,6 +31,7 @@ class CommandRecycle(commands.Cog):
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
     @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.command()
     async def recycle(self, context, rarity=None):
         """Allows the player to recycle his characters"""
 
@@ -41,8 +42,14 @@ class CommandRecycle(commands.Cog):
         deleted_amount = 0
 
         # Get the rarity value if specified
-        rarity = await tool.get_rarity_value(rarity)
+        if rarity is not None:
+            rarity = await tool.get_rarity_value(rarity)
+            
+            if rarity is None:
+                await context.send(f":x: Unknown rarity `{rarity}`")
+                return
 
+        # If the rarity passed is correct
         if rarity is not None:
             # Get all the character with the passed rarity
             characters = await self.client.database.fetch_row("""
