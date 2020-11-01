@@ -59,7 +59,7 @@ class ToolInventory:
                         inline=True)
         
         embed.add_field(name="♻️Dragon Stone shards",
-                        value=f"{dragonstone_shard:,}",
+                        value=f"{dragonstone_shard:.2f}",
                         inline=True)
 
         embed.add_field(name=f"{self.__icon.zeni}Zeni",

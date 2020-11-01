@@ -126,7 +126,7 @@ class CommandRecycle(commands.Cog):
         )
 
         # Send message
-        await context.send(f"You have recycled **{deleted_amount:,}** characters and generated **{generated_shards:,}** {GameIcon().dragonstone}")
+        await context.send(f"You have recycled **{deleted_amount:,}** characters and generated **{generated_shards:.2f}** {GameIcon().dragonstone}")
 
         # Add the dragonstone to the player
         added_ds = int(await player.resource.get_dragonstone_shard())
