@@ -54,7 +54,7 @@ class CommandRecycle(commands.Cog):
         if rarity is not None:
             # Get all the character with the passed rarity
             characters = await self.client.database.fetch_row("""
-                                                              SELECT reference, character_rarity
+                                                              SELECT reference, character_rarity, character_unique_id
                                                               FROM character_unique
                                                               WHERE character_rarity = $1
                                                               AND character_owner_id = $2
