@@ -78,6 +78,8 @@ class CommandRecycle(commands.Cog):
         # Get the transaction object
         transaction = await self.client.database.get_transaction()
         await transaction.start()
+
+        waiting_msg = await context.send("Recycling your characters ...")
         
         for character in characters:
             await asyncio.sleep(0)
@@ -141,6 +143,7 @@ class CommandRecycle(commands.Cog):
         )
 
         # Send message
+        await waiting_msg.delete()
         await context.send(f"♻️ You have recycled **{deleted_amount:,}** characters and generated **{generated_shards:.2f}** {GameIcon().dragonstone}")
 
         # Add the dragonstone to the player
