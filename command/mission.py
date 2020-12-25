@@ -43,7 +43,7 @@ class CommandMission(commands.Cog):
     @commands.check(CommandChecker.not_fighting)
     @commands.check(CommandChecker.has_team)
     @commands.cooldown(1, 10, commands.BucketType.user)
-    @mission.command()
+    @mission.command(aliases=["s"])
     async def start(self, context, index):
         """Allows the player to start a mission"""
 
