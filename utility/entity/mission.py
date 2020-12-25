@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 06/09/20 by DrLarck"""
+@update 25/12/20 by DrLarck"""
 
 import asyncio
 
@@ -169,6 +169,7 @@ class MissionGetter:
                 opponent_list.append(new_opponent)
             
             mission_obj.opponent = opponent_list
+            mission_obj.opponent_lvl = opponent_lvl
 
             # Get the rewards
             mission_obj.experience  = mission[6]
