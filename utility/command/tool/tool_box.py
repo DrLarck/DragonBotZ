@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 12/08/20 by DrLarck
+Last update : 25/12/20 by DrLarck
 """
 
 import asyncio
@@ -64,7 +64,7 @@ class ToolBox:
             elif unique_reference is not None:
                 # Setup the data
                 self.__data = await self.__database.fetch_row("""
-                                                              SELECT character_unique_id, character_level
+                                                              SELECT character_unique_id, character_level, locked
                                                               FROM character_unique
                                                               WHERE character_reference = $1 AND character_owner_id = $2
                                                               ORDER BY character_level DESC;
@@ -272,9 +272,15 @@ class ToolBox:
             # Get the unique id
             unique_id = self.__data[i][0]
             character_level = self.__data[i][1]
+            
+            if self.__data[i][2] == True:
+                locked = ""
+            
+            else:
+                locked = "🔒"
 
             # Display the character
-            characters += f"`#{unique_id}` **{reference.name}** {reference.rarity.icon} - lv.{character_level}\n"
+            characters += f"{locked} `#{unique_id}` **{reference.name}** {reference.rarity.icon} - lv.{character_level}\n"
 
         box_page.add_field(name="Characters",
                            value=characters,
