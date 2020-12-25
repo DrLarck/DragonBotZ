@@ -37,6 +37,10 @@ class EventOnError(commands.Cog):
         # Command check failure
         if isinstance(error, commands.CheckFailure):
             await context.send("You do not fill the requirements to perform this action")
+
+        # Command missing argument
+        if isinstance(error, commands.MissingRequiredArgument):
+            await context.send("Incomplete command")
         
         # Command cooldown
         if isinstance(error, commands.CommandOnCooldown):
