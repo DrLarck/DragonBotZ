@@ -66,7 +66,7 @@ class CommandShop(commands.Cog):
         player = Player(context, self.client, context.message.author)
         tool   = ToolShop(self.client, context)
 
-        if type_.lower() == "character":
+        if type_.lower() == "character" or type_.lower() == "char":
             await tool.add_character(player, unique_id, price)
 
         else:
@@ -99,7 +99,7 @@ class CommandShop(commands.Cog):
             return
 
         # Player asked to buy a character
-        if type_.lower() == "character":
+        if type_.lower() == "character" or type_.lower() == "char":
             await tool.buy_character(buyer, object_id)
 
         # Type not found
