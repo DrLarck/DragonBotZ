@@ -10,6 +10,7 @@
 
 import os
 
+from utility.entity.config_parser import ConfigParser
 from discord.ext import commands
 import dbl
 
@@ -19,14 +20,17 @@ class TopGgWebhook(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.token = os.environ["dev_dbz_dbl_token"]
-        self.dbl = dbl.DBLClient(self.client, self.token, 
-                                 webhook_path='/dblwebhook', webhook_port=8152)
+        self.dbl = dbl.DBLClient(
+            self.client, self.token, 
+            webhook_path=ConfigParser.get_config_for(["webhook link"]), 
+            webhook_port=8152
+        )
     
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         """Triggered when a vote is cast on top.gg
 
-        @param data - ` dict`
+        @param data - `dict`
 
         @return - `None`"""
 
