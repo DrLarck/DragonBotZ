@@ -5,7 +5,7 @@ Custom embed
 
 Author : DrLarck
 
-Last update : 19/03/20 by DrLarck
+Last update : 25/12/20 by DrLarck
 """
 
 import discord
@@ -45,7 +45,7 @@ class CustomEmbed:
             description = ""
 
         if not len(footer) > 0:
-            footer = "Discord Ball Z : Origins | MIT License ©2019 - 2020"
+            footer = "Dragont Bot Z : Origins | MIT License ©2019 - 2020"
 
         if not len(thumbnail_url) > 0:
             thumbnail_url = None
