@@ -274,10 +274,10 @@ class ToolBox:
             character_level = self.__data[i][1]
             
             if self.__data[i][2] == True:
-                locked = ""
+                locked = "🔒"
             
             else:
-                locked = "🔒"
+                locked = ""
 
             # Display the character
             characters += f"{locked} `#{unique_id}` **{reference.name}** {reference.rarity.icon} - lv.{character_level}\n"
