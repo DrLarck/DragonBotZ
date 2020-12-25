@@ -5,7 +5,7 @@ On error event handler
 
 Author : DrLarck
 
-Last update : 1/11/20 by DrLarck
+Last update : 25/12/20 by DrLarck
 """
 
 from discord.ext import commands
@@ -32,13 +32,11 @@ class EventOnError(commands.Cog):
 
         # Command not found error
         if isinstance(error, commands.CommandNotFound):
-            # Ignore the exception
-            pass
+            await context.send("Command not found, please refer to `help`")
 
         # Command check failure
         if isinstance(error, commands.CheckFailure):
-            # Ignore the exception
-            pass
+            await context.send("You do not fill the requirements to perform this action")
         
         # Command cooldown
         if isinstance(error, commands.CommandOnCooldown):
