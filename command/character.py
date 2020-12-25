@@ -20,7 +20,7 @@ class CommandCharacter(commands.Cog):
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, aliases=["char"])
     async def character(self, context):
         """Display the character help"""
 
