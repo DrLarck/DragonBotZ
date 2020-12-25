@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 1/11/20 by DrLarck
+Last update : 25/12/20 by DrLarck
 """
 
 import asyncio
@@ -167,6 +167,15 @@ class Database:
         await self.__close()
 
         return row
+
+    async def get_transaction(self) -> asyncpg.transaction.Transaction:
+        """Returns a transaction object from the connection
+
+        @return - `Transaction`"""
+
+        await self.__get_connection()
+
+        return self.__connection.transaction()
 
     async def create_game_tables(self):
         """
