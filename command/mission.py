@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 25/12/20 by DrLarck"""
+@update 1/11/20 by DrLarck"""
 
 from discord.ext import commands
 
