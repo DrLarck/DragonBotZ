@@ -5,7 +5,7 @@ Command loader
 
 Author : DrLarck
 
-Last update : 1/11/20 by DrLarck
+Last update : 25/12/20 by DrLarck
 """
 
 import asyncio
@@ -29,7 +29,8 @@ class CommandLoader:
             "command.recycle", "command.shop", "command.trade",
 
             # Event
-            "utility.event.on_ready", "utility.event.on_error"
+            "utility.event.on_ready", "utility.event.on_error", 
+            "utility.event.top_gg"
         ]
 
     async def load_commands(self):
