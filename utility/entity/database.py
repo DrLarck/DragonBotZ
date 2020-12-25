@@ -168,7 +168,7 @@ class Database:
 
         return row
 
-    async def get_transaction(self) -> asyncpg.transaction.Transaction:
+    async def get_transaction(self) -> asyncpg.connection.transaction:
         """Returns a transaction object from the connection
 
         @return - `Transaction`"""
