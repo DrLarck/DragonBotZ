@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 08/09/20 by DrLarck"""
+@update 25/12/20 by DrLarck"""
 
 from discord.ext import commands
 
@@ -37,7 +37,7 @@ class CommandShop(commands.Cog):
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @shop.command()
+    @shop.command(alias=["char"])
     async def character(self, context, character_id:int=None):
         """Displays the character shop"""
 
