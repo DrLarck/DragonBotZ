@@ -1,5 +1,8 @@
 {
     "banner":{
         "current":1
+    },
+    "webhook": {
+        "link":"http://92106a6f47d5.ngrok.io/dblwebhook"
     }
 }
