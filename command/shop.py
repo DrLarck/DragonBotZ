@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 08/09/20 by DrLarck"""
+@update 25/12/20 by DrLarck"""
 
 from discord.ext import commands
 
@@ -37,7 +37,7 @@ class CommandShop(commands.Cog):
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
-    @shop.command()
+    @shop.command(alias=["char"])
     async def character(self, context, character_id:int=None):
         """Displays the character shop"""
 
@@ -66,7 +66,7 @@ class CommandShop(commands.Cog):
         player = Player(context, self.client, context.message.author)
         tool   = ToolShop(self.client, context)
 
-        if type_.lower() == "character":
+        if type_.lower() == "character" or type_.lower() == "char":
             await tool.add_character(player, unique_id, price)
 
         else:
@@ -99,7 +99,7 @@ class CommandShop(commands.Cog):
             return
 
         # Player asked to buy a character
-        if type_.lower() == "character":
+        if type_.lower() == "character" or type_.lower() == "char":
             await tool.buy_character(buyer, object_id)
 
         # Type not found
