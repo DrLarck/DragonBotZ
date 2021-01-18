@@ -6,11 +6,10 @@
 
 @author DrLarck
 
-@update 25/12/20 by DrLarck"""
+@update 18/01/20 by DrLarck"""
 
 import os
 
-from utility.entity.config_parser import ConfigParser
 from discord.ext import commands
 import dbl
 
@@ -22,8 +21,9 @@ class TopGgWebhook(commands.Cog):
         self.token = os.environ["dev_dbz_dbl_token"]
         self.dbl = dbl.DBLClient(
             self.client, self.token, 
-            webhook_path=ConfigParser.get_config_for(["webhook link"]), 
-            webhook_port=8152
+            webhook_path="/dblwebhook", 
+            webhook_port=8152,
+            webhook_auth=self.token
         )
     
     @commands.Cog.listener()
