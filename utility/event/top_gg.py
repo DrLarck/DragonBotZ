@@ -32,6 +32,51 @@ class TopGgWebhook(commands.Cog):
     
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
+        """Triggered when a vote is cast on top.gg
+
+        @param data - `dict`
+
+        @return - `None`"""
+
+        weekend = data["isWeekend"]
+        icon = GameIcon()
+        user_id = int(data["user"])
+        user = await self.client.fetch_user(user_id)
+
+        # Rewards
+        reward_ds = 25
+        reward_zenis = 1000
+        reward_power = 100
+
+        # If it's weekend, rewards are doubled
+        if weekend:
+            reward_ds *= 2
+            reward_zenis *= 2
+            reward_power *= 2
+
+        player = Player(None, self.client, user)
+
+        if player is not None:
+            # Sends rewards to the player
+            await player.resource.add_dragonstone(reward_ds)
+            await player.resource.add_zeni(reward_zenis)
+            await player.experience.add_power(reward_power)
+
+            # Send dm
+            try:
+                await user.send(f"Thanks for voting ! Here are **{reward_ds}**{icon.dragonstone}, as well as **{reward_zenis}**{icon.zeni} and **{reward_power}**:star:")
+            
+            except discord.Forbidden:
+                print(f"Failed to send reward message to {user_id} : Permission denied")
+                pass
+
+            except discord.HTTPException:
+                print(f"Failed to send reward message to {user_id}")
+                pass
+                
+            else:
+                pass
+        
         return
     
     @commands.Cog.listener()
