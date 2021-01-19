@@ -13,6 +13,7 @@ import dbl
 import discord
 
 from discord.ext import commands
+from utility.command.checker import CommandChecker
 from utility.entity.player import Player
 from utility.graphic.icon import GameIcon
 
@@ -31,6 +32,10 @@ class TopGgWebhook(commands.Cog):
     
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
+        return
+    
+    @commands.Cog.listener()
+    async def on_dbl_test(self, data):
         """Triggered when a vote is cast on top.gg
 
         @param data - `dict`
@@ -40,6 +45,7 @@ class TopGgWebhook(commands.Cog):
         weekend = data["isWeekend"]
         icon = GameIcon()
         user_id = int(data["user"])
+        user = await self.client.fetch_user(user_id)
 
         # Rewards
         reward_ds = 25
@@ -52,9 +58,7 @@ class TopGgWebhook(commands.Cog):
             reward_zenis *= 2
             reward_power *= 2
 
-        player = await Player(None, self.client, None).get_player_from_id(
-            user_id
-        )
+        player = Player(None, self.client, user)
 
         if player is not None:
             # Sends rewards to the player
@@ -63,10 +67,8 @@ class TopGgWebhook(commands.Cog):
             await player.experience.add_power(reward_power)
 
             # Send dm
-            user = await self.client.get_user(user_id)
-
             try:
-                await user.send(f"Thanks for voting ! Here are **{reward_ds}**{icon.dragonstone}, as well as **{reward_zenis}**{icon.zenis} and **{reward_power}**:star:")
+                await user.send(f"Thanks for voting ! Here are **{reward_ds}**{icon.dragonstone}, as well as **{reward_zenis}**{icon.zeni} and **{reward_power}**:star:")
             
             except discord.Forbidden:
                 print(f"Failed to send reward message to {user_id} : Permission denied")
@@ -80,6 +82,7 @@ class TopGgWebhook(commands.Cog):
                 pass
         
         return
+
 
 def setup(client):
     client.add_cog(TopGgWebhook(client))
