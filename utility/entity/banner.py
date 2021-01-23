@@ -5,7 +5,7 @@ Banner object
 
 Author : DrLarck
 
-Last update : 07/09/20 by DrLarck
+Last update : 23/01/21 by DrLarck
 """
 
 import asyncio
@@ -269,6 +269,8 @@ class BannerGetter:
             if len(data) > 0:
                 for banner in data:
                     await asyncio.sleep(0)
+
+                    print(banner[0])
 
                     # Generate the banner object
                     banner_ = Banner()
