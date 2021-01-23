@@ -270,8 +270,6 @@ class BannerGetter:
                 for banner in data:
                     await asyncio.sleep(0)
 
-                    print(banner[0])
-
                     # Generate the banner object
                     banner_ = Banner()
 
