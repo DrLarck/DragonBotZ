@@ -5,7 +5,7 @@ Banner object
 
 Author : DrLarck
 
-Last update : 23/01/21 by DrLarck
+Last update : 24/01/21 by DrLarck
 """
 
 import asyncio
@@ -149,6 +149,8 @@ class Banner:
         characters = []
 
         for i in range(self.multi):
+            await asyncio.sleep(0)
+
             summoned = await self.summon()
 
             if summoned is not None:
