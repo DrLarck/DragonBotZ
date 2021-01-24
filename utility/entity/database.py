@@ -45,7 +45,7 @@ class Database:
         if self.__pool is None:
             self.__pool = await asyncpg.create_pool(host=self.__host, database=self.__database,
                                                     user=self.__user, password=self.__password,
-                                                    port=self.__port)
+                                                    port=self.__port, max_inactive_connection_lifetime=100)
 
         # If the connection pool exists : defines the connection
         if self.__pool is not None:
