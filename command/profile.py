@@ -5,10 +5,11 @@ Profile command
 
 Author : DrLarck
 
-Last update : 12/09/20 by DrLarck
+Last update : 24/01/21 by DrLarck
 """
 
 import discord
+import asyncio
 
 from discord.ext import commands
 
@@ -122,6 +123,8 @@ class CommandProfile(commands.Cog):
         pressed = None
 
         while not stop:
+            await asyncio.sleep(0)
+
             # If no button has been pressed
             if count > 0 and pressed is None:
                 break
