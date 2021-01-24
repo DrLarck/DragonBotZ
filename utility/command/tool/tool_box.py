@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 25/12/20 by DrLarck
+Last update : 24/01/21 by DrLarck
 """
 
 import asyncio
@@ -211,7 +211,7 @@ class ToolBox:
 
             # Get the amount of characters the player owns
             amount = await self.__database.fetch_row("""
-                                                     SELECT * FROM character_unique
+                                                     SELECT COUNT(reference) FROM character_unique
                                                      WHERE character_reference = $1
                                                      AND character_owner_id = $2;
                                                      """, [character.id, player.id])
