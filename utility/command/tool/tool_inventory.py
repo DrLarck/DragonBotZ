@@ -5,7 +5,7 @@ Inventory tool object
 
 Author : DrLarck
 
-Last update : 1/11/20 by DrLarck
+Last update : 24/01/21 by DrLarck
 """
 
 # util
@@ -37,7 +37,7 @@ class ToolInventory:
 
         # Init
         player_characters = await self.__database.fetch_row("""
-                                                            SELECT *
+                                                            SELECT COUNT(reference)
                                                             FROM character_unique
                                                             WHERE character_owner_id = $1;
                                                             """, [player.id])
