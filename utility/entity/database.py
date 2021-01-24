@@ -109,8 +109,8 @@ class Database:
             pass
 
         # Gracefully close the connection
-        finally:
-            await self.__close()
+        # finally:
+        #     await self.__close()
 
         return
 
@@ -137,7 +137,7 @@ class Database:
         fetched = await self.__connection.fetchval(query, *parameters)
 
         # Gracefully close the connection
-        await self.__close()
+        #await self.__close()
 
         return fetched
 
@@ -164,7 +164,7 @@ class Database:
         row = await self.__connection.fetch(query, *parameters)
 
         # Gracefully close the connection
-        await self.__close()
+        #await self.__close()
 
         return row
 
