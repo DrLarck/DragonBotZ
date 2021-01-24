@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 05/09/20 by DrLarck"""
+@update 24/01/21 by DrLarck"""
 
 import patreon
 import os
@@ -57,6 +57,8 @@ class Patreon:
         stop         = False
 
         while not stop:
+            await asyncio.sleep(0)
+
             # Get the resources of the current pledge page
             # Each page contains 25 pledgers, also
             # fetches the pledge info such as the total
