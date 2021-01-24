@@ -52,6 +52,8 @@ class CommandTrade(commands.Cog):
 
         await self.tool.trade(context, player_a, player_b)
 
+        await self.getter.remove_trade(player_a.id)
+
 
 def setup(client):
     client.add_cog(CommandTrade(client))
