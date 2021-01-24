@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 1/11/20 by DrLarck"""
+@update 24/01/21 by DrLarck"""
 
 from discord.ext import commands
 
@@ -80,6 +80,9 @@ class CommandMission(commands.Cog):
                 rewards = await mission.send_rewards(context, player_a)
 
                 await context.send(f"🏆 **{player_a.name}** won the fight ! Here are your rewards : {rewards}")
+            
+            else:
+                await context.send(f"☠️ **{player_b.name}** won the fight !")
 
         else:
             await context.send("Mission not found")
