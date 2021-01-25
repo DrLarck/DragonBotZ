@@ -110,7 +110,8 @@ class Database:
         
         except Exception as error:
             print(error)
-
+            pass
+        
         # Gracefully close the connection
         finally:
             await self.__close()
@@ -135,12 +136,20 @@ class Database:
 
         if parameters is None:
             parameters = []
-            
-        # Execute the query
-        fetched = await self.__connection.fetchval(query, *parameters)
 
-        # Gracefully close the connection
-        await self.__close()
+        fetched = None
+        
+        try:
+            # Execute the query
+            fetched = await self.__connection.fetchval(query, *parameters)
+        
+        except Exception as error:
+            print(error)
+            pass
+
+        finally:
+            # Gracefully close the connection
+            await self.__close()
 
         return fetched
 
@@ -163,11 +172,19 @@ class Database:
         if parameters is None:
             parameters = []
 
-        # Fetch the row(s)
-        row = await self.__connection.fetch(query, *parameters)
+        row = None
 
-        # Gracefully close the connection
-        await self.__close()
+        try:
+            # Fetch the row(s)
+            row = await self.__connection.fetch(query, *parameters)
+        
+        except Exception as error:
+            print(error)
+            pass
+        
+        finally:
+            # Gracefully close the connection
+            await self.__close()
 
         return row
 
