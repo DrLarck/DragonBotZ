@@ -2,7 +2,7 @@
 
 @author DrLarck
 
-@update 25/12/20 by DrLarck"""
+@update 25/01/21 by DrLarck"""
 
 import asyncio
 
@@ -75,10 +75,6 @@ class CommandRecycle(commands.Cog):
         deleted_amount = len(characters)
         shop = ToolShop(self.client, context)
 
-        # Get the transaction object
-        transaction = await self.client.database.get_transaction()
-        await transaction.start()
-
         waiting_msg = await context.send("Recycling your characters ...")
         
         for character in characters:
@@ -119,9 +115,6 @@ class CommandRecycle(commands.Cog):
             
             else:
                 deleted_amount -= 1
-
-        # Close the transaction
-        await transaction.commit()
 
         # Add the shards to the player's resources
         player_shard = await self.client.database.fetch_value(
