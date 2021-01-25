@@ -107,6 +107,9 @@ class Database:
         # Ignore the UniqueViolationError
         except asyncpg.UniqueViolationError:
             pass
+        
+        except Exception as error:
+            print(error)
 
         # Gracefully close the connection
         finally:
