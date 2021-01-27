@@ -969,6 +969,15 @@ class PlayerCombat:
                                           WHERE player_id = $2;
                                           """, [team_id, self.player.id])
 
+            # Lock the character to avoid the player to recycle it
+            await self.__database.execute(
+                """
+                UPDATE character_unique
+                SET locked = true
+                WHERE character_unique_id = $1
+                """, [unique_id]
+            )
+
             success = True
             reason = f"You've added **{new_character.name}**{new_character.type.icon} lv.**{new_character.level}** in your team !"
 
