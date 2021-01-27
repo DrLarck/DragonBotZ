@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 1/11/20 by DrLarck
+Last update : 27/01/21 by DrLarck
 """
 
 import discord
@@ -322,6 +322,10 @@ class PlayerResource:
         # Remove the amount
         dragonstone -= amount
 
+        # Avoid negative value
+        if dragonstone < 0:
+            dragonstone = 0
+
         # Update the inventory
         await self.__database.execute("""
                                       UPDATE player_resource
@@ -343,6 +347,9 @@ class PlayerResource:
         shards = await self.get_dragonstone_shard()
 
         shards -= amount
+
+        if shards < 0:
+            shards = 0
 
         await self.__database.execute(
             """
@@ -370,6 +377,9 @@ class PlayerResource:
 
         # Remove the amount
         zeni -= amount
+
+        if zeni < 0:
+            zeni = 0
 
         # Update inventory
         await self.__database.execute("""
