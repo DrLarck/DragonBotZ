@@ -78,7 +78,7 @@ class Player:
         @return Player or None if not found"""
 
         # Retrieve the discord user
-        user = self.client.get_user(player_id)
+        user = await self.client.fetch_user(player_id)
 
         if user is not None:
             new_player = Player(self.context, self.client, user)
