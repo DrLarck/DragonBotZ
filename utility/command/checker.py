@@ -112,7 +112,7 @@ class CommandChecker:
         database = client.database
 
         # Check if the player is in the database
-        value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = {player.id};")
+        value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = $1;", [player.id])
 
         # If the player is registered
         # Return true
