@@ -19,6 +19,9 @@ class CommandCharacter(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.icon = GameIcon()
+        self.tool = GlobalTool()
+        self.rarity = ['n', 'r', "sr", "ssr", "ur", "lr"]
     
     @commands.check(CommandChecker.game_ready)
     @commands.check(CommandChecker.register)
@@ -60,8 +63,6 @@ class CommandCharacter(commands.Cog):
         """Allows the player to lock a character he owns"""
 
         player = Player(context, self.client, context.message.author)
-        rarity = ['n', 'r', "sr", "ssr", "ur", "lr"]
-        icon = GameIcon()
 
         # If the player wants to lock all the characters
         if unique_id.lower() == "all":
@@ -77,9 +78,9 @@ class CommandCharacter(commands.Cog):
             return
         
         # Lock by rarity
-        elif unique_id.lower() in rarity:
+        elif unique_id.lower() in self.rarity:
             asked_rarity = await GlobalTool().get_rarity_value(unique_id)
-            rarity_icon = await icon.get_rarity_icon(asked_rarity)
+            rarity_icon = await self.icon.get_rarity_icon(asked_rarity)
 
             await self.client.database.execute(
                 """
@@ -125,6 +126,21 @@ class CommandCharacter(commands.Cog):
             )
 
             await context.send("✅ You have successfully unlocked your characters")
+            return
+        
+        if unique_id.lower() in self.rarity:
+            asked_rarity = await self.tool.get_rarity_value(unique_id)
+            rarity_icon = await self.icon.get_rarity_icon(asked_rarity)
+
+            await self.client.database.execute(
+                """
+                UPDATE character_unique
+                SET locked = false
+                WHERE character_rarity = $1;
+                """, [asked_rarity]
+            )
+
+            await context.send(f"✅ You have successfully unlocked your {rarity_icon} characters")
             return
 
         # If the player owns the character
