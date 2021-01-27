@@ -5,7 +5,7 @@ Command checker
 
 Author : DrLarck
 
-Last update : 13/09/20 by DrLarck
+Last update : 27/01/21 by DrLarck
 """
 
 from discord.channel import DMChannel
@@ -34,6 +34,9 @@ class CommandChecker:
 
         # Init
         client = context.bot
+
+        # Error message
+        await context.send("I'm currently booting up, please wait while I'm completing the boot process ...")
 
         return client.is_ready()
 
