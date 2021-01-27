@@ -5,7 +5,7 @@ Box command tools
 
 Author : DrLarck
 
-Last update : 24/01/21 by DrLarck
+Last update : 27/01/21 by DrLarck
 """
 
 import asyncio
@@ -210,13 +210,11 @@ class ToolBox:
             character = self.__data[i]
 
             # Get the amount of characters the player owns
-            amount = await self.__database.fetch_row("""
-                                                     SELECT COUNT(reference) FROM character_unique
+            amount = await self.__database.fetch_value("""
+                                                     SELECT COUNT(*) FROM character_unique
                                                      WHERE character_reference = $1
                                                      AND character_owner_id = $2;
                                                      """, [character.id, player.id])
-
-            amount = len(amount)
 
             # Display the character
             characters += f"`#{character.id}` **{character.name}** {character.rarity.icon} x{amount}\n"
