@@ -871,13 +871,21 @@ class PlayerCombat:
             char_getter = CharacterGetter()
 
             # Get the instance of each character
+            count = 0
             for unique_id in player_team:
                 await asyncio.sleep(0)
 
                 character = await char_getter.get_from_unique(self.player.client, self.__database, unique_id)
 
-                # Add the character to the team list
-                team.append(character)
+                # If the character is not found, remove it from the team
+                if character is None:
+                    await self.remove_character(count, from_get_team=True)
+                
+                else:
+                    # Add the character to the team list
+                    team.append(character)
+                
+                count += 1
 
         self.team = team
 
@@ -1015,7 +1023,7 @@ class PlayerCombat:
 
         return slot
 
-    async def remove_character(self, slot):
+    async def remove_character(self, slot, from_get_team=False):
         """Remove a character from the player's team
 
         --
@@ -1025,8 +1033,10 @@ class PlayerCombat:
         reason = ""
         getter = CharacterGetter()
 
-        # Check if the character is in the player's team
-        await self.get_team()
+        # If remove_character() is not called by get_team()
+        if not from_get_team:
+            # Check if the character is in the player's team
+            await self.get_team()
 
         # Get the unique id of the character
         unique_id = self.unique_id_team[slot]
@@ -1059,7 +1069,9 @@ class PlayerCombat:
                                           WHERE player_id = $2;
                                           """, [new_team, self.player.id])
 
-            reason = f"Successfully removed **{character.name}**{character.type.icon} from your team"
+            # Display this message if the call is not from get_team()
+            if not from_get_team:
+                reason = f"Successfully removed **{character.name}**{character.type.icon} from your team"
 
         else:
             reason = "This character is not in your team"
