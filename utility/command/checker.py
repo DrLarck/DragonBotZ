@@ -36,7 +36,7 @@ class CommandChecker:
         client = context.bot
 
         # Error message
-        await context.send("I'm currently booting up, please wait while I'm completing the boot process ...")
+        await context.send("I'm currently booting up, please wait until the end of the process ...")
 
         return client.is_ready()
 
