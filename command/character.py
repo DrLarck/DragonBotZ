@@ -2,7 +2,7 @@
 
 @author DrLarck
 
-@update 1/11/20 by DrLarck"""
+@update 27/01/21 by DrLarck"""
 
 from discord.ext import commands
 
@@ -11,6 +11,8 @@ from utility.entity.player import Player
 from utility.command.checker import CommandChecker
 from utility.command.tool.tool_help import ToolHelp
 from utility.entity.character import CharacterGetter
+from utility.global_tool import GlobalTool
+from utility.graphic.icon import GameIcon
 
 
 class CommandCharacter(commands.Cog):
@@ -58,6 +60,8 @@ class CommandCharacter(commands.Cog):
         """Allows the player to lock a character he owns"""
 
         player = Player(context, self.client, context.message.author)
+        rarity = ['n', 'r', "sr", "ssr", "ur", "lr"]
+        icon = GameIcon()
 
         # If the player wants to lock all the characters
         if unique_id.lower() == "all":
@@ -70,6 +74,22 @@ class CommandCharacter(commands.Cog):
             )
 
             await context.send("✅ You have successfully locked your characters")
+            return
+        
+        # Lock by rarity
+        elif unique_id.lower() in rarity:
+            asked_rarity = await GlobalTool().get_rarity_value(unique_id)
+            rarity_icon = await icon.get_rarity_icon(asked_rarity)
+
+            await self.client.database.execute(
+                """
+                UPDATE character_unique
+                SET locked = true
+                WHERE character_rarity = $1;
+                """, [asked_rarity]
+            )
+
+            await context.send(f"✅ You have successfully locked your {rarity_icon} characters")
             return
 
         # If the player owns the character
