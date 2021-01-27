@@ -5,10 +5,11 @@ Custom embed
 
 Author : DrLarck
 
-Last update : 25/12/20 by DrLarck
+Last update : 27/01/21 by DrLarck
 """
 
 import discord
+import time
 
 
 class CustomEmbed:
@@ -45,7 +46,8 @@ class CustomEmbed:
             description = ""
 
         if not len(footer) > 0:
-            footer = "Dragont Bot Z : Origins | MIT License ©2019 - 2020"
+            year = time.strftime("%Y", time.gmtime())
+            footer = f"Dragont Bot Z : Origins | MIT License © 2019 - {year}"
 
         if not len(thumbnail_url) > 0:
             thumbnail_url = None
