@@ -34,11 +34,14 @@ class CommandChecker:
 
         # Init
         client = context.bot
+        ready = client.is_ready()
 
-        # Error message
-        await context.send("I'm currently booting up, please wait until the end of the process ...")
-
-        return client.is_ready()
+        if not ready:
+            await context.send("I'm currently booting up, please wait until the end of the process ...")
+            return False
+        
+        else:
+            return True
 
     @staticmethod
     async def no_dm(context):
