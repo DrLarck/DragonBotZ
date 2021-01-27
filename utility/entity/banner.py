@@ -5,7 +5,7 @@ Banner object
 
 Author : DrLarck
 
-Last update : 24/01/21 by DrLarck
+Last update : 27/01/21 by DrLarck
 """
 
 import asyncio
@@ -39,7 +39,7 @@ class Banner:
         self.__n = []
 
         # Droprate as %
-        self.__lr_droprate = 0.01
+        self.__lr_droprate = 0.07
         self.__ur_droprate = 3
         self.__ssr_droprate = 15
         self.__sr_droprate = 33
