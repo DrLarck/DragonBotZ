@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 27/01/21 by DrLarck
+Last update : 28/01/21 by DrLarck
 """
 
 import discord
@@ -39,6 +39,27 @@ class Player:
         self.time = PlayerTime(self)
 
         self.combat = PlayerCombat(self)
+
+    async def is_mod(self) -> bool:
+        """Tells if the player is mod or not
+
+        --
+
+        @return `bool`"""
+
+        data = await self.client.database.fetch_value(
+            """
+            SELECT player_id
+            FROM mod
+            WHERE player_id = $1;
+            """, [self.id]
+        )
+
+        if data is not None:
+            return True
+        
+        else:
+            return False
 
     async def send_dm(self, message):
         """Send a DM to the user
