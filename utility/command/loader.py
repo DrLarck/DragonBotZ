@@ -28,6 +28,7 @@ class CommandLoader:
             "command.team", "command.train", "command.mission",
             "command.recycle", "command.shop", "command.trade",
             "command.vote", "command.invite", "command.mod",
+            "command.premium",
 
             # Event
             "utility.event.on_ready", "utility.event.on_error", 
