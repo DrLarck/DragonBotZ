@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 12/08/20 by DrLarck"""
+@update 28/01/21 by DrLarck"""
 
 import asyncio
 
@@ -126,13 +126,14 @@ class ToolMission:
 
             # Get the difficulty display
             difficulty = ""
+            lvl = current.opponent_lvl
 
             for j in range(current.difficulty):
                 await asyncio.sleep(0)
 
                 difficulty += ":star:"
 
-            mission += f"`#{current.reference}`. {current.name} {difficulty}\n"
+            mission += f"`#{current.reference}`. {current.name} - lv.{lvl:,} {difficulty}\n"
         
         mission_page.add_field(
             name="Missions : ",
