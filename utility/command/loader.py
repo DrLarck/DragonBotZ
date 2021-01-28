@@ -5,7 +5,7 @@ Command loader
 
 Author : DrLarck
 
-Last update : 27/01/21 by DrLarck
+Last update : 28/01/21 by DrLarck
 """
 
 import asyncio
@@ -27,7 +27,7 @@ class CommandLoader:
             "command.hourly", "command.daily", "command.status",
             "command.team", "command.train", "command.mission",
             "command.recycle", "command.shop", "command.trade",
-            "command.vote",
+            "command.vote", "command.invite",
 
             # Event
             "utility.event.on_ready", "utility.event.on_error", 
