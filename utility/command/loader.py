@@ -27,7 +27,7 @@ class CommandLoader:
             "command.hourly", "command.daily", "command.status",
             "command.team", "command.train", "command.mission",
             "command.recycle", "command.shop", "command.trade",
-            "command.vote", "command.invite",
+            "command.vote", "command.invite", "command.mod",
 
             # Event
             "utility.event.on_ready", "utility.event.on_error", 
