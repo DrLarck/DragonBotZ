@@ -5,7 +5,7 @@ Manage the database
 
 Author : DrLarck
 
-Last update : 25/12/20 by DrLarck
+Last update : 28/01/21 by DrLarck
 """
 
 import asyncio
@@ -313,7 +313,9 @@ class Database:
                 character_leader TEXT,
                 character_passive TEXT,
 
-                character_ability TEXT
+                character_ability TEXT,
+
+                tradable BOOLEAN DEFAULT TRUE
             );
 
             CREATE UNIQUE INDEX IF NOT EXISTS character_reference_reference_index ON character_reference(reference);
@@ -446,6 +448,15 @@ class Database:
             );
 
             CREATE UNIQUE INDEX IF NOT EXISTS character_unique_id ON shop_character(character_unique_id);
+            """,
+
+            # Mod table
+            """
+            CREATE TABLE IF NOT EXISTS mod(
+                player_id BIGINT NOT NULL
+            );
+
+            CREATE UNIQUE INDEX IF NOT EXISTS mod_id ON mod(player_id);
             """
         ]
 
