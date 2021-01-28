@@ -840,14 +840,23 @@ class PlayerItem:
 
         has_it = False
 
-        character = await self.__database.fetch_value("""
-                                                      SELECT character_unique_id
+        character = await self.__database.fetch_row("""
+                                                      SELECT character_unique_id, character_reference
                                                       FROM character_unique
                                                       WHERE character_owner_id = $1 AND character_unique_id = $2;
                                                       """, [self.player.id, unique_id])
 
-        if character is not None:
-            has_it = True
+        if len(character) > 0 :
+            tradable = await self.__database.fetch_value(
+                """
+                SELECT tradable
+                FROM character_reference
+                WHERE reference = $1;
+                """, [character[1]]
+            )
+
+            if tradable:
+                has_it = True
 
         return has_it
 
