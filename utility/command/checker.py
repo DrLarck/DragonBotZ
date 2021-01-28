@@ -5,7 +5,7 @@ Command checker
 
 Author : DrLarck
 
-Last update : 27/01/21 by DrLarck
+Last update : 28/01/21 by DrLarck
 """
 
 from discord.channel import DMChannel
@@ -191,3 +191,22 @@ class CommandChecker:
         in_trade = await trade_getter.is_trading(player)
 
         return not in_trade
+    
+    @staticmethod
+    async def is_mod(context):
+        """Check if the caller is mod
+
+        @param context - `Context`
+
+        --
+
+        @return `bool`"""
+
+        mod = False
+
+        client = context.bot
+        player = Player(context, client, context.message.author)
+
+        mod = await player.is_mod()
+
+        return mod
