@@ -1,4 +1,4 @@
-![version](https://img.shields.io/badge/version-2.1.0-orange.svg)
+![version](https://img.shields.io/badge/version-2.1.1-orange.svg)
 ![MIT](https://img.shields.io/github/license/DrLarck/discordballz-origins)
 
 ![dbz-logo](https://i.imgur.com/8dDHHm7.png)
