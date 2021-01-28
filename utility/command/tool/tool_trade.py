@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 13/09/20 by DrLarck"""
+@update 28/01/21 by DrLarck"""
 
 import asyncio
 
@@ -300,7 +300,7 @@ Each proposition must be separated from the others by a **whitespace**
 
                     else:
                         char   = current["value"]
-                        error += f"- You do not own the character `{char}`\n"
+                        error += f"- You do not own the character `{char}` or this character is not tradable\n"
 
                 # Check if it's zenis
                 elif current["object"].lower() in self.short_zenis:
