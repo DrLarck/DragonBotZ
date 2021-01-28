@@ -852,7 +852,7 @@ class PlayerItem:
                 SELECT tradable
                 FROM character_reference
                 WHERE reference = $1;
-                """, [character[1]]
+                """, [character[0][1]]
             )
 
             if tradable:
