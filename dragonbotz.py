@@ -7,7 +7,7 @@ Project start : 09/03/20
 
 Author : DrLarck
 
-Last update : 25/01/21 by DrLarck
+Last update : 28/01/21 by DrLarck
 """
 
 import logging
@@ -30,7 +30,7 @@ class Main:
 
     def __init__(self):
         self.__TOKEN = os.environ["dev_dbz_token"]
-        self.__version = "2.1.0.278r"
+        self.__version = "2.1.1.0s"
         self.__phase = ["ALPHA", "BETA", "RELEASE", "STABLE"]
 
         self.__prefix = ["d!", "D!", "db", "Db"]
@@ -45,7 +45,7 @@ class Main:
         """
 
         # Init
-        activity = discord.Game(name=f"d!help | v{self.__version} - {self.__phase[2]}")
+        activity = discord.Game(name=f"d!help | v{self.__version} - {self.__phase[3]}")
 
         client = commands.AutoShardedBot(command_prefix=self.__prefix, help_command=None,
                               activity=activity)
