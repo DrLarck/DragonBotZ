@@ -5,7 +5,7 @@ Player object
 
 Author : DrLarck
 
-Last update : 1/11/20 by DrLarck
+Last update : 28/01/21 by DrLarck
 """
 
 import discord
@@ -39,6 +39,27 @@ class Player:
         self.time = PlayerTime(self)
 
         self.combat = PlayerCombat(self)
+
+    async def is_mod(self) -> bool:
+        """Tells if the player is mod or not
+
+        --
+
+        @return `bool`"""
+
+        data = await self.client.database.fetch_value(
+            """
+            SELECT player_id
+            FROM mod
+            WHERE player_id = $1;
+            """, [self.id]
+        )
+
+        if data is not None:
+            return True
+        
+        else:
+            return False
 
     async def send_dm(self, message):
         """Send a DM to the user
@@ -78,7 +99,7 @@ class Player:
         @return Player or None if not found"""
 
         # Retrieve the discord user
-        user = self.client.get_user(player_id)
+        user = await self.client.fetch_user(player_id)
 
         if user is not None:
             new_player = Player(self.context, self.client, user)
@@ -322,6 +343,10 @@ class PlayerResource:
         # Remove the amount
         dragonstone -= amount
 
+        # Avoid negative value
+        if dragonstone < 0:
+            dragonstone = 0
+
         # Update the inventory
         await self.__database.execute("""
                                       UPDATE player_resource
@@ -343,6 +368,9 @@ class PlayerResource:
         shards = await self.get_dragonstone_shard()
 
         shards -= amount
+
+        if shards < 0:
+            shards = 0
 
         await self.__database.execute(
             """
@@ -370,6 +398,9 @@ class PlayerResource:
 
         # Remove the amount
         zeni -= amount
+
+        if zeni < 0:
+            zeni = 0
 
         # Update inventory
         await self.__database.execute("""
@@ -809,14 +840,23 @@ class PlayerItem:
 
         has_it = False
 
-        character = await self.__database.fetch_value("""
-                                                      SELECT character_unique_id
+        character = await self.__database.fetch_row("""
+                                                      SELECT character_unique_id, character_reference
                                                       FROM character_unique
                                                       WHERE character_owner_id = $1 AND character_unique_id = $2;
                                                       """, [self.player.id, unique_id])
 
-        if character is not None:
-            has_it = True
+        if len(character) > 0 :
+            tradable = await self.__database.fetch_value(
+                """
+                SELECT tradable
+                FROM character_reference
+                WHERE reference = $1;
+                """, [character[0][1]]
+            )
+
+            if tradable:
+                has_it = True
 
         return has_it
 
@@ -861,13 +901,21 @@ class PlayerCombat:
             char_getter = CharacterGetter()
 
             # Get the instance of each character
+            count = 0
             for unique_id in player_team:
                 await asyncio.sleep(0)
 
                 character = await char_getter.get_from_unique(self.player.client, self.__database, unique_id)
 
-                # Add the character to the team list
-                team.append(character)
+                # If the character is not found, remove it from the team
+                if character is None:
+                    await self.remove_character(count, from_get_team=True)
+                
+                else:
+                    # Add the character to the team list
+                    team.append(character)
+                
+                count += 1
 
         self.team = team
 
@@ -959,6 +1007,15 @@ class PlayerCombat:
                                           WHERE player_id = $2;
                                           """, [team_id, self.player.id])
 
+            # Lock the character to avoid the player to recycle it
+            await self.__database.execute(
+                """
+                UPDATE character_unique
+                SET locked = true
+                WHERE character_unique_id = $1
+                """, [unique_id]
+            )
+
             success = True
             reason = f"You've added **{new_character.name}**{new_character.type.icon} lv.**{new_character.level}** in your team !"
 
@@ -996,7 +1053,7 @@ class PlayerCombat:
 
         return slot
 
-    async def remove_character(self, slot):
+    async def remove_character(self, slot, from_get_team=False):
         """Remove a character from the player's team
 
         --
@@ -1006,8 +1063,10 @@ class PlayerCombat:
         reason = ""
         getter = CharacterGetter()
 
-        # Check if the character is in the player's team
-        await self.get_team()
+        # If remove_character() is not called by get_team()
+        if not from_get_team:
+            # Check if the character is in the player's team
+            await self.get_team()
 
         # Get the unique id of the character
         unique_id = self.unique_id_team[slot]
@@ -1040,7 +1099,9 @@ class PlayerCombat:
                                           WHERE player_id = $2;
                                           """, [new_team, self.player.id])
 
-            reason = f"Successfully removed **{character.name}**{character.type.icon} from your team"
+            # Display this message if the call is not from get_team()
+            if not from_get_team:
+                reason = f"Successfully removed **{character.name}**{character.type.icon} from your team"
 
         else:
             reason = "This character is not in your team"

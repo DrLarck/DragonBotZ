@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 1/11/20 by DrLarck"""
+@update 27/01/21 by DrLarck"""
 
 import asyncio
 import time
@@ -359,7 +359,7 @@ class ToolShop:
                     # Change the character's owner id and name
                     await self.__database.execute("""
                                                   UPDATE character_unique
-                                                  SET character_owner_id = $1, character_owner_name = $2
+                                                  SET character_owner_id = $1, character_owner_name = $2, locked = true
                                                   WHERE character_unique_id = $3;
                                                   """, [buyer.id, buyer.name, character_id])
 

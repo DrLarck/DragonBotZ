@@ -5,7 +5,7 @@ Command checker
 
 Author : DrLarck
 
-Last update : 13/09/20 by DrLarck
+Last update : 28/01/21 by DrLarck
 """
 
 from discord.channel import DMChannel
@@ -34,8 +34,14 @@ class CommandChecker:
 
         # Init
         client = context.bot
+        ready = client.is_ready()
 
-        return client.is_ready()
+        if not ready:
+            await context.send("I'm currently booting up, please wait until the end of the process ...")
+            return False
+        
+        else:
+            return True
 
     @staticmethod
     async def no_dm(context):
@@ -78,7 +84,7 @@ class CommandChecker:
         database = client.database
 
         # Check if the player is in the database
-        value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = {player.id};")
+        value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = $1;", [player.id])
 
         # If the player is already registered
         # Send an error message telling him
@@ -109,7 +115,7 @@ class CommandChecker:
         database = client.database
 
         # Check if the player is in the database
-        value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = {player.id};")
+        value = await database.fetch_value(f"SELECT player_name FROM player_info WHERE player_id = $1;", [player.id])
 
         # If the player is registered
         # Return true
@@ -185,3 +191,22 @@ class CommandChecker:
         in_trade = await trade_getter.is_trading(player)
 
         return not in_trade
+    
+    @staticmethod
+    async def is_mod(context):
+        """Check if the caller is mod
+
+        @param context - `Context`
+
+        --
+
+        @return `bool`"""
+
+        mod = False
+
+        client = context.bot
+        player = Player(context, client, context.message.author)
+
+        mod = await player.is_mod()
+
+        return mod
