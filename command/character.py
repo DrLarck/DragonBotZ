@@ -2,7 +2,7 @@
 
 @author DrLarck
 
-@update 27/01/21 by DrLarck"""
+@update 29/01/21 by DrLarck"""
 
 from discord.ext import commands
 
@@ -86,8 +86,8 @@ class CommandCharacter(commands.Cog):
                 """
                 UPDATE character_unique
                 SET locked = true
-                WHERE character_rarity = $1;
-                """, [asked_rarity]
+                WHERE character_rarity = $1 AND character_owner_id = $2;
+                """, [asked_rarity, player.id]
             )
 
             await context.send(f"✅ You have successfully locked your {rarity_icon} characters")
@@ -136,8 +136,8 @@ class CommandCharacter(commands.Cog):
                 """
                 UPDATE character_unique
                 SET locked = false
-                WHERE character_rarity = $1;
-                """, [asked_rarity]
+                WHERE character_rarity = $1 AND character_owner_id = $2;
+                """, [asked_rarity, player.id]
             )
 
             await context.send(f"✅ You have successfully unlocked your {rarity_icon} characters")
