@@ -4,7 +4,7 @@
 
 @author DrLarck
 
-@update 25/12/20 by DrLarck"""
+@update 14/02/21 by DrLarck"""
 
 import asyncio
 
@@ -50,6 +50,11 @@ class Mission:
         character_exp = CharacterExperience(self.client)
         icon = GameIcon()
 
+        # Rewards
+        r_exp = self.experience
+        r_zenis = self.zenis
+        r_dragonstone = self.dragonstone
+
         # Reducing the reward according to the player's team level
         average_level    = await player.combat.get_average_team_level()
         reward_reduction = 1  # If it reaches 0, the player doesn't get anything
@@ -65,9 +70,9 @@ class Mission:
                 reward_reduction = 0
         
         # Update rewards
-        self.experience  = int((self.experience * reward_reduction) * premium_bonus)
-        self.zenis       = int((self.zenis * reward_reduction) * premium_bonus)
-        self.dragonstone = int((self.dragonstone * reward_reduction) * premium_bonus)
+        r_exp         = int((self.experience * reward_reduction) * premium_bonus)
+        r_zenis       = int((self.zenis * reward_reduction) * premium_bonus)
+        r_dragonstone = int((self.dragonstone * reward_reduction) * premium_bonus)
         await player.experience.add_power(int(5 * reward_reduction))
 
         if reward_reduction == 0:
@@ -75,23 +80,23 @@ class Mission:
         
         # Add xp to the player's characters
         if self.experience is not None:
-            rewards += f"**{self.experience:,}**xp | "
+            rewards += f"**{r_exp:,}**xp | "
 
             player_team = player.combat.unique_id_team
             for character in player_team:
                 await asyncio.sleep(0)
 
-                await character_exp.add_experience(character, self.experience)
+                await character_exp.add_experience(character, r_exp)
         
         if self.dragonstone is not None:
-            rewards += f"**{self.dragonstone:,}** {icon.dragonstone} | "
+            rewards += f"**{r_dragonstone:,}** {icon.dragonstone} | "
 
-            await player.resource.add_dragonstone(self.dragonstone)
+            await player.resource.add_dragonstone(r_dragonstone)
 
         if self.zenis is not None:
-            rewards += f"**{self.zenis:,}** {icon.zeni} | "
+            rewards += f"**{r_zenis:,}** {icon.zeni} | "
 
-            await player.resource.add_zeni(self.zenis)
+            await player.resource.add_zeni(r_zenis)
 
         if self.capsule is not None:
             capsule = Capsule(context, self.client, player)
