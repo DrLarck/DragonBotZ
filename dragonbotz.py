@@ -62,9 +62,9 @@ class Main:
         client.loop.run_until_complete(client.database.create_game_tables())
 
         # Set the patreon attribute for client
-        client.patreon = Patreon(client.database)
-        client.loop.run_until_complete(client.patreon.init(os.environ["dbz_patreon_access_token"]))
-        client.loop.run_until_complete(client.patreon.set_premium())
+        # client.patreon = Patreon(client.database)
+        # client.loop.run_until_complete(client.patreon.init(os.environ["dbz_patreon_access_token"]))
+        # client.loop.run_until_complete(client.patreon.set_premium())
 
         # Filling up the cache
         client.loop.run_until_complete(CharacterGetter().set_cache(client))
